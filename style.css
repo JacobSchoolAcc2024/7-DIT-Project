@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+:root {
+    font-family: "Quicksand", sans-serif;
+    font-size: 20px;
+    --bg-primary: rgb(20, 0, 51);
+}
+
+.sidenav {
+    height: 60%;
+    width: 0;
+    position: fixed;
+}

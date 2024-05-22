@@ -1,5 +1,5 @@
 
-///Variabels///
+///Variables///
 
 let str = 1;
 let str_gain = 1;
@@ -10,7 +10,7 @@ let auto_pushup_multiplier = 1
 /// Html Related JS ///
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "8rem";
+    document.getElementById("mySidenav").style.width = "10%";
 }
 
 function closeNav() {
@@ -129,6 +129,8 @@ function check_upgrades(id, cost, cost_id) {
         document.getElementById(cost_id).innerHTML = "Cost :" + formatNumber(requiredCost);
     } else {
         document.getElementById(id).style.display = "none";
+        console.log("Cost for next progressive overload upgrade: " 
+        + formatNumber(requiredCost));
     }
 }
 

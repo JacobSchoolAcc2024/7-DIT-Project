@@ -18,22 +18,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="idle_gym.js"></script>
-    <span onclick="openNav()">Menu</span>
+    <div class="menu_container" onclick="openNav()">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
 </head>
 <body>
-    <div class="exercises"></div>
-    <button id="push_up"  onclick="gain_str(1, 'strenght')">Push-up</button>
-    <div class="status">
-        <div id="strenght"> Strenght: 0</div>
-    </div>
-    <div class="upgrades">
-        <div>
-            <div id="upgrade1_" style="display: none;">
-                <button id="upgrade1" onclick="upgrade_str(2, 10, 3)">Anabolic Steroids!</button>
-                <a id="cost1">Cost: 20 str</a>
-            </div>
+    <div id="main">
+        <div class="exercises"></div>
+        <button id="push_up"  onclick="gain_str(1, 'strenght')">Push-up</button>
+        <div class="status">
+            <div id="strenght"> Strenght: 0</div>
         </div>
-
+        <div class="upgrades">
+            <div>
+                <div id="upgrade1_" style="display: none;">
+                    <button id="upgrade1" onclick="upgrade_str(2, 10, 3)">Anabolic Steroids!</button>
+                    <a id="cost1">Cost: 20 str</a>
+                </div>
+            </div>
     </div>
+        </div>
 </body>
 </html>

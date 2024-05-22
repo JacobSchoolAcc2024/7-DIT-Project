@@ -3,7 +3,7 @@ let str_gain = 0;
 let multiplier = 1;
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "10%";
+    document.getElementById("mySidenav").style.width = "8rem";
 }
 
 function closeNav() {

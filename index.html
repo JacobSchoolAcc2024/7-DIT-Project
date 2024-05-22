@@ -26,18 +26,33 @@
 </head>
 <body>
     <div id="main">
-        <div class="exercises"></div>
-        <button id="push_up"  onclick="gain_str(1, 'strenght')">Push-up</button>
+        <div class="exercises">
+            <button id="push_up"  onclick="gain_str(0, 'strenght')"
+            >Push-up</button>
+        </div>
         <div class="status">
             <div id="strenght"> Strenght: 0</div>
         </div>
         <div class="upgrades">
             <div>
-                <div id="upgrade1_" style="display: none;">
-                    <button id="upgrade1" onclick="upgrade_str(2, 10, 3)">Anabolic Steroids!</button>
-                    <a id="cost1">Cost: 20 str</a>
+                <div id="progressive_overload" style="display: none;">
+                    <button id="upgrade1" onclick="upgrade_str(2, 10)">Progressive Overload</button>
+                    <a id="progressive_overload_cost">Cost: 20 str</a>
                 </div>
             </div>
+        <div class="managers">
+            <div id="auto_pushup" style="display: none;">
+                <button id="buy_auto_pushup" onclick="purchaseAuto(1, 'strenght_gain', 2000, 500)">
+                    Buy Auto Pushup</button>
+                <a id="auto_cost_pushup">Cost: 500 str</a>
+            </div>
+        </div>
+        <div class="status">
+            <div id="strenght_gain">Current Strenght Gain: 1</div>
+        </div>
+    </div>
+
+>>>>>>> ca222c45c5200a03b6de669c1c6192b3c2b028a4
     </div>
         </div>
 </body>

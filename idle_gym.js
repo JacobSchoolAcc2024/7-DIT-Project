@@ -264,14 +264,16 @@ function fightEnemy() {
     multiplier = parseInt(localStorage.getItem("mutiplier"));
 }
 
-function buyHP(){
-    if(str<=0){
+function buyHP() {
+    if (str >= 1) {
+        str -= 1;
+        player_hp += 1;
+        // Update localStorage
+        localStorage.setItem("str", str);
+        localStorage.setItem("player_hp", player_hp);
+    } else {
         document.getElementById("buyHP").style.display = "block";
     }
-    str-=1;
-    player_hp +=1;
-    localStorage.setItem("player_hp", player_hp);
-    localStorage.setItem("str", str);
     str = parseInt(localStorage.getItem("str"));
     player_hp = parseInt(localStorage.getItem("player_hp"));
 }

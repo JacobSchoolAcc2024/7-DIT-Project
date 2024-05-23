@@ -1,10 +1,15 @@
 
 ///Variables///
 
-let str = 1;
-let str_gain = 1;
-let multiplier = 1;
-let auto_pushup_multiplier = 1
+let str = parseInt(localStorage.getItem("str")) || 1;
+let str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
+let multiplier = parseInt(localStorage.getItem("mutiplier")) ||  1;
+let auto_pushup_multiplier = parseInt(localStorage.getItem("upgrade")) || 1;
+let enemy_hp = parseInt(localStorage.getItem("enemy_hp")) || 100;
+let player_hp = parseInt(localStorage.getItem("player_hp")) || 100;
+let enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
+let enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
+let upgradeCost = 10;
 
 
 /// Html Related JS ///
@@ -41,19 +46,26 @@ function showMainContent() {
 
 
 function gain_str(increase_by, str_id) {
+    str = parseInt(localStorage.getItem("str")) || 1;
     str += increase_by + str_gain;
     document.getElementById(str_id).innerHTML 
     = "Strenght: " + formatNumber(str);
+    localStorage.setItem("str",str);
+
 }
 
 
 function upgrade_str(increase_by, cost) {
+    multiplier = parseInt(localStorage.getItem("mutiplier")) || 1;
+    str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
     upgradeCost = Math.round(cost ** multiplier);
     str -= upgradeCost;
     str_gain += (increase_by ** multiplier)*multiplier;
     document.getElementById("strenght").innerHTML = "Strenght: " + str;
     document.getElementById("strenght_gain").innerHTML = "Strenght Gain: " + str_gain;
     multiplier += 1;    
+    localStorage.setItem("mutiplier",multiplier);
+    localStorage.setItem("str_gain",str_gain);
 }
 
 
@@ -186,8 +198,68 @@ function formatNumber(num) {
 
 function update_window_str() {
     document.getElementById('strenght').innerHTML = "Strenght: " + formatNumber(str);
+    document.getElementById('strenght_gain').innerHTML = "Current Strenght: " + formatNumber(str_gain);
+    
+
 }
 
+function update_enemy_window_str() {
+    document.getElementById("player_str").innerText = "Player Strength: " + str;
+    document.getElementById("enemy_HP").innerText = "Enemy HP: " + enemy_hp;
+    document.getElementById("player_HP").innerText = "Player HP: " + player_hp;
+    document.getElementById("enemy_level").innerText = "Enemy Level: " + enemy_level;
+}
+    
 setInterval(checkUpgrades, 100);
 setInterval(update_window_str, 100);
 setInterval(auto_price_pushup, 100);
+setInterval(update_enemy_window_str, 100);
+/////////////////////////////////////////////////////////////////////////////////////
+/// Fighting
+
+function fightEnemy() {
+    
+
+    // Update localStorage with new values
+    str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
+    enemy_hp = parseInt(localStorage.getItem("enemy_hp")) || 100;
+    player_hp = parseInt(localStorage.getItem("player_hp")) || 100;
+    enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
+    enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
+    multiplier = parseInt(localStorage.getItem("mutiplier")) ||  1
+
+    // Update player and enemy HP based on combat
+    player_hp -= enemy_str;
+    enemy_hp -= str;
+
+
+    if (player_hp > 0){
+        // Update player and enemy HP based on combat
+        player_hp -= enemy_str;
+        enemy_hp -= str;
+    }
+
+    // Check if the player or enemy has been defeated
+    if (player_hp <= 0) {
+        player_hp = 0;
+        str = 0;
+        str_gain = 1;
+        multiplier = 1;
+        localStorage.setItem("mutiplier",multiplier);
+        localStorage.setItem("str", str);
+        localStorage.setItem("str_gain",str_gain);
+    } 
+    if (enemy_hp <= 0) {
+        enemy_hp=100;
+        enemy_level++;
+        player_hp +=str_gain;
+        enemy_hp +=10;
+        enemy_str += 2;
+        
+    }
+    localStorage.setItem("enemy_level", enemy_level);
+    localStorage.setItem("player_hp", player_hp);
+    localStorage.setItem("str", str);
+    localStorage.setItem("enemy_hp", enemy_hp);
+    localStorage.setItem("enemy_str", enemy_str);
+}

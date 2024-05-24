@@ -1,7 +1,6 @@
 
 ///Variables///
 
-<<<<<<< Updated upstream
 let str = parseInt(localStorage.getItem("str")) || 1;
 let str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
 let multiplier = parseInt(localStorage.getItem("mutiplier")) ||  1;
@@ -12,13 +11,6 @@ let enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
 let enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
 let upgradeCost = 10;
 
-=======
-let str = 100000;
-let str_gain = 1;
-let multiplier = 1;
-let auto_pushup_multiplier = 1
-let statusOpened = false;
->>>>>>> Stashed changes
 
 /// Html Related JS ///
 
@@ -151,8 +143,8 @@ function check_upgrades(id, cost, cost_id) {
         document.getElementById(cost_id).innerHTML = "Cost :" + formatNumber(requiredCost);
     } else {
         document.getElementById(id).style.display = "none";
-        console.log("Cost for next progressive overload upgrade: " 
-        + formatNumber(requiredCost));
+        // console.log("Cost for next progressive overload upgrade: " 
+        // + formatNumber(requiredCost));
     }
 }
 
@@ -172,7 +164,7 @@ function auto_price_pushup(){
     };
 
     for (const price in auto_prices) {
-        check_auto_price(auto_prices[price].id, auto_prices[price].cost, 
+        check_upgrades(auto_prices[price].id, auto_prices[price].cost, 
             auto_prices[price].cost_id);
     }
 
@@ -198,36 +190,46 @@ function formatNumber(num) {
 
 function update_window_str() {
     document.getElementById('strenght').innerHTML = "Strenght: " + formatNumber(str);
-    document.getElementById('strenght_gain').innerHTML = "Current Strenght: " + formatNumber(str_gain);
+    document.getElementById('strenght_gain').innerHTML = "Current Strenght Gain: " + formatNumber(str_gain);
     
 
 }
 
-<<<<<<< Updated upstream
 function update_enemy_window_str() {
     document.getElementById("player_str").innerText = "Player Strength: " + str;
     document.getElementById("enemy_HP").innerText = "Enemy HP: " + enemy_hp;
     document.getElementById("player_HP").innerText = "Player HP: " + player_hp;
     document.getElementById("enemy_level").innerText = "Enemy Level: " + enemy_level;
 }
-    
-=======
-function toggleStatus() {
-    const statusElement = document.querySelector(".status");
-    const buttonElement = document.getElementById("status_button");
 
-    if (statusOpened) {
-        statusElement.style.display = "none";
-        buttonElement.innerHTML = "Show Status";
+
+function toggleStatus(id) {
+    const element = document.getElementById(id);
+    if (element.style.display === "none") {
+        element.style.display = "block";
     } else {
-        statusElement.style.display = "block";
-        buttonElement.innerHTML = "Hide Status";
+        element.style.display = "none";
     }
-
-    statusOpened = !statusOpened;
 }
 
->>>>>>> Stashed changes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 setInterval(checkUpgrades, 100);
 setInterval(update_window_str, 100);
 setInterval(auto_price_pushup, 100);
@@ -293,3 +295,4 @@ function buyHP() {
     str = parseInt(localStorage.getItem("str"));
     player_hp = parseInt(localStorage.getItem("player_hp"));
 }
+

@@ -13,7 +13,6 @@
         <a href="help.html" class="menu_Item">HELP</a>
         <a href="contact.html" class="menu_Item">CONTACT</a>
         <a href="about.html" class="menu_Item">ABOUT</a>
-   str_gain += increase_by;
  </div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,9 +42,9 @@
         </div>
     </div>
     <div>
-        <button id="status_button" onclick="toggleStatus()">Show Status</button>
+        <button id="status_button" onclick="toggleStatus('status')">Show Status</button>
     </div>
-    <div class="status" style="display: none;">
+    <div id="status" style="display: none;">
         <div id="strenght_gain">Current Strenght Gain: 1</div>
     </div>
     </div>

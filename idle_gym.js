@@ -1,6 +1,7 @@
 
 ///Variables///
 
+<<<<<<< Updated upstream
 let str = parseInt(localStorage.getItem("str")) || 1;
 let str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
 let multiplier = parseInt(localStorage.getItem("mutiplier")) ||  1;
@@ -11,6 +12,13 @@ let enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
 let enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
 let upgradeCost = 10;
 
+=======
+let str = 100000;
+let str_gain = 1;
+let multiplier = 1;
+let auto_pushup_multiplier = 1
+let statusOpened = false;
+>>>>>>> Stashed changes
 
 /// Html Related JS ///
 
@@ -170,17 +178,7 @@ function auto_price_pushup(){
 
 }
 
-function check_auto_price(id, cost, cost_id){
-    const requiredCost = Math.round(cost ** auto_pushup_multiplier);
-    if (str >= requiredCost) {
-        document.getElementById(id).style.display = "block";
-        document.getElementById(cost_id).innerHTML = "Cost :" + formatNumber(requiredCost);
-    } else {
-        document.getElementById(id).style.display = "none";
-        console.log("This is the price for auto_pushup: " + formatNumber(requiredCost))
-}
 
-}
 
 
 
@@ -205,6 +203,7 @@ function update_window_str() {
 
 }
 
+<<<<<<< Updated upstream
 function update_enemy_window_str() {
     document.getElementById("player_str").innerText = "Player Strength: " + str;
     document.getElementById("enemy_HP").innerText = "Enemy HP: " + enemy_hp;
@@ -212,6 +211,23 @@ function update_enemy_window_str() {
     document.getElementById("enemy_level").innerText = "Enemy Level: " + enemy_level;
 }
     
+=======
+function toggleStatus() {
+    const statusElement = document.querySelector(".status");
+    const buttonElement = document.getElementById("status_button");
+
+    if (statusOpened) {
+        statusElement.style.display = "none";
+        buttonElement.innerHTML = "Show Status";
+    } else {
+        statusElement.style.display = "block";
+        buttonElement.innerHTML = "Hide Status";
+    }
+
+    statusOpened = !statusOpened;
+}
+
+>>>>>>> Stashed changes
 setInterval(checkUpgrades, 100);
 setInterval(update_window_str, 100);
 setInterval(auto_price_pushup, 100);

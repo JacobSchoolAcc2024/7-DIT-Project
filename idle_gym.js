@@ -15,15 +15,18 @@ let upgradeCost = 10;
 /// Html Related JS ///
 
 function openNav() {
-<<<<<<< Updated upstream
+
     document.getElementById("mySidenav").style.width = "10%";
-=======
+
     document.getElementById("mySidenav").style.width = "10rem";
->>>>>>> Stashed changes
+
+
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+
+
 }
 
 

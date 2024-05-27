@@ -22,6 +22,7 @@
     left: 0;
 }
 
+
 .sidenav a {
     text-decoration: none;
     font-size: 1rem;
@@ -29,23 +30,15 @@
     transition: 0.3s;
     display: block;
     padding-right: 0;
-    width: 80%;
-}
-
-.close {
-  text-decoration: none;
-  font-size: 1rem;
-  color: #818181;
-  transition: 0.3s;
-  display: block;
-  padding-right: 0;
+    
 }
 
 .closebtn {
-    margin-top: 12px;
-    padding: 0px 8px 0px 10px;
-    transform: rotate(90deg);
-    transition: 0.7s;
+  margin: 0;
+  padding: 0px 8px 0px 10px;
+  transform: rotate(90deg);
+  transition: 0.7s;
+
 }
 
 .menu_Item {
@@ -56,12 +49,13 @@
     border-radius: 9px;
     font-size: 1rem;
     padding: 3%;
+    width: 70%;
 }
 
 .sidenav .menu_Item:hover{
     color: #f1f1f1;
     border: 2px solid white;
-    padding: 15px 15px 15px 15px;
+    padding: 8px 8px 8px 8px;
 }
 
 
@@ -84,17 +78,10 @@
     padding: 20px;
   }
 
-  .menu_container {
-    display: inline-block;
-    margin-top: 1rem;
-    margin-left: 1rem;
-    
-  }
-
   .bar1, .bar2, .bar3 {
     width: 1.5rem;
     height: 0.2rem;
-    background-color: #333;
+    background-color: rgb(184, 184, 184);
     transition: 0.4s;
     margin-bottom: 0.24rem;
     border-radius: 1rem;
@@ -106,4 +93,37 @@
     .sidenav {padding-top: 10px;}
     .sidenav a {font-size: 10rem;}
 
+  }
+
+  .main {
+    margin-top: 1.3rem;
+    margin-left: 1.2rem;
+    width: 100%;
+    height: 100%;
+  }
+
+  .menu_container {
+    display: inline-block;
+    margin-bottom: 2rem;
+    margin-top: 1.5rem;
+    margin-left: 1.2rem;
+    justify-content: end;
+  }
+
+  .top_bar {
+    margin: 0;
+    padding: 0;
+    display: block;
+    background-color: var(--bg-primary);
+    width: 100%;
+    height: 4rem;
+  }
+
+  img {
+    background-color: rgba(255,255,255,0);
+    height: 6rem;
+    width: 6rem;
+    color: white;
+    margin-top: 1rem;
+    float: right;
   }

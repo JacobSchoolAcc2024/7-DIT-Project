@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
     <div id="mySidenav" class="sidenav">
-        <a class="close" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="#" class="menu_Item" onclick="showMainContent()">HOME</a>
         <a href="#" class="menu_Item" onclick="showUpgradesSection()">UPGRADES</a>
         <a href="market.html" class="menu_Item">MARKET</a>
@@ -18,37 +18,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="idle_gym.js"></script>
-    <span onclick="openNav()">Menu</span>
+    <div class="top_bar">
+        <div class="menu_container" onclick="openNav()">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <img src="Idle_transparent.png">
+    </div>
 </head>
 <body>
-    <div class="exercises">
-        <button id="push_up"  onclick="gain_str(0, 'strenght')"
-        >Push-up</button>
-    </div>
-    <div class="status">
-        <div id="strenght"> Strenght: 0</div>
-    </div>
-    <div class="upgrades">
-        <div>
-            <div id="progressive_overload" style="display: none;">
-                <button id="upgrade1" onclick="upgrade_str(2, 10)">Progressive Overload</button>
-                <a id="progressive_overload_cost">Cost: 20 str</a>
+    <div class="main" id="main_Page">
+        <div class="exercises">
+            <button id="push_up"  onclick="gain_str(0, 'strenght')"
+            >Push-up</button>
+        </div>
+        <div class="status">
+            <div id="strenght"> Strenght: 0</div>
+        </div>
+        <div class="upgrades">
+            <div>
+                <div id="progressive_overload" style="display: none;">
+                    <button id="upgrade1" onclick="upgrade_str(2, 10)">Progressive Overload</button>
+                    <a id="progressive_overload_cost">Cost: 20 str</a>
+                </div>
+            </div>
+        <div class="managers">
+            <div id="auto_pushup" style="display: none;">
+                <button id="buy_auto_pushup" onclick="purchaseAuto(1, 'strenght_gain', 2000, 500)">
+                    Buy Auto Pushup</button>
             </div>
         </div>
-    <div class="managers">
-        <div id="auto_pushup" style="display: none;">
-            <button id="buy_auto_pushup" onclick="purchaseAuto(1, 'strenght_gain', 2000, 500)">
-                Buy Auto Pushup</button>
+
+        <div>
+            <button id="status_button" onclick="toggleStatus('status')">Show Status</button>
         </div>
-    </div>
+        <div id="status" style="display: none;">
+            <div id="strenght_gain">Current Strenght Gain: 1</div>
+        </div>
 
-    <div>
-        <button id="status_button" onclick="toggleStatus('status')">Show Status</button>
-    </div>
-    <div id="status" style="display: none;">
-        <div id="strenght_gain">Current Strenght Gain: 1</div>
-    </div>
-
+        </div>
     </div>
 </body>
 </html>

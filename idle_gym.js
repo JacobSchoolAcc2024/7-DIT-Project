@@ -187,12 +187,12 @@ function auto_price_pushup(){
 
 
 function formatNumber(num) {
-    const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion"
-        , " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
+    const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion",
+        " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
     ];
-    const suffixIndex = Math.floor(Math.log10(Math.abs(num)) / 3);
+    const suffixIndex = Math.floor(Math.log10(Math.abs(num) || 1) / 3);
     const formattedNum = parseFloat((num / Math.pow(1000, suffixIndex)).toFixed(2));
-    return formattedNum + (suffixes[suffixIndex] || "");
+    return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");
 }
 
 function update_window_str() {
@@ -203,10 +203,10 @@ function update_window_str() {
 }
 
 function update_enemy_window_str() {
-    document.getElementById("player_str").innerText = "Player Strength: " + str;
-    document.getElementById("enemy_HP").innerText = "Enemy HP: " + enemy_hp;
-    document.getElementById("player_HP").innerText = "Player HP: " + player_hp;
-    document.getElementById("enemy_level").innerText = "Enemy Level: " + enemy_level;
+    document.getElementById("player_str").innerText = "Player Strength: " + formatNumber(str);
+    document.getElementById("enemy_HP").innerText = "Enemy HP: " + formatNumber(enemy_hp);
+    document.getElementById("player_HP").innerText = "Player HP: " + formatNumber(player_hp);
+    document.getElementById("enemy_level").innerText = "Enemy Level: " + formatNumber(enemy_level);
 }
 
 
@@ -246,15 +246,19 @@ setInterval(update_enemy_window_str, 100);
 
 function fightEnemy() {
 
-    if (player_hp > 0){
+    if (player_hp > 0 && str > 0){
         // Update player and enemy HP based on combat
         player_hp -= enemy_str;
         enemy_hp -= str;
     }
 
     // Check if the player or enemy has been defeated
-    if (player_hp <= 0) {
+    if(str==0) {
         document.getElementById("fight").style.display = "block";
+
+    }
+
+    if (player_hp <= 0) {
         player_hp = 100;
         str = 0;
         str_gain = 1;
@@ -268,7 +272,7 @@ function fightEnemy() {
         enemy_hp=100;
         enemy_level++;
         player_hp +=str_gain;
-        enemy_hp +=10;
+        enemy_hp +=enemy_level*10;
         enemy_str += 2;
         localStorage.setItem("enemy_hp", enemy_hp);
         localStorage.setItem("enemy_str", enemy_str);
@@ -289,16 +293,24 @@ function fightEnemy() {
     multiplier = parseInt(localStorage.getItem("mutiplier"));
 }
 
-function buyHP() {
-    if (str >= 1) {
-        str -= 1;
-        player_hp += 1;
+function buyHP(){
+    let HP_number = parseInt(prompt("How many HP do you wanna buy:"));
+
+    if (isNaN(HP_number) || HP_number <= 0 || !Number.isInteger(HP_number) || HP_number > str) {
+        alert("This is not a valid number!!!");
+        return;
+    }
+
+    if (str >= HP_number) {
+        str -= HP_number;
+        player_hp += HP_number;
         // Update localStorage
         localStorage.setItem("str", str);
         localStorage.setItem("player_hp", player_hp);
     } else {
         document.getElementById("buyHP").style.display = "block";
     }
+
     str = parseInt(localStorage.getItem("str"));
     player_hp = parseInt(localStorage.getItem("player_hp"));
 }

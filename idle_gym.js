@@ -4,7 +4,7 @@
 let str = parseInt(localStorage.getItem("str")) || 1;
 let str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
 let multiplier_str = parseInt(localStorage.getItem("mutiplier_str")) ||  1;
-let auto_pushup_multiplier = parseInt(localStorage.getItem("auto_push_up_multiplier")) || 1;
+let auto_push_up_multiplier = parseInt(localStorage.getItem("auto_push_up_multiplier")) || 1;
 let enemy_hp = parseInt(localStorage.getItem("enemy_hp")) || 100;
 let player_hp = parseInt(localStorage.getItem("player_hp")) || 100;
 let enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
@@ -156,11 +156,11 @@ function auto_price_pushup() {
             id: "auto_pushup",
             cost: 500
         },
-        auto_price2: {
-            cost_id: "auto_cost_archer_pushup",
-            id: "auto_archer_pushup",
-            cost: 1000
-        }
+        // auto_price2: {
+        //     cost_id: "auto_cost_archer_pushup",
+        //     id: "auto_archer_pushup",
+        //     cost: 1000
+        // }
     };
 
     for (const price in auto_prices) {

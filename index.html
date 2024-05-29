@@ -33,7 +33,7 @@
             <button id="push_up"  onclick="gain_str(0, 'strenght')"
             >Push-up</button>
         </div>
-        <div class="status">
+        <div>
             <div id="strenght"> Strenght: 0</div>
         </div>
         <div class="upgrades">
@@ -45,18 +45,21 @@
             </div>
         <div class="managers">
             <div id="auto_pushup" style="display: none;">
-                <button id="buy_auto_pushup" onclick="purchaseAuto(1, 'strenght_gain', 2000, 500)">
+                <button id="buy_auto_pushup" onclick="purchaseAuto(1, 2000, 500)">
                     Buy Auto Pushup</button>
+                <a id="auto_pushup_cost">Cost: 500 str</a>
             </div>
         </div>
 
         <div>
             <button id="status_button" onclick="toggleStatus('status')">Show Status</button>
         </div>
-        <div id="status" style="display: none;">
+        <div class="status" style="display: none;">
             <div id="strenght_gain">Current Strenght Gain: 1</div>
+            <div id="auto_str">Current Auto Strenght Gain: 0</div>
         </div>
-
+        <div>
+            <button id="reset" onclick="reset()">Reset Progress </button>
         </div>
     </div>
     <div class="footer">

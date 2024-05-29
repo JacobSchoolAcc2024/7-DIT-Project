@@ -3,30 +3,23 @@
 
 let str = parseInt(localStorage.getItem("str")) || 1;
 let str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
-let multiplier = parseInt(localStorage.getItem("mutiplier")) ||  1;
-let auto_pushup_multiplier = parseInt(localStorage.getItem("upgrade")) || 1;
+let multiplier_str = parseInt(localStorage.getItem("mutiplier_str")) ||  1;
+let auto_pushup_multiplier = parseInt(localStorage.getItem("auto_push_up_multiplier")) || 1;
 let enemy_hp = parseInt(localStorage.getItem("enemy_hp")) || 100;
 let player_hp = parseInt(localStorage.getItem("player_hp")) || 100;
 let enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
 let enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
-let upgradeCost = 10;
+let auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
 
 
 /// Html Related JS ///
 
 function openNav() {
-
-    document.getElementById("mySidenav").style.width = "10%";
-
     document.getElementById("mySidenav").style.width = "10rem";
-
-
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
-
-
 }
 
 
@@ -57,21 +50,20 @@ function gain_str(increase_by, str_id) {
     document.getElementById(str_id).innerHTML 
     = "Strenght: " + formatNumber(str);
     localStorage.setItem("str",str);
-    str = parseInt(localStorage.getItem("str")) || 1;
-
 }
 
 
 function upgrade_str(increase_by, cost) {
-    upgradeCost = Math.round(cost ** multiplier);
+    upgradeCost = Math.round(cost ** multiplier_str);
     str -= upgradeCost;
-    str_gain += (increase_by ** multiplier)*multiplier;
+
+    str_gain += (increase_by ** multiplier_str)*multiplier_str;
     document.getElementById("strenght").innerHTML = "Strenght: " + str;
     document.getElementById("strenght_gain").innerHTML = "Strenght Gain: " + str_gain;
-    multiplier += 1;    
-    localStorage.setItem("mutiplier",multiplier);
+    multiplier_str += 1;    
+    localStorage.setItem("mutiplier_str",multiplier_str);
     localStorage.setItem("str_gain",str_gain);
-    multiplier = parseInt(localStorage.getItem("mutiplier"));
+    multiplier_str = parseInt(localStorage.getItem("mutiplier_str")) || 1;
     str_gain = parseInt(localStorage.getItem("str_gain"));
 }
 
@@ -80,23 +72,25 @@ function upgrade_str(increase_by, cost) {
 /// Automatic gain of strenght.
 
 
-function purchaseAuto(increase_by, id, time, cost) {
-    requiredCost = Math.round(cost ** auto_pushup_multiplier);
+function purchaseAuto(increase_by, time, cost) {
+    requiredCost = Math.round(cost ** auto_push_up_multiplier);
+    auto_push_up_multiplier = parseInt(localStorage.getItem("auto_push_up_mutiplier")) || 1;
     str = parseInt(localStorage.getItem("str")) || 1;
     str -= requiredCost;
-    auto_pushup_multiplier += 1;
-    setInterval(auto_str_gain(increase_by, id), time);
-    console.log("This is the time: " + time)
-    time -= 500;
-    localStorage.setItem("str",str);
+    auto_push_up_multiplier += 1;
+    setInterval(auto_str_gain(increase_by), time);
+    localStorage.setItem("str", str);
+    localStorage.setItem("auto_push_up_mutiplier", auto_push_up_multiplier);
 }
 
-function auto_str_gain(increase_by, id){
+function auto_str_gain(increase_by){
     return function(){
         str = parseInt(localStorage.getItem("str")) || 1;
-        str += (increase_by * auto_pushup_multiplier) * str_gain;
-        console.log((increase_by * auto_pushup_multiplier) * str_gain)
+        auto_push_up_multiplier = parseInt(localStorage.getItem("auto_push_up_mutiplier")) || 1;
+        auto_str = (increase_by * auto_push_up_multiplier) * str_gain;
+        str += auto_str;
         localStorage.setItem("str",str);
+        localStorage.setItem("auto_str",auto_str);
     }
 }
 
@@ -144,7 +138,7 @@ function checkUpgrades() {
 
 
 function check_upgrades(id, cost, cost_id) {
-    const requiredCost = Math.round(cost ** multiplier);
+    const requiredCost = Math.round(cost ** multiplier_str);
     if (str >= requiredCost) {
         document.getElementById(id).style.display = "block";
         document.getElementById(cost_id).innerHTML = "Cost :" + formatNumber(requiredCost);
@@ -155,27 +149,40 @@ function check_upgrades(id, cost, cost_id) {
     }
 }
 
-function auto_price_pushup(){
-    
+function auto_price_pushup() {
     const auto_prices = {
         auto_price1: {
             cost_id: "auto_cost_pushup",
             id: "auto_pushup",
-            cost: 500,
+            cost: 500
         },
-        // auto_price2: {
-        //     cost_id: "auto_price2",
-        //     id: "auto_price2_",
-        //     cost: 1000
-        // },
+        auto_price2: {
+            cost_id: "auto_cost_archer_pushup",
+            id: "auto_archer_pushup",
+            cost: 1000
+        }
     };
 
     for (const price in auto_prices) {
-        check_upgrades(auto_prices[price].id, auto_prices[price].cost, 
-            auto_prices[price].cost_id);
+        check_auto_price(auto_prices[price].id, auto_prices[price].cost, auto_prices[price].cost_id);
     }
-
 }
+
+
+
+function check_auto_price(id, cost, cost_id) {
+    const requiredCost = Math.round(cost ** auto_push_up_multiplier);
+    const element = document.getElementById(id);
+    if (str >= requiredCost) {
+        element.style.display = "block";
+        document.getElementById(cost_id).innerHTML = "Cost: " + formatNumber(requiredCost);
+    } else {
+        element.style.display = "none";
+    }
+}
+
+
+
 
 
 
@@ -185,33 +192,49 @@ function auto_price_pushup(){
 /////////////////////////////////////////////////////////////////////////////////////
 /// Utilities.
 
+function reset(){
+    str = 0;
+    str_gain = 1;
+    multiplier_str = 1;
+    auto_str = 0;
+    localStorage.setItem("multiplier_str",multiplier_str);
+    localStorage.setItem("str", str);
+    localStorage.setItem("str_gain",str_gain);
+    localStorage.setItem("player_hp", player_hp);
+    localStorage.setItem("auto_str", auto_str);
+}
+
+
 
 function formatNumber(num) {
-    const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion",
-        " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
+    const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion"
+        , " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
     ];
-    const suffixIndex = Math.floor(Math.log10(Math.abs(num) || 1) / 3);
+    const suffixIndex = Math.floor(Math.log10(Math.abs(num)) / 3);
     const formattedNum = parseFloat((num / Math.pow(1000, suffixIndex)).toFixed(2));
-    return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");
+    return formattedNum + (suffixes[suffixIndex] || "");
 }
 
 function update_window_str() {
+    str = parseInt(localStorage.getItem("str")) || 1;
+    str_gain = parseInt(localStorage.getItem("str_gain")) || 1;
+    auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
     document.getElementById('strenght').innerHTML = "Strenght: " + formatNumber(str);
     document.getElementById('strenght_gain').innerHTML = "Current Strenght Gain: " + formatNumber(str_gain);
-    
+    document.getElementById('auto_str').innerHTML = "Current Auto Strenght Gain: " + formatNumber(auto_str);
 
 }
 
 function update_enemy_window_str() {
-    document.getElementById("player_str").innerText = "Player Strength: " + formatNumber(str);
-    document.getElementById("enemy_HP").innerText = "Enemy HP: " + formatNumber(enemy_hp);
-    document.getElementById("player_HP").innerText = "Player HP: " + formatNumber(player_hp);
-    document.getElementById("enemy_level").innerText = "Enemy Level: " + formatNumber(enemy_level);
+    document.getElementById("player_str").innerText = "Player Strength: " + str;
+    document.getElementById("enemy_HP").innerText = "Enemy HP: " + enemy_hp;
+    document.getElementById("player_HP").innerText = "Player HP: " + player_hp;
+    document.getElementById("enemy_level").innerText = "Enemy Level: " + enemy_level;
 }
 
 
-function toggleStatus(id) {
-    const element = document.getElementById(id);
+function toggleStatus(className) {
+    const element = document.getElementsByClassName(className)[0];
     if (element.style.display === "none") {
         element.style.display = "block";
     } else {
@@ -246,24 +269,20 @@ setInterval(update_enemy_window_str, 100);
 
 function fightEnemy() {
 
-    if (player_hp > 0 && str > 0){
+    if (player_hp > 0){
         // Update player and enemy HP based on combat
         player_hp -= enemy_str;
         enemy_hp -= str;
     }
 
     // Check if the player or enemy has been defeated
-    if(str==0) {
-        document.getElementById("fight").style.display = "block";
-
-    }
-
     if (player_hp <= 0) {
+        document.getElementById("fight").style.display = "block";
         player_hp = 100;
         str = 0;
         str_gain = 1;
-        multiplier = 1;
-        localStorage.setItem("mutiplier",multiplier);
+        multiplier_str = 1;
+        localStorage.setItem("multiplier_str",multiplier_str);
         localStorage.setItem("str", str);
         localStorage.setItem("str_gain",str_gain);
         localStorage.setItem("player_hp", player_hp);
@@ -272,7 +291,7 @@ function fightEnemy() {
         enemy_hp=100;
         enemy_level++;
         player_hp +=str_gain;
-        enemy_hp +=enemy_level*10;
+        enemy_hp +=10;
         enemy_str += 2;
         localStorage.setItem("enemy_hp", enemy_hp);
         localStorage.setItem("enemy_str", enemy_str);
@@ -290,27 +309,19 @@ function fightEnemy() {
     player_hp = parseInt(localStorage.getItem("player_hp"));
     enemy_str = parseInt(localStorage.getItem("enemy_str"));
     enemy_level = parseInt(localStorage.getItem("enemy_level"));
-    multiplier = parseInt(localStorage.getItem("mutiplier"));
+    multiplier_str = parseInt(localStorage.getItem("mutiplier_str"));
 }
 
-function buyHP(){
-    let HP_number = parseInt(prompt("How many HP do you wanna buy:"));
-
-    if (isNaN(HP_number) || HP_number <= 0 || !Number.isInteger(HP_number) || HP_number > str) {
-        alert("This is not a valid number!!!");
-        return;
-    }
-
-    if (str >= HP_number) {
-        str -= HP_number;
-        player_hp += HP_number;
+function buyHP() {
+    if (str >= 1) {
+        str -= 1;
+        player_hp += 1;
         // Update localStorage
         localStorage.setItem("str", str);
         localStorage.setItem("player_hp", player_hp);
     } else {
         document.getElementById("buyHP").style.display = "block";
     }
-
     str = parseInt(localStorage.getItem("str"));
     player_hp = parseInt(localStorage.getItem("player_hp"));
 }

@@ -27,37 +27,45 @@
     </div>
 </head>
 <body>
-    <div class="flex_container">
-        <div class="container">
-            <div class="exercises">
-                <button id="push_up"  onclick="gain_str(0, 'strenght')"
-                >Push-up</button>
+    <div class="main" id="main_Page">
+        <div class="exercises">
+            <button id="push_up"  onclick="gain_str(0)"
+            >Push-up</button>
+            <button id="pull_up" onclick="gain_str(2)">
+            Pull Up</button>
+        </div>
+        <div>
+            <div id="Strength"> Strength: 0</div>
+        </div>
+        <div class="upgrades">
+            <div>
+                <button id="progressive_overload" onclick="upgrade_str(2, 10, 1, 1, 'Progressive_Overload')"
+                 disabled>Progressive Overload</button>
+                <a id="progressive_overload_cost">Cost: 10 str</a>
             </div>
             <div>
-                <div id="strenght"> Strength: 0</div>
+                <button id="purchase_pull_up" disabled>Purchase Pull Up</button>
+                <div id="pull_up_requirements">
+                    <p>Requirements: </p>
+                    <a>5,000 Strenght</a>
+                    <a>Progressive Overload (3)</a>
+                </div>
+            </div>
+        <div class="managers">
+            <div>
+                <button id="auto_pushup" onclick="purchase_auto(1, 1, 'Auto_Pushup', parseInt(localStorage.getItem('auto_pushup_purchases')) || 0)" disabled>
+                    Buy Auto Pushup</button>
+
+                <a id="auto_pushup_cost">Cost: 500 str</a>
             </div>
         </div>
-            <div class="upgrades">
-                <div>
-                    <div id="progressive_overload" style="display: none;">
-                        <button id="upgrade1" onclick="upgrade_str(2, 10)">Progressive Overload</button>
-                        <a id="progressive_overload_cost">Cost: 20 str</a>
-                    </div>
-                </div>
-            <div class="managers">
-                <div id="auto_pushup" style="display: none;">
-                    <button id="buy_auto_pushup" onclick="purchaseAuto(1, 2000, 500)">
-                        Buy Auto Pushup</button>
-                    <a id="auto_pushup_cost">Cost: 500 str</a>
-                </div>
-            </div>
 
             <div>
                 <button id="status_button" onclick="toggleStatus('status')">Show Status</button>
             </div>
             <div class="status" style="display: none;">
-                <div id="strenght_gain">Current Strenght Gain: 1</div>
-                <div id="auto_str">Current Auto Strenght Gain: 0</div>
+                <div id="strength_gain">Current Strength Gain: 1</div>
+                <div id="auto_str">Current Auto Strength Gain: 0</div>
             </div>
             <div>
                 <button id="reset" onclick="reset()">Reset Progress </button>

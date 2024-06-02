@@ -3,15 +3,14 @@
 
 let str = parseInt(localStorage.getItem("str")) || 1;
 let str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
-let multiplier_str = parseInt(localStorage.getItem("mutiplier_str")) ||  1;
 let auto_push_up_multiplier = parseInt(localStorage.getItem("auto_push_up_multiplier")) || 1;
 let enemy_hp = parseInt(localStorage.getItem("enemy_hp")) || 100;
 let player_hp = parseInt(localStorage.getItem("player_hp")) || 100;
 let enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
 let enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
 let auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
-
-
+let auto_pushup_purchases = parseInt(localStorage.getItem("auto_pushup_purchases")) || 1;
+let Push_up_interval;
 /// Html Related JS ///
 
 function openNav() {
@@ -42,57 +41,128 @@ function showMainContent() {
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-/// Strenght and Upgrades section.
+/// Strength and Upgrades section.
 
 
-function gain_str(increase_by, str_id) {
+function gain_str(increase_by) {
     str += increase_by + str_gain;
-    document.getElementById(str_id).innerHTML 
-    = "Strenght: " + formatNumber(str);
+    document.getElementById('Strength').innerHTML 
+    = "Strength: " + formatNumber(str);
     localStorage.setItem("str",str);
 }
 
 
-function upgrade_str(increase_by, cost) {
-    upgradeCost = Math.round(cost ** multiplier_str);
-    str -= upgradeCost;
+function upgrade_str(increase_by, cost, multiplier, multiplier_increase_by, upgradeName) {
+   
+    const upgrades = {
+        Progressive_Overload: {
+            button_id: "progressive_overload",
+            cost_id: "progressive_overload_cost",
+            cost: 10,
+            multiplier: parseInt(localStorage.getItem("Progressive_Overload_multiplier")) || 1,
+        },
+    
+    };
 
-    str_gain += (increase_by ** multiplier_str)*multiplier_str;
-    document.getElementById("strenght").innerHTML = "Strenght: " + str;
-    document.getElementById("strenght_gain").innerHTML = "Strenght Gain: " + str_gain;
-    multiplier_str += 1;    
-    localStorage.setItem("mutiplier_str",multiplier_str);
-    localStorage.setItem("str_gain",str_gain);
-    multiplier_str = parseInt(localStorage.getItem("mutiplier_str")) || 1;
-    str_gain = parseInt(localStorage.getItem("str_gain"));
+    const upgradeData = upgrades[upgradeName];
+    const requiredCost = Math.round(cost ** upgradeData.multiplier);
+    str -= requiredCost;
+    str_gain += (increase_by ** upgradeData.multiplier) * multiplier;
+    auto_str += str_gain;
+    upgradeData.multiplier += multiplier_increase_by;
+
+    document.getElementById("Strength").innerHTML = "Strength: " + formatNumber(str);
+    document.getElementById("strength_gain").innerHTML = "Strength Gain: " + formatNumber(str_gain);
+
+    localStorage.setItem("str", str);
+    localStorage.setItem("str_gain", str_gain);
+    localStorage.setItem(upgradeName + "_multiplier", upgradeData.multiplier);
+    
+    
 }
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-/// Automatic gain of strenght.
+/// Automatic gain of Strength.
 
 
-function purchaseAuto(increase_by, time, cost) {
-    requiredCost = Math.round(cost ** auto_push_up_multiplier);
-    auto_push_up_multiplier = parseInt(localStorage.getItem("auto_push_up_mutiplier")) || 1;
-    str = parseInt(localStorage.getItem("str")) || 1;
-    str -= requiredCost;
-    auto_push_up_multiplier += 1;
-    setInterval(auto_str_gain(increase_by), time);
-    localStorage.setItem("str", str);
-    localStorage.setItem("auto_push_up_mutiplier", auto_push_up_multiplier);
-}
 
-function auto_str_gain(increase_by){
-    return function(){
-        str = parseInt(localStorage.getItem("str")) || 1;
-        auto_push_up_multiplier = parseInt(localStorage.getItem("auto_push_up_mutiplier")) || 1;
-        auto_str = (increase_by * auto_push_up_multiplier) * str_gain;
-        str += auto_str;
-        localStorage.setItem("str",str);
-        localStorage.setItem("auto_str",auto_str);
+function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
+    const upgrades = {
+        Auto_Pushup: {
+            button_id: "auto_pushup",
+            cost_id: "auto_pushup_cost",
+            cost: 500,
+            time: parseInt(localStorage.getItem("Auto_Pushup_time")) || 2000,
+            multiplier: parseInt(localStorage.getItem("Auto_Pushup_multiplier")) || 1,
+            auto_pushup_purchases: parseInt(localStorage.getItem("auto_pushup_purchases")) || 0,
+        }
+    };
+
+    const upgradeData = upgrades[upgradeName];
+    const time = upgradeData.time;
+    const baseCost = upgradeData.cost;
+    const requiredCost = Math.round(baseCost * Math.pow(2, upgradeData.auto_pushup_purchases));
+
+    if (str >= requiredCost) {
+        str -= requiredCost;
+        upgradeData.auto_pushup_purchases += 1;
+        upgradeData.multiplier += multiplier_increase_by;
+
+        // Calculate auto_str based on updated multiplier
+        auto_str += (increase_by ** upgradeData.multiplier)
+        * Math.pow(2, upgradeData.auto_pushup_purchases);
+        if (upgradeData.time <= 0) {
+            upgradeData.time == 100;
+        }
+        else {
+            upgradeData.time -= 100;
+        }
+        document.getElementById("Strength").innerHTML = "Strength: " + formatNumber(str);
+        document.getElementById("auto_str").innerHTML = "Auto Strength Gain: " + formatNumber(auto_str);
+
+        localStorage.setItem("str", str);
+        localStorage.setItem("str_gain", str_gain);
+        localStorage.setItem(upgradeName + "_multiplier", upgradeData.multiplier);
+        localStorage.setItem("auto_pushup_purchases", upgradeData.auto_pushup_purchases);
+        localStorage.setItem("Auto_Pushup_time", upgradeData.time);
+        localStorage.setItem("auto_str", auto_str);
+        console.log(auto_str, time)
+        // Clear existing interval and set a new one
+        clearInterval(Push_up_interval);
+        Push_up_interval = setInterval(() => auto_gain_str(auto_str), time);
+        localStorage.setItem("Push_up_interval", Push_up_interval);
+    } else {
+        console.log(requiredCost);
     }
 }
+
+
+
+
+
+function auto_gain_str(increase_by) {
+    str += increase_by;
+    document.getElementById('Strength').innerHTML 
+    = "Strength: " + formatNumber(str);
+    console.log(increase_by)
+    localStorage.setItem("str",str);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -120,70 +190,40 @@ function auto_str_gain(increase_by){
 function checkUpgrades() {
     const upgrades = {
         Progressive_Overload: {
+            button_id: "progressive_overload",
             cost_id: "progressive_overload_cost",
-            id: "progressive_overload",
-            cost: 10
+            cost: 10,
+            multiplier: parseInt(localStorage.getItem("Progressive_Overload_multiplier")) || 1,
         },
-        // upgrade2: {
-        //     cost_id: "cost2",
-        //     id: "upgrade2_",
-        //     cost: 1000
-        // },
+        Auto_Pushup: {
+            button_id: "auto_pushup",
+            cost_id: "auto_pushup_cost",
+            cost: 500,
+            multiplier: parseInt(localStorage.getItem("Auto_Pushup_multiplier")) || 1,
+            auto_pushup_purchases: parseInt(localStorage.getItem("auto_pushup_purchases")) || 0,
+        }
     };
 
     for (const upgrade in upgrades) {
-        check_upgrades(upgrades[upgrade].id, upgrades[upgrade].cost, upgrades[upgrade].cost_id);
+        const upgradeData = upgrades[upgrade];
+        let requiredCost;
+        if (upgrade === "Auto_Pushup") {
+            requiredCost = Math.round(upgradeData.cost * Math.pow(2, upgradeData.auto_pushup_purchases));
+        } else {
+            requiredCost = Math.round(upgradeData.cost ** upgradeData.multiplier);
+        }
+        const button = document.getElementById(upgradeData.button_id);
+        const costElement = document.getElementById(upgradeData.cost_id);
+
+        if (str >= requiredCost) {
+            button.disabled = false;
+            costElement.innerHTML = "Cost: " + formatNumber(requiredCost);
+        } else {
+            button.disabled = true;
+            costElement.innerHTML = "Cost: " + formatNumber(requiredCost);
+        }
     }
 }
-
-
-function check_upgrades(id, cost, cost_id) {
-    const requiredCost = Math.round(cost ** multiplier_str);
-    if (str >= requiredCost) {
-        document.getElementById(id).style.display = "block";
-        document.getElementById(cost_id).innerHTML = "Cost :" + formatNumber(requiredCost);
-    } else {
-        document.getElementById(id).style.display = "none";
-        // console.log("Cost for next progressive overload upgrade: " 
-        // + formatNumber(requiredCost));
-    }
-}
-
-function auto_price_pushup() {
-    const auto_prices = {
-        auto_price1: {
-            cost_id: "auto_cost_pushup",
-            id: "auto_pushup",
-            cost: 500
-        },
-        // auto_price2: {
-        //     cost_id: "auto_cost_archer_pushup",
-        //     id: "auto_archer_pushup",
-        //     cost: 1000
-        // }
-    };
-
-    for (const price in auto_prices) {
-        check_auto_price(auto_prices[price].id, auto_prices[price].cost, auto_prices[price].cost_id);
-    }
-}
-
-
-
-function check_auto_price(id, cost, cost_id) {
-    const requiredCost = Math.round(cost ** auto_push_up_multiplier);
-    const element = document.getElementById(id);
-    if (str >= requiredCost) {
-        element.style.display = "block";
-        document.getElementById(cost_id).innerHTML = "Cost: " + formatNumber(requiredCost);
-    } else {
-        element.style.display = "none";
-    }
-}
-
-
-
-
 
 
 
@@ -192,17 +232,25 @@ function check_auto_price(id, cost, cost_id) {
 /////////////////////////////////////////////////////////////////////////////////////
 /// Utilities.
 
-function reset(){
-    str = 0;
-    str_gain = 1;
-    multiplier_str = 1;
-    auto_str = 0;
-    localStorage.setItem("multiplier_str",multiplier_str);
-    localStorage.setItem("str", str);
-    localStorage.setItem("str_gain",str_gain);
-    localStorage.setItem("player_hp", player_hp);
-    localStorage.setItem("auto_str", auto_str);
+function reset() {
+    localStorage.clear();
+    auto_pushup_purchases = 0;
+    localStorage.setItem("auto_pushup_purchases", auto_pushup_purchases);
+    clearInterval(Push_up_interval);
+    localStorage.removeItem("Push_up_interval");
 }
+
+
+
+function restoreAutoGain() {
+    const auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
+    if (auto_str > 0) {
+        const intervalTime = parseInt(localStorage.getItem("Auto_Pushup_time")) || 2000;
+        clearInterval(Push_up_interval);
+        Push_up_interval = setInterval(() => auto_gain_str(auto_str), intervalTime);
+    }
+}
+
 
 
 
@@ -219,11 +267,14 @@ function update_window_str() {
     str = parseInt(localStorage.getItem("str")) || 1;
     str_gain = parseInt(localStorage.getItem("str_gain")) || 1;
     auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
-    document.getElementById('strenght').innerHTML = "Strenght: " + formatNumber(str);
-    document.getElementById('strenght_gain').innerHTML = "Current Strenght Gain: " + formatNumber(str_gain);
-    document.getElementById('auto_str').innerHTML = "Current Auto Strenght Gain: " + formatNumber(auto_str);
 
+    document.getElementById('Strength').innerHTML = "Strength: " + formatNumber(str);
+    document.getElementById('strength_gain').innerHTML = "Current Strength Gain: " + formatNumber(str_gain);
+    document.getElementById('auto_str').innerHTML = "Current Auto Strength Gain: " + formatNumber(auto_str);
 }
+
+
+
 
 function update_enemy_window_str() {
     document.getElementById("player_str").innerText = "Player Strength: " + formatNumber(str);
@@ -231,6 +282,7 @@ function update_enemy_window_str() {
     document.getElementById("player_HP").innerText = "Player HP: " + formatNumber(player_hp);
     document.getElementById("enemy_level").innerText = "Enemy Level: " + formatNumber(enemy_level);
 }
+
 
 
 function toggleStatus(className) {
@@ -262,8 +314,10 @@ function toggleStatus(className) {
     
 setInterval(checkUpgrades, 100);
 setInterval(update_window_str, 100);
-setInterval(auto_price_pushup, 100);
-setInterval(update_enemy_window_str, 100);
+window.onload = function(){
+    restoreAutoGain();
+};
+// setInterval(update_enemy_window_str, 100);
 /////////////////////////////////////////////////////////////////////////////////////
 /// Fighting
 
@@ -281,8 +335,8 @@ function fightEnemy() {
         player_hp = 100;
         str = 0;
         str_gain = 1;
-        multiplier_str = 1;
-        localStorage.setItem("multiplier_str",multiplier_str);
+        multi = 1;
+        localStorage.setItem("multi",multi);
         localStorage.setItem("str", str);
         localStorage.setItem("str_gain",str_gain);
         localStorage.setItem("player_hp", player_hp);
@@ -309,7 +363,7 @@ function fightEnemy() {
     player_hp = parseInt(localStorage.getItem("player_hp"));
     enemy_str = parseInt(localStorage.getItem("enemy_str"));
     enemy_level = parseInt(localStorage.getItem("enemy_level"));
-    multiplier_str = parseInt(localStorage.getItem("mutiplier_str"));
+    multi = parseInt(localStorage.getItem("muti"));
 }
 
 function buyHP() {
@@ -334,5 +388,4 @@ function buyHP() {
 function fightboss(){
     finalboss.src = 'finalboss.png';
     document.getElementById("enemy_HP").innerText = "Enemy HP: ???";
-
 }

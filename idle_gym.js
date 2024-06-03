@@ -53,8 +53,8 @@ function upgrade_str(increase_by, cost, multiplier, multiplier_increase_by, upgr
         upgradeData.Progressive_Overload_Bought += 1;
         str -= requiredCost;
         str_gain += (increase_by ** upgradeData.multiplier) * multiplier;
-        auto_str += str_gain;
-        upgradeData.multiplier += multiplier_increase_by;
+        auto_str += str_gain / 10;
+        upgradeData.multiplier += multiplier_increase_by + 1;
     }
 
     document.getElementById("Strength").innerHTML = "Strength: " + formatNumber(str);

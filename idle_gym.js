@@ -21,6 +21,15 @@ function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
 }
 
+function openUpgrades() {
+    document.getElementById("Upgrades").style.width = "10rem";
+}
+
+function closeUpgrades() {
+    document.getElementById("Upgrades").style.width = "0";
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 /// Strength and Upgrades section.
@@ -355,14 +364,32 @@ function update_enemy_window_str() {
 
 
 
-function toggleStatus(className) {
+function toggle(className, button_id) {
     const element = document.getElementsByClassName(className)[0];
-    if (element.style.display === "none") {
-        element.style.display = "block";
-    } else {
-        element.style.display = "none";
+    const button = document.getElementById(button_id)
+    if (button_id == 'upgrade'){
+        if (element.style.display === "none") {
+            element.style.display = "block";
+            button.innerHTML = "Close"
+        } else {
+            element.style.display = "none";
+            button.innerHTML = "Upgrades"
+    
+        }
+    }
+    else if (button_id == 'status_button'){
+        if (element.style.display === "none") {
+            element.style.display = "block";
+            button.innerHTML = "Hide Status"
+        } else {
+            element.style.display = "none";
+            button.innerHTML = "Show Status"
+    
+        }
     }
 }
+
+
 
 
 

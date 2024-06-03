@@ -7,7 +7,6 @@
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="index.html" class="menu_Item">HOME</a>
-        <a href="upgrade.html" class="menu_Item">UPGRADES</a>
         <a href="market.html" class="menu_Item">MARKET</a>
         <a href="boss.html" class="menu_Item">BOSS</a>
         <a href="help.html" class="menu_Item">HELP</a>
@@ -35,45 +34,48 @@
             Pull Up</button>
         </div>
         <div>
-            <div id="Strength"> Strength: 0</div>
+            <div class="status_text" id="Strength"> Strength: 0</div>
         </div>
+        <button id = "show_upgrade" onclick="toggle('upgrades', 'show_upgrade')">Upgrades</button>
+        
+        
         <div class="upgrades">
             <div>
                 <button id="progressive_overload" onclick="upgrade_str(2, 10, 1, 1, 'Progressive_Overload')"
                  disabled>Progressive Overload</button>
-                <a id="progressive_overload_cost">Cost: 10 str
+                <a class="status_text" id="progressive_overload_cost">Cost: 10 str
                 </a>
             </div>
+
             <div id="pull_up_container">
                 <button id="purchase_pull_up" onclick="purchase_exercise('Pull_up')">
                     Purchase Pull Up</button>
-                    <p id="pull_up_requirements">
-                        Requirements: 
+                    <p class="status_text" id="pull_up_requirements">
+                        Requirements:
                         5,000 Strength
                         Progressive Overload (3)
                     </p>
             </div>
-        <div class="managers">
             <div>
                 <button id="auto_pushup" onclick="purchase_auto(1, 1, 'Auto_Pushup', parseInt(localStorage.getItem('auto_pushup_purchases')) || 0)" disabled>
                     Buy Auto Pushup</button>
-
-                <a id="auto_pushup_cost">Cost: 500 str</a>
+                <a id="auto_pushup_cost">
+                    Cost: 500 str
+                </a>
             </div>
         </div>
-            <div>
-                <button id="status_button" onclick="toggleStatus('status')">Show Status</button>
+
+
+        <div class="status_text">
             </div>
+            <button id="status_button" onclick="toggle('status', 'status_button')">Show Status</button>
             <div class="status" style="display: none;">
                 <div id="strength_gain">Current Strength Gain: 1</div>
-                <div id="auto_str">Current Auto Strength Gain: 0</div>
+                <div class="status_text" id="auto_str">Current Auto Strength Gain: 0</div>
             </div>
             <div>
                 <button id="reset" onclick="reset()">Reset Progress </button>
             </div>
-    </div>
-    <div class="footer">
-        
-    </div>
+        </div>
 </body>
 </html>

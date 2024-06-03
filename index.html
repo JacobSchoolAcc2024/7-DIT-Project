@@ -6,8 +6,8 @@
 </head>
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#" class="menu_Item" onclick="showMainContent()">HOME</a>
-        <a href="#" class="menu_Item" onclick="showUpgradesSection()">UPGRADES</a>
+        <a href="index.html" class="menu_Item">HOME</a>
+        <a href="upgrade.html" class="menu_Item">UPGRADES</a>
         <a href="market.html" class="menu_Item">MARKET</a>
         <a href="boss.html" class="menu_Item">BOSS</a>
         <a href="help.html" class="menu_Item">HELP</a>
@@ -31,7 +31,7 @@
         <div class="exercises">
             <button id="push_up"  onclick="gain_str(0)"
             >Push-up</button>
-            <button id="pull_up" onclick="gain_str(2)">
+            <button id="pull_up" onclick="gain_str(2)"  style="display: none;">
             Pull Up</button>
         </div>
         <div>
@@ -41,15 +41,17 @@
             <div>
                 <button id="progressive_overload" onclick="upgrade_str(2, 10, 1, 1, 'Progressive_Overload')"
                  disabled>Progressive Overload</button>
-                <a id="progressive_overload_cost">Cost: 10 str</a>
+                <a id="progressive_overload_cost">Cost: 10 str
+                </a>
             </div>
-            <div>
-                <button id="purchase_pull_up" disabled>Purchase Pull Up</button>
-                <div id="pull_up_requirements">
-                    <p>Requirements: </p>
-                    <a>5,000 Strenght</a>
-                    <a>Progressive Overload (3)</a>
-                </div>
+            <div id="pull_up_container">
+                <button id="purchase_pull_up" onclick="purchase_exercise('Pull_up')">
+                    Purchase Pull Up</button>
+                    <p id="pull_up_requirements">
+                        Requirements: 
+                        5,000 Strength
+                        Progressive Overload (3)
+                    </p>
             </div>
         <div class="managers">
             <div>
@@ -59,7 +61,6 @@
                 <a id="auto_pushup_cost">Cost: 500 str</a>
             </div>
         </div>
-
             <div>
                 <button id="status_button" onclick="toggleStatus('status')">Show Status</button>
             </div>

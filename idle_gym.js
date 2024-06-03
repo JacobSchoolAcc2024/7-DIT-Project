@@ -22,24 +22,6 @@ function closeNav() {
 }
 
 
-function showUpgradesSection() {
-    // Hide all sections
-    document.querySelector(".exercises").style.display = "none";
-    document.querySelector("#push_up").style.display = "none";
-    document.querySelector(".status").style.display = "none";
-
-    // Show the upgrades section
-}
-
-function showMainContent() {
-    // Show all sections
-    document.querySelector(".exercises").style.display = "block";
-    document.querySelector("#push_up").style.display = "block";
-    document.querySelector(".status").style.display = "block";
-}
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////
 /// Strength and Upgrades section.
 
@@ -49,6 +31,7 @@ function gain_str(increase_by) {
     document.getElementById('Strength').innerHTML 
     = "Strength: " + formatNumber(str);
     localStorage.setItem("str",str);
+    checkUpgrades();
 }
 
 
@@ -60,24 +43,29 @@ function upgrade_str(increase_by, cost, multiplier, multiplier_increase_by, upgr
             cost_id: "progressive_overload_cost",
             cost: 10,
             multiplier: parseInt(localStorage.getItem("Progressive_Overload_multiplier")) || 1,
+            Progressive_Overload_Bought: parseInt(localStorage.getItem("Progressive_Overload_Bought")) || 0,
         },
     
     };
-
     const upgradeData = upgrades[upgradeName];
-    const requiredCost = Math.round(cost ** upgradeData.multiplier);
-    str -= requiredCost;
-    str_gain += (increase_by ** upgradeData.multiplier) * multiplier;
-    auto_str += str_gain;
-    upgradeData.multiplier += multiplier_increase_by;
+    if (upgradeName == 'Progressive_Overload') {
+        const requiredCost = Math.round(cost ** upgradeData.multiplier);
+        upgradeData.Progressive_Overload_Bought += 1;
+        str -= requiredCost;
+        str_gain += (increase_by ** upgradeData.multiplier) * multiplier;
+        auto_str += str_gain;
+        upgradeData.multiplier += multiplier_increase_by;
+    }
 
     document.getElementById("Strength").innerHTML = "Strength: " + formatNumber(str);
-    document.getElementById("strength_gain").innerHTML = "Strength Gain: " + formatNumber(str_gain);
+    document.getElementById("strength_gain").innerHTML = "Current Strength Gain: " + formatNumber(str_gain);
 
     localStorage.setItem("str", str);
     localStorage.setItem("str_gain", str_gain);
+    localStorage.setItem("auto_str", auto_str);
     localStorage.setItem(upgradeName + "_multiplier", upgradeData.multiplier);
-    
+    localStorage.setItem(upgradeName + "_Bought", upgradeData.Progressive_Overload_Bought);
+    checkUpgrades();
     
 }
 
@@ -112,7 +100,7 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
 
         // Calculate auto_str based on updated multiplier
         auto_str += (increase_by ** upgradeData.multiplier)
-        * Math.pow(2, upgradeData.auto_pushup_purchases);
+        * Math.pow(2, upgradeData.auto_pushup_purchases) * (str_gain/4);
         if (upgradeData.time <= 0) {
             upgradeData.time == 100;
         }
@@ -133,6 +121,7 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
         clearInterval(Push_up_interval);
         Push_up_interval = setInterval(() => auto_gain_str(auto_str), time);
         localStorage.setItem("Push_up_interval", Push_up_interval);
+        checkUpgrades();
     } else {
         console.log(requiredCost);
     }
@@ -148,9 +137,34 @@ function auto_gain_str(increase_by) {
     = "Strength: " + formatNumber(str);
     console.log(increase_by)
     localStorage.setItem("str",str);
+    checkUpgrades();
 }
 
 
+
+///Purchase New Exercise////
+
+function purchase_exercise(exerciseName){
+    const Exercises ={
+        Pull_up: {
+            button_id: "pull_up",
+            Container_id: "pull_up_container",
+            cost: 5000,
+            Bought: parseInt(localStorage.getItem("pull_up_Bought")) || 0,
+        }
+    }
+    const exerciseData = Exercises[exerciseName];
+    const requiredCost = exerciseData.cost;
+    const container = document.getElementById(exerciseData.Container_id);
+    const button = document.getElementById(exerciseData.button_id);
+    str -= requiredCost;
+    button.style.display = "block";
+    container.style.display = "none";
+    exerciseData.Bought += 1;
+    localStorage.setItem(exerciseName + "_Bought", exerciseData.Bought);
+    localStorage.setItem("str", str);
+    checkUpgrades();
+}
 
 
 
@@ -194,6 +208,7 @@ function checkUpgrades() {
             cost_id: "progressive_overload_cost",
             cost: 10,
             multiplier: parseInt(localStorage.getItem("Progressive_Overload_multiplier")) || 1,
+            Bought: parseInt(localStorage.getItem("Progressive_Overload_Bought")) || 0,
         },
         Auto_Pushup: {
             button_id: "auto_pushup",
@@ -201,26 +216,71 @@ function checkUpgrades() {
             cost: 500,
             multiplier: parseInt(localStorage.getItem("Auto_Pushup_multiplier")) || 1,
             auto_pushup_purchases: parseInt(localStorage.getItem("auto_pushup_purchases")) || 0,
+        },
+        Pull_up: {
+            Container_id: "pull_up_container",
+            button_id: "purchase_pull_up",
+            cost_id: "pull_up_requirements",
+            Requirement: {
+                cost: 5000,
+                "1" : localStorage.getItem("Progressive_Overload_Bought") || 0,
+            },
+            multiplier: parseInt(localStorage.getItem("Pull_up_multiplier")) || 1,
+            Bought: parseInt(localStorage.getItem("Pull_up_Bought")) || 0,
         }
+        
     };
+    
 
     for (const upgrade in upgrades) {
         const upgradeData = upgrades[upgrade];
-        let requiredCost;
-        if (upgrade === "Auto_Pushup") {
-            requiredCost = Math.round(upgradeData.cost * Math.pow(2, upgradeData.auto_pushup_purchases));
-        } else {
+        if (upgrade === "Progressive_Overload") {
+            const button = document.getElementById(upgradeData.button_id);
+            const costElement = document.getElementById(upgradeData.cost_id);
+            bought = upgradeData.Bought;
             requiredCost = Math.round(upgradeData.cost ** upgradeData.multiplier);
+            if (str >= requiredCost) {
+                button.disabled = false;
+                costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
+                + bought + ")";
+            } else {
+                button.disabled = true;
+                costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
+                + bought + ")";
+            }
         }
-        const button = document.getElementById(upgradeData.button_id);
-        const costElement = document.getElementById(upgradeData.cost_id);
-
-        if (str >= requiredCost) {
-            button.disabled = false;
-            costElement.innerHTML = "Cost: " + formatNumber(requiredCost);
-        } else {
-            button.disabled = true;
-            costElement.innerHTML = "Cost: " + formatNumber(requiredCost);
+        else if (upgrade === "Auto_Pushup") {
+            const button = document.getElementById(upgradeData.button_id);
+            const costElement = document.getElementById(upgradeData.cost_id);
+            bought = upgradeData.auto_pushup_purchases;
+            
+            if (bought >= 10){
+                requiredCost = Math.round(upgradeData.cost * Math.pow(2, upgradeData.auto_pushup_purchases))
+                * (auto_pushup_purchases * auto_pushup_purchases);}
+            else {requiredCost = Math.round(upgradeData.cost * Math.pow(2, upgradeData.auto_pushup_purchases));}
+            
+            if (str >= requiredCost) {
+                button.disabled = false;
+                costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
+                + bought + ")";
+            } else {
+                button.disabled = true;
+                costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
+                + bought + ")";
+            }
+        }
+        else if (upgrade === "Pull_up") {
+            const button = document.getElementById(upgradeData.button_id);
+            requiredCost = Math.round(upgradeData.Requirement.cost ** upgradeData.multiplier);
+            Progressive_Overload_Bought = upgradeData.Requirement["1"];
+            Pull_up_Bought = upgradeData.Bought;
+            cotainer = document.getElementById(upgradeData.Container_id);
+            if (Progressive_Overload_Bought >= 3 && str >= requiredCost) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
         }
     }
 }
@@ -251,6 +311,16 @@ function restoreAutoGain() {
     }
 }
 
+function check_exercise_upgrade(){
+    const pull_up_Bought = parseInt(localStorage.getItem("Pull_up_Bought")) || 0;
+    if (pull_up_Bought === 1){
+        document.getElementById("pull_up_container").style.display = "none";
+        document.getElementById("pull_up").style.display = "block";
+    }
+    else {
+        document.getElementById("pull_up_container").style.display = "block";
+    }
+}
 
 
 
@@ -311,11 +381,11 @@ function toggleStatus(className) {
 
 
 
-    
 setInterval(checkUpgrades, 100);
 setInterval(update_window_str, 100);
 window.onload = function(){
     restoreAutoGain();
+    check_exercise_upgrade();
 };
 // setInterval(update_enemy_window_str, 100);
 /////////////////////////////////////////////////////////////////////////////////////

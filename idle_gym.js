@@ -14,20 +14,17 @@ let Push_up_interval;
 /// Html Related JS ///
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "10rem";
+    document.getElementById("mySidenav").style.width = "8rem";
+    document.getElementById("main_Page").style.marginLeft = "9.5rem";
+    document.getElementById("main_Page").style.transition = "0.9s";
+    
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main_Page").style.marginLeft = "1.5rem";
 }
 
-function openUpgrades() {
-    document.getElementById("Upgrades").style.width = "10rem";
-}
-
-function closeUpgrades() {
-    document.getElementById("Upgrades").style.width = "0";
-}
 
 
 
@@ -367,17 +364,7 @@ function update_enemy_window_str() {
 function toggle(className, button_id) {
     const element = document.getElementsByClassName(className)[0];
     const button = document.getElementById(button_id)
-    if (button_id == 'upgrade'){
-        if (element.style.display === "none") {
-            element.style.display = "block";
-            button.innerHTML = "Close"
-        } else {
-            element.style.display = "none";
-            button.innerHTML = "Upgrades"
-    
-        }
-    }
-    else if (button_id == 'status_button'){
+        if (button_id == 'status_button'){
         if (element.style.display === "none") {
             element.style.display = "block";
             button.innerHTML = "Hide Status"
@@ -388,6 +375,18 @@ function toggle(className, button_id) {
         }
     }
 }
+
+function toggleUpgrades() {
+    var x = document.getElementById("upgrades");
+    var y = document.getElementById("closeUpgrades")
+    if (x.style.display == "block") { // `=` to `==` or `===`
+      x.style.display = "none";
+      y.innerHTML = "Upgrades"
+    } else {
+      x.style.display = "block";
+      y.innerHTML = "Close"
+    }
+  }
 
 
 

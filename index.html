@@ -36,10 +36,8 @@
         <div>
             <div class="status_text" id="Strength"> Strength: 0</div>
         </div>
-        <button id = "show_upgrade" onclick="toggle('upgrades', 'show_upgrade')">Upgrades</button>
-        
-        
-        <div class="upgrades">
+        <button id="closeUpgrades" onclick="toggleUpgrades()">Upgrades</button>
+        <div id ="upgrades">
             <div>
                 <button id="progressive_overload" onclick="upgrade_str(2, 10, 1, 1, 'Progressive_Overload')"
                  disabled>Progressive Overload</button>
@@ -59,8 +57,7 @@
             <div>
                 <button id="auto_pushup" onclick="purchase_auto(1, 1, 'Auto_Pushup', parseInt(localStorage.getItem('auto_pushup_purchases')) || 0)" disabled>
                     Buy Auto Pushup</button>
-                <a id="auto_pushup_cost">
-                    Cost: 500 str
+                <a id="auto_pushup_cost">Cost: 500 str
                 </a>
             </div>
         </div>
@@ -72,9 +69,6 @@
             <div class="status" style="display: none;">
                 <div id="strength_gain">Current Strength Gain: 1</div>
                 <div class="status_text" id="auto_str">Current Auto Strength Gain: 0</div>
-            </div>
-            <div>
-                <button id="reset" onclick="reset()">Reset Progress </button>
             </div>
         </div>
 </body>

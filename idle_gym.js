@@ -1,7 +1,7 @@
 
 ///Variables///
 
-let str = parseInt(localStorage.getItem("str")) || 1;
+let str = parseInt(localStorage.getItem("str")) || 0;
 let str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
 let auto_push_up_multiplier = parseInt(localStorage.getItem("auto_push_up_multiplier")) || 1;
 let enemy_hp = parseInt(localStorage.getItem("enemy_hp")) || 100;
@@ -11,6 +11,7 @@ let enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
 let auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
 let auto_pushup_purchases = parseInt(localStorage.getItem("auto_pushup_purchases")) || 1;
 let Push_up_interval;
+let gold = parseInt(localStorage.getItem("gold")) || 0;
 /// Html Related JS ///
 
 function openNav() {
@@ -334,7 +335,7 @@ function formatNumber(num) {
 }
 
 function update_window_str() {
-    str = parseInt(localStorage.getItem("str")) || 1;
+    str = parseInt(localStorage.getItem("str")) || 0;
     str_gain = parseInt(localStorage.getItem("str_gain")) || 1;
     auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
 
@@ -380,7 +381,7 @@ function toggleStatus(className) {
 
 
 
-
+setInterval(update_enemy_window_str,1);
 setInterval(checkUpgrades, 100);
 setInterval(update_window_str, 100);
 window.onload = function(){
@@ -402,23 +403,22 @@ function fightEnemy() {
     // Check if the player or enemy has been defeated
     if (player_hp <= 0) {
         document.getElementById("fight").style.display = "block";
-        player_hp = 100;
-        str = 0;
-        str_gain = 1;
-        multi = 1;
-        localStorage.setItem("multi",multi);
-        localStorage.setItem("str", str);
-        localStorage.setItem("str_gain",str_gain);
-        localStorage.setItem("player_hp", player_hp);
+        player_hp = 0;
+        localStorage.setItem("enemy_hp", enemy_hp);
+        localStorage.clear();
+        auto_pushup_purchases = 0;
+        localStorage.setItem("auto_pushup_purchases", auto_pushup_purchases);
+        clearInterval(Push_up_interval);
+        localStorage.removeItem("Push_up_interval");
     } 
     if (enemy_hp <= 0) {
-        enemy_hp=100;
         enemy_level++;
-        player_hp +=str_gain;
-        enemy_hp +=10;
+        player_hp = 100 * enemy_level;
+        enemy_hp = 100 * enemy_level;
         enemy_str += 2;
         localStorage.setItem("enemy_hp", enemy_hp);
         localStorage.setItem("enemy_str", enemy_str);
+        localStorage.setItem("player_hp", player_hp);
         
     }
 
@@ -433,12 +433,11 @@ function fightEnemy() {
     player_hp = parseInt(localStorage.getItem("player_hp"));
     enemy_str = parseInt(localStorage.getItem("enemy_str"));
     enemy_level = parseInt(localStorage.getItem("enemy_level"));
-    multi = parseInt(localStorage.getItem("muti"));
 }
 
 function buyHP() {
     let HP_number = parseInt(prompt("How many HP do you wanna buy:"));
-    if (isNaN(HP_number) || HP_number <= 0 || !Number.isInteger(HP_number) || HP_number > str) {
+    if (isNaN(HP_number) || HP_number <= 0 || !Number.isInteger(HP_number) || HP_number >= str) {
         alert("This is not a valid number!!!");
         return;
     }
@@ -458,4 +457,38 @@ function buyHP() {
 function fightboss(){
     finalboss.src = 'finalboss.png';
     document.getElementById("enemy_HP").innerText = "Enemy HP: ???";
+    enemy_hp = 99999999;
+    localStorage.setItem("enemy_hp", enemy_hp);
+    enemy_hp = parseInt(localStorage.getItem("enemy_hp"));
+    enemy_hp = parseInt(localStorage.getItem("enemy_hp"));
+    if (player_hp > 0){
+        // Update player and enemy HP based on combat
+        player_hp -= enemy_str;
+        enemy_hp -= str;
+    }
+    if (str >= enemy_hp) {
+        document.getElementById("fightboss").style.display = "block";
+        player_hp = 100;
+        str = 0;
+        str_gain = 1;
+        localStorage.setItem("str", str);
+        localStorage.setItem("str_gain",str_gain);
+        localStorage.setItem("player_hp", player_hp);
+    }
+    if (enemy_hp <= str) {
+        enemy_hp=100;
+        enemy_level=0;
+        player_hp +=str_gain;
+        enemy_str = 2;
+        localStorage.setItem("enemy_hp", enemy_hp);
+        localStorage.setItem("enemy_str", enemy_str);
+        }
+    
+    // Update localStorage with new values
+    str_gain = parseInt(localStorage.getItem("str_gain"));
+    enemy_hp = parseInt(localStorage.getItem("enemy_hp"));
+    player_hp = parseInt(localStorage.getItem("player_hp"));
+    enemy_str = parseInt(localStorage.getItem("enemy_str"));
+    enemy_level = parseInt(localStorage.getItem("enemy_level"));
+    multiplier_str = parseInt(localStorage.getItem("mutiplier_str"));    
 }

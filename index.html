@@ -28,13 +28,14 @@
 <body>
     <div class="main" id="main_Page">
         <div class="exercises">
-            <button id="push_up"  onclick="gain_str(0)"
+            <button id="push_up"  onclick="gain_str(0, 1)"
             >Push-up</button>
-            <button id="pull_up" onclick="gain_str(2)"  style="display: none;">
+            <button id="pull_up" onclick="gain_str(2, 2)"  style="display: none;">
             Pull Up</button>
         </div>
         <div>
             <div class="status_text" id="Strength"> Strength: 0</div>
+            <div class="status_text" id="combo">Current combo: x1</div>
         </div>
         <button id="closeUpgrades" onclick="toggleUpgrades()">Upgrades</button>
         <div id ="upgrades">
@@ -61,15 +62,15 @@
                 </a>
             </div>
         </div>
-
-
         <div class="status_text">
             </div>
             <button id="status_button" onclick="toggle('status', 'status_button')">Show Status</button>
             <div class="status" style="display: none;">
                 <div id="strength_gain">Current Strength Gain: 1</div>
                 <div class="status_text" id="auto_str">Current Auto Strength Gain: 0</div>
+                <div class="status_text" id="click_strength">Click Strength: 1</div>
             </div>
         </div>
+        <button class="status_text"  onclick="reset()">Reset Progress</button>
 </body>
 </html>

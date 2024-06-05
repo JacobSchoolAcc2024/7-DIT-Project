@@ -54,6 +54,7 @@ function gain_str(increase_by, multiplier) {
     comboTimeout = setTimeout(() => {
         combo = 0;
         document.getElementById('combo').innerHTML = "Combo: 0";
+        alert("Your combo has reset!");
     }, 5000); 
     
     checkUpgrades();
@@ -276,7 +277,7 @@ function checkUpgrades() {
                 + bought + ")";
             } else {
                 button.disabled = true;
-                button.style.background = "red";
+                button.style.background = "darkred";
                 button.style.color = "white";
                 costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
                 + bought + ")";
@@ -301,7 +302,7 @@ function checkUpgrades() {
                 + bought + ")";
             } else {
                 button.disabled = true;
-                button.style.background = "red";
+                button.style.background = "darkred";
                 button.style.color = "white";
                 costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
                 + bought + ")";
@@ -319,7 +320,7 @@ function checkUpgrades() {
                 button.disabled = false;
             }
             else {
-                button.style.background = "red";
+                button.style.background = "darkred";
                 button.style.color = "white";
                 button.disabled = true;
             }
@@ -387,6 +388,7 @@ function update_window_str() {
 
     document.getElementById('Strength').innerHTML = "Strength: " + formatNumber(str);
     document.getElementById('strength_gain').innerHTML = "Current Strength Gain: " + formatNumber(str_gain);
+    document.getElementById('click_strength').innerHTML = "Click Str Gain: " + formatNumber(click_str_gain);
     document.getElementById('auto_str').innerHTML = "Current Auto Strength Gain: " + formatNumber(auto_str);
 }
 

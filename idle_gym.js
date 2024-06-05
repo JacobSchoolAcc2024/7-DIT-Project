@@ -10,6 +10,9 @@ let enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
 let enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
 let auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
 let auto_pushup_purchases = parseInt(localStorage.getItem("auto_pushup_purchases")) || 1;
+let click_str_gain = parseInt(localStorage.getItem("click_str_gain")) || 1;
+let combo = parseInt(localStorage.getItem("combo")) || 0;
+let comboTimeout;
 let Push_up_interval;
 let gold = parseInt(localStorage.getItem("gold")) || 0;
 /// Html Related JS ///
@@ -33,13 +36,33 @@ function closeNav() {
 /// Strength and Upgrades section.
 
 
-function gain_str(increase_by) {
-    str += increase_by + str_gain;
-    document.getElementById('Strength').innerHTML 
-    = "Strength: " + formatNumber(str);
-    localStorage.setItem("str",str);
+
+function gain_str(increase_by, multiplier) {
+    str += (increase_by + str_gain) * (multiplier + combo);
+    click_str_gain = (increase_by + str_gain) * (multiplier + combo)
+    combo += 0.01;
+    document.getElementById('click_strength').innerHTML = "Click Str Gain: " + formatNumber(click_str_gain);
+    document.getElementById('combo').innerHTML = "Combo: " + formatNumber(combo);
+    document.getElementById('Strength').innerHTML = "Strength: " + formatNumber(str);
+
+    if (str == 10) {
+        setTimeout(() => {
+            alert("You have enough strength to buy an upgrade!\nYou can view upgrades by clicking the upgrade button below push up.");
+        }, 2000);
+    }
+
+    clearTimeout(comboTimeout);
+    comboTimeout = setTimeout(() => {
+        combo = 0;
+        document.getElementById('combo').innerHTML = "Combo: 0";
+        alert("Your combo has reset!");
+    }, 5000); 
+    
     checkUpgrades();
+    localStorage.setItem("str", str);
+    localStorage.setItem("combo", combo);
 }
+
 
 
 function upgrade_str(increase_by, cost, multiplier, multiplier_increase_by, upgradeName) {
@@ -59,7 +82,7 @@ function upgrade_str(increase_by, cost, multiplier, multiplier_increase_by, upgr
         const requiredCost = Math.round(cost ** upgradeData.multiplier);
         upgradeData.Progressive_Overload_Bought += 1;
         str -= requiredCost;
-        str_gain += (increase_by ** upgradeData.multiplier) * multiplier;
+        str_gain += (increase_by ** upgradeData.multiplier) * Math.pow(2, multiplier);
         auto_str += str_gain / 10;
         upgradeData.multiplier += multiplier_increase_by + 1;
     }
@@ -108,6 +131,7 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
         // Calculate auto_str based on updated multiplier
         auto_str += (increase_by ** upgradeData.multiplier)
         * Math.pow(2, upgradeData.auto_pushup_purchases) * (str_gain/4);
+        str_gain += (increase_by ** upgradeData.multiplier);
         if (upgradeData.time <= 0) {
             upgradeData.time == 100;
         }
@@ -248,10 +272,14 @@ function checkUpgrades() {
             requiredCost = Math.round(upgradeData.cost ** upgradeData.multiplier);
             if (str >= requiredCost) {
                 button.disabled = false;
+                button.style.background = "green";
+                button.style.color = "white";
                 costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
                 + bought + ")";
             } else {
                 button.disabled = true;
+                button.style.background = "darkred";
+                button.style.color = "white";
                 costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
                 + bought + ")";
             }
@@ -268,10 +296,15 @@ function checkUpgrades() {
             
             if (str >= requiredCost) {
                 button.disabled = false;
+                button.style.background = "green";
+                button.style.color = "white";
+
                 costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
                 + bought + ")";
             } else {
                 button.disabled = true;
+                button.style.background = "darkred";
+                button.style.color = "white";
                 costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
                 + bought + ")";
             }
@@ -283,9 +316,13 @@ function checkUpgrades() {
             Pull_up_Bought = upgradeData.Bought;
             cotainer = document.getElementById(upgradeData.Container_id);
             if (Progressive_Overload_Bought >= 3 && str >= requiredCost) {
+                button.style.background = "green";
+                button.style.color = "white";
                 button.disabled = false;
             }
             else {
+                button.style.background = "darkred";
+                button.style.color = "white";
                 button.disabled = true;
             }
         }
@@ -298,6 +335,10 @@ function checkUpgrades() {
 
 /////////////////////////////////////////////////////////////////////////////////////
 /// Utilities.
+
+
+
+
 
 function reset() {
     localStorage.clear();
@@ -340,6 +381,7 @@ function formatNumber(num) {
     return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");
 }
 
+
 function update_window_str() {
     str = parseInt(localStorage.getItem("str")) || 0;
     str_gain = parseInt(localStorage.getItem("str_gain")) || 1;
@@ -347,8 +389,10 @@ function update_window_str() {
 
     document.getElementById('Strength').innerHTML = "Strength: " + formatNumber(str);
     document.getElementById('strength_gain').innerHTML = "Current Strength Gain: " + formatNumber(str_gain);
+    document.getElementById('click_strength').innerHTML = "Click Str Gain: " + formatNumber(click_str_gain);
     document.getElementById('auto_str').innerHTML = "Current Auto Strength Gain: " + formatNumber(auto_str);
 }
+
 
 
 
@@ -410,7 +454,13 @@ function toggleUpgrades() {
 setInterval(update_enemy_window_str,1);
 setInterval(checkUpgrades, 100);
 setInterval(update_window_str, 100);
-window.onload = function(){
+setInterval(update_enemy_window_str, 100);
+
+window.onload = function () {
+    setTimeout(() => {
+        alert("Welcome to Idle Gym\nClick the push up button to begin" + 
+        "\nBecome the strongest in the world and ascend to become a god!");
+    }, 2000);
     restoreAutoGain();
     check_exercise_upgrade();
 };

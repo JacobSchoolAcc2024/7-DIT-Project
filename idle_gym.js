@@ -40,7 +40,7 @@ function closeNav() {
 function gain_str(increase_by, multiplier) {
     str += (increase_by + str_gain) * (multiplier + combo);
     click_str_gain = (increase_by + str_gain) * (multiplier + combo)
-    combo += 0.01;
+    combo += 1;
     document.getElementById('click_strength').innerHTML = "Click Str Gain: " + formatNumber(click_str_gain);
     document.getElementById('combo').innerHTML = "Combo: " + formatNumber(combo);
     document.getElementById('Strength').innerHTML = "Strength: " + formatNumber(str);
@@ -56,6 +56,7 @@ function gain_str(increase_by, multiplier) {
         combo = 0;
         document.getElementById('combo').innerHTML = "Combo: 0";
         alert("Your combo has reset!");
+        localStorage.setItem("combo", combo);
     }, 5000); 
     
     checkUpgrades();
@@ -391,6 +392,7 @@ function update_window_str() {
     document.getElementById('strength_gain').innerHTML = "Current Strength Gain: " + formatNumber(str_gain);
     document.getElementById('click_strength').innerHTML = "Click Str Gain: " + formatNumber(click_str_gain);
     document.getElementById('auto_str').innerHTML = "Current Auto Strength Gain: " + formatNumber(auto_str);
+    document.getElementById("combo").innerText = "Combo: " + formatNumber(combo);
 }
 
 
@@ -402,6 +404,8 @@ function update_enemy_window_str() {
     document.getElementById("enemy_HP").innerText = "Enemy HP: " + formatNumber(enemy_hp);
     document.getElementById("player_HP").innerText = "Player HP: " + formatNumber(player_hp);
     document.getElementById("enemy_level").innerText = "Enemy Level: " + formatNumber(enemy_level);
+    document.getElementById("enemy_str").innerText = "Enemy Strength: " + formatNumber(enemy_str);
+
 }
 
 
@@ -531,40 +535,15 @@ function buyHP() {
 }
 
 function fightboss(){
+    alert("Jacob is coming");
     finalboss.src = 'finalboss.png';
-    document.getElementById("enemy_HP").innerText = "Enemy HP: ???";
-    enemy_hp = 99999999;
+    localStorage.setItem("finalboss_src", "finalboss.png");
+    enemy_hp = 99999999999;
+    enemy_level = 1000000000000;
+    enemy_str = 666666666666666;
     localStorage.setItem("enemy_hp", enemy_hp);
-    enemy_hp = parseInt(localStorage.getItem("enemy_hp"));
-    enemy_hp = parseInt(localStorage.getItem("enemy_hp"));
-    if (player_hp > 0){
-        // Update player and enemy HP based on combat
-        player_hp -= enemy_str;
-        enemy_hp -= str;
-    }
-    if (str >= enemy_hp) {
-        document.getElementById("fightboss").style.display = "block";
-        player_hp = 100;
-        str = 0;
-        str_gain = 1;
-        localStorage.setItem("str", str);
-        localStorage.setItem("str_gain",str_gain);
-        localStorage.setItem("player_hp", player_hp);
-    }
-    if (enemy_hp <= str) {
-        enemy_hp=100;
-        enemy_level=0;
-        player_hp +=str_gain;
-        enemy_str = 2;
-        localStorage.setItem("enemy_hp", enemy_hp);
-        localStorage.setItem("enemy_str", enemy_str);
-        }
-    
-    // Update localStorage with new values
-    str_gain = parseInt(localStorage.getItem("str_gain"));
-    enemy_hp = parseInt(localStorage.getItem("enemy_hp"));
-    player_hp = parseInt(localStorage.getItem("player_hp"));
-    enemy_str = parseInt(localStorage.getItem("enemy_str"));
-    enemy_level = parseInt(localStorage.getItem("enemy_level"));
-    multiplier_str = parseInt(localStorage.getItem("mutiplier_str"));    
+    localStorage.setItem("enemy_level", enemy_level);
+    localStorage.setItem("enemy_str", enemy_str);
+    document.getElementById("fightboss").style.display = "none";
+    document.getElementById("finalboss").src = localStorage.getItem("finalboss_src");
 }

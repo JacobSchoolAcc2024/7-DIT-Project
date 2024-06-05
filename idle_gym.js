@@ -15,12 +15,18 @@ let gold = parseInt(localStorage.getItem("gold")) || 0;
 /// Html Related JS ///
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "10rem";
+    document.getElementById("mySidenav").style.width = "8rem";
+    document.getElementById("main_Page").style.marginLeft = "9.5rem";
+    document.getElementById("main_Page").style.transition = "0.9s";
+    
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main_Page").style.marginLeft = "1.5rem";
 }
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -356,14 +362,34 @@ function update_enemy_window_str() {
 
 
 
-function toggleStatus(className) {
+function toggle(className, button_id) {
     const element = document.getElementsByClassName(className)[0];
-    if (element.style.display === "none") {
-        element.style.display = "block";
-    } else {
-        element.style.display = "none";
+    const button = document.getElementById(button_id)
+        if (button_id == 'status_button'){
+        if (element.style.display === "none") {
+            element.style.display = "block";
+            button.innerHTML = "Hide Status"
+        } else {
+            element.style.display = "none";
+            button.innerHTML = "Show Status"
+    
+        }
     }
 }
+
+function toggleUpgrades() {
+    var x = document.getElementById("upgrades");
+    var y = document.getElementById("closeUpgrades")
+    if (x.style.display == "block") { // `=` to `==` or `===`
+      x.style.display = "none";
+      y.innerHTML = "Upgrades"
+    } else {
+      x.style.display = "block";
+      y.innerHTML = "Close"
+    }
+  }
+
+
 
 
 

@@ -14,7 +14,7 @@
     height: 100%;
     width: 0;
     position: fixed;
-    background-color: var(--bg-primary);
+    background-color: black;
     overflow-x: hidden;
     padding-top: 60px;
     transition: 0.9s;
@@ -48,7 +48,7 @@ body {
 .sidenav a {
     text-decoration: none;
     font-size: 1rem;
-    color:black;
+    color:white;
     transition: 0.3s;
     display: block;
     padding-right: 0;
@@ -72,12 +72,12 @@ body {
 
 .sidenav .menu_Item:hover{
     color: #f1f1f1;
-    padding: 8px 8px 8px 8px;
-    background-color: black;
+    padding: 8px 0px 8px 0px;
+    background-color: darkgreen;
 }
 
   .sidenav .closebtn:hover {
-    color: #f1f1f1;
+    color: darkgreen;
     transform: rotate(0deg);
   }
 

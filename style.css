@@ -3,6 +3,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&family=VT323&display=swap');
 
+
+
+
+
+
+
+body{
+  background-color: white;
+}
+
+#container{
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  font-size: 25px;
+}
+
+
+
+
+#canvas1{
+  position: relative;
+  width: 100%;
+  height: auto;
+  
+
+}
+
+#slider{
+  width: 100%;
+}
+
+p{
+  color: black;
+}
+
+
+
+
+
+
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 :root {
     font-family: "VT323", monospace;
     font-size: 20px;
@@ -33,7 +79,6 @@ body {
 
 
 #upgrades{
-  
   display: none;
   position: absolute;
   right: 0;
@@ -197,3 +242,26 @@ body {
   #status_button {
     margin-top: 4.9rem;
   }
+
+  .tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Show the tooltip text when hovering over the button */
+button:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}

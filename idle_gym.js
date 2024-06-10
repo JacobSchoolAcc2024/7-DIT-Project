@@ -10,10 +10,12 @@ let enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
 let enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
 let auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
 let auto_pushup_purchases = parseInt(localStorage.getItem("auto_pushup_purchases")) || 1;
-let click_str_gain = parseInt(localStorage.getItem("click_str_gain")) || 1;
-let combo = parseInt(localStorage.getItem("combo")) || 0;
+let click_str_gain = parseInt(localStorage.getItem("click_str_gain")) || str_gain;
+let combo = parseFloat(localStorage.getItem("combo")) || 0;
+let comboTime = parseInt(localStorage.getItem("comboTimeout")) || 10000;
 let comboTimeout;
 let Push_up_interval;
+let clicked = parseInt(localStorage.getItem("clicked")) || 0;
 let gold = parseInt(localStorage.getItem("gold")) || 0;
 /// Html Related JS ///
 
@@ -38,6 +40,18 @@ function closeNav() {
 
 
 function gain_str(increase_by, multiplier) {
+    clicked += 1;
+
+    if (combo % 10 === 0) {
+        click_str_gain = (increase_by + str_gain) * (multiplier + combo) * (10 * (combo % 10));
+        str += click_str_gain
+        combo += 0.01;
+
+    }
+    else if (combo % 10 !== 0) {
+        click_str_gain = (increase_by + str_gain) * (multiplier + combo) 
+        str += click_str_gain
+        combo += 0.01;
     str += (increase_by + str_gain) * (multiplier + combo);
     click_str_gain = (increase_by + str_gain) * (multiplier + combo)
     combo += 1;
@@ -45,23 +59,21 @@ function gain_str(increase_by, multiplier) {
     document.getElementById('combo').innerHTML = "Combo: " + formatNumber(combo);
     document.getElementById('Strength').innerHTML = "Strength: " + formatNumber(str);
 
-    if (str == 10) {
-        setTimeout(() => {
-            alert("You have enough strength to buy an upgrade!\nYou can view upgrades by clicking the upgrade button below push up.");
-        }, 2000);
-    }
-
     clearTimeout(comboTimeout);
     comboTimeout = setTimeout(() => {
         combo = 0;
         document.getElementById('combo').innerHTML = "Combo: 0";
         alert("Your combo has reset!");
+    }, comboTime); 
         localStorage.setItem("combo", combo);
-    }, 5000); 
+    }; 
     
-    checkUpgrades();
     localStorage.setItem("str", str);
     localStorage.setItem("combo", combo);
+    localStorage.setItem("click_str_gain", click_str_gain);
+    localStorage.setItem("clicked", clicked);
+    checkUpgrades();
+    update_window_str();
 }
 
 
@@ -88,8 +100,6 @@ function upgrade_str(increase_by, cost, multiplier, multiplier_increase_by, upgr
         upgradeData.multiplier += multiplier_increase_by + 1;
     }
 
-    document.getElementById("Strength").innerHTML = "Strength: " + formatNumber(str);
-    document.getElementById("strength_gain").innerHTML = "Current Strength Gain: " + formatNumber(str_gain);
 
     localStorage.setItem("str", str);
     localStorage.setItem("str_gain", str_gain);
@@ -97,6 +107,7 @@ function upgrade_str(increase_by, cost, multiplier, multiplier_increase_by, upgr
     localStorage.setItem(upgradeName + "_multiplier", upgradeData.multiplier);
     localStorage.setItem(upgradeName + "_Bought", upgradeData.Progressive_Overload_Bought);
     checkUpgrades();
+    update_window_str();
     
 }
 
@@ -139,9 +150,6 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
         else {
             upgradeData.time -= 100;
         }
-        document.getElementById("Strength").innerHTML = "Strength: " + formatNumber(str);
-        document.getElementById("auto_str").innerHTML = "Auto Strength Gain: " + formatNumber(auto_str);
-
         localStorage.setItem("str", str);
         localStorage.setItem("str_gain", str_gain);
         localStorage.setItem(upgradeName + "_multiplier", upgradeData.multiplier);
@@ -154,6 +162,7 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
         Push_up_interval = setInterval(() => auto_gain_str(auto_str), time);
         localStorage.setItem("Push_up_interval", Push_up_interval);
         checkUpgrades();
+        update_window_str();
     } else {
         console.log(requiredCost);
     }
@@ -165,11 +174,9 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
 
 function auto_gain_str(increase_by) {
     str += increase_by;
-    document.getElementById('Strength').innerHTML 
-    = "Strength: " + formatNumber(str);
-    console.log(increase_by)
     localStorage.setItem("str",str);
     checkUpgrades();
+    update_window_str()
 }
 
 
@@ -196,6 +203,7 @@ function purchase_exercise(exerciseName){
     localStorage.setItem(exerciseName + "_Bought", exerciseData.Bought);
     localStorage.setItem("str", str);
     checkUpgrades();
+    update_window_str();
 }
 
 
@@ -279,7 +287,7 @@ function checkUpgrades() {
                 + bought + ")";
             } else {
                 button.disabled = true;
-                button.style.background = "darkred";
+                button.style.background = "crimson";
                 button.style.color = "white";
                 costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
                 + bought + ")";
@@ -304,7 +312,7 @@ function checkUpgrades() {
                 + bought + ")";
             } else {
                 button.disabled = true;
-                button.style.background = "darkred";
+                button.style.background = "crimson";
                 button.style.color = "white";
                 costElement.innerHTML = "Cost: " + formatNumber(requiredCost) + " ||" + " ("
                 + bought + ")";
@@ -322,12 +330,14 @@ function checkUpgrades() {
                 button.disabled = false;
             }
             else {
-                button.style.background = "darkred";
+                button.style.background = "crimson";
                 button.style.color = "white";
                 button.disabled = true;
             }
         }
-    }
+        }
+    check_exercise_upgrade();
+
 }
 
 
@@ -364,6 +374,7 @@ function check_exercise_upgrade(){
     const pull_up_Bought = parseInt(localStorage.getItem("Pull_up_Bought")) || 0;
     if (pull_up_Bought === 1){
         document.getElementById("pull_up_container").style.display = "none";
+        document.getElementById("push_up").style.display = "none";
         document.getElementById("pull_up").style.display = "block";
     }
     else {
@@ -392,6 +403,18 @@ function update_window_str() {
     document.getElementById('strength_gain').innerHTML = "Current Strength Gain: " + formatNumber(str_gain);
     document.getElementById('click_strength').innerHTML = "Click Str Gain: " + formatNumber(click_str_gain);
     document.getElementById('auto_str').innerHTML = "Current Auto Strength Gain: " + formatNumber(auto_str);
+    if (clicked <= 0){
+        document.getElementById('push_up').innerHTML = "Click me!";
+    }
+    else {
+        document.getElementById('push_up').innerHTML = "Push up";
+    }
+    if (combo <= 1){
+        document.getElementById('combo').innerHTML = "Combo: " + combo.toFixed(2);
+    }
+    else {
+        document.getElementById('combo').innerHTML = "Combo: " + formatNumber(combo);
+    }
     document.getElementById("combo").innerText = "Combo: " + formatNumber(combo);
 }
 
@@ -461,12 +484,9 @@ setInterval(update_window_str, 100);
 setInterval(update_enemy_window_str, 100);
 
 window.onload = function () {
-    setTimeout(() => {
-        alert("Welcome to Idle Gym\nClick the push up button to begin" + 
-        "\nBecome the strongest in the world and ascend to become a god!");
-    }, 2000);
     restoreAutoGain();
     check_exercise_upgrade();
+    checkUpgrades();
 };
 // setInterval(update_enemy_window_str, 100);
 /////////////////////////////////////////////////////////////////////////////////////

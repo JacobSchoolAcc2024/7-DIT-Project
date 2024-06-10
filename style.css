@@ -54,6 +54,7 @@ p{
     font-size: 20px;
     --bg-primary: rgb(167, 167, 167);
     overflow-x: hidden;
+    --clr: #1e9bff
 }
 
 .sidenav {
@@ -242,7 +243,6 @@ body {
   #status_button {
     margin-top: 4.9rem;
   }
-<<<<<<< Updated upstream
 
   .tooltip-text {
     visibility: hidden;
@@ -266,7 +266,6 @@ button:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
 }
-=======
 .starting_buttons {
   margin-top: 25%;
   text-align: center;
@@ -274,16 +273,23 @@ button:hover .tooltip-text {
 }
 
 .starting {
-  font-size: ;
+  width: 30%;
+  display: block;
   position: absolute;
   top: 50%;
   left: 50%;
   text-shadow: 0px 0.5px 0px #000;
-  box-shadow: inset 0 1px 0 #f70d1a, 0 10px 0 #c90711;
+  letter-spacing: 0.1rem;
+  transition: 0.3s;
+  text-decoration: none;
+  color: white;
+  padding: 0.5rem 0 0.5rem 0;
+
 }
 
 .starting:hover{
-  background-color: rgb(2, 150, 2);
+  background: var(--clr);
+  letter-spacing: 0.15rem;
+  box-shadow: 0 0 35px var(--clr);
+
 }
-  
->>>>>>> Stashed changes

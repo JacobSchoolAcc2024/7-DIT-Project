@@ -34,7 +34,7 @@
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 const CANVAS_WIDTH = canvas.width = 4000;
-const CANVAS_HEIGHT = canvas.height = 4000;
+const CANVAS_HEIGHT = canvas.height = 2500;
 let gameSpeed = 50
 
 
@@ -47,12 +47,91 @@ backgroundLayer3.src = "layer-3.png"
 const backgroundLayer4 = new Image();
 backgroundLayer4.src = "layer-4.png"
 
+// Create a new button element
+
+// const startButton = document.createElement('button');
+// startButton.textContent = 'Start';
+// startButton.style.position = 'absolute';
+// startButton.style.zIndex = '1000'; // Ensure the button is on top of other elements
+// startButton.style.left = '50%';
+// startButton.style.top = '50%';
+// startButton.style.transform = 'translate(-50%, -50%)';
+// startButton.style.fontSize = '2rem'; // Increase font size
+// startButton.style.padding = '1rem 2rem'; // Increase padding
+
+
+// // Add the button to the document body
+// document.body.appendChild(startButton);
+
+
+// // Redirect to start.html when the button is clicked
+// startButton.addEventListener('click', () => {
+//   window.location.href = 'start.html';
+// });
+
+// Get the modal
+let modal_timer = 5;
+
+const modal = document.getElementById('modal');
+
+// Get the button that opens the modal
+const startGameButton = document.getElementById('startGameButton');
+
+// Get the <span> element that closes the modal
+const closeModal = document.getElementsByClassName('close')[0];
+
+// When the page loads, show the modal
+window.onload = function() {
+  modal.style.display = 'block';
+};
+
+// When the user clicks on the "Start Game" button, redirect to the game page
+startGameButton.onclick = function() {
+  window.location.href = 'start.html'; // Replace 'index.html' with your game page
+};
+
+// // When the user clicks on <span> (x), close the modal
+// closeModal.onclick = function() {
+//   window.location.href = 'start.html'
+// };
+
+// // When the user clicks anywhere outside of the modal, close it
+// window.onclick = function(event) {
+//   if (event.target === modal) {
+//     window.location.href = 'index.html'
+//   }
+// };
+
+function start_timer(){
+  modal_timer -= 1
+  if (modal_timer <= 0){
+    startGameButton.style.display = "block";
+  }
+  else{
+    startGameButton.style.display = "none";
+  }
+}
+
+setInterval(start_timer, 1000)
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Layer{
     constructor(image, speedModifier){
         this.x = 0;
         this.y = 0;
         this.width = 4000;
-        this.height = 4000;
+        this.height = 2450;
         this.x2 = this.width;
         this.image = image;
         this.speedModifier = speedModifier;
@@ -82,9 +161,6 @@ const layer3 = new Layer(backgroundLayer3, 0.6);
 // const layer4 = new Layer(backgroundLayer4, 0.8);
 
 const gameObjects = [ layer2,layer3 ,layer2];
-
-
-
 function animate(){
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     gameObjects.forEach(object => {

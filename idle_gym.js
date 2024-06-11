@@ -13,7 +13,7 @@ let auto_pushup_purchases = parseInt(localStorage.getItem("auto_pushup_purchases
 let click_str_gain = parseInt(localStorage.getItem("click_str_gain")) || str_gain;
 let combo = parseFloat(localStorage.getItem("combo")) || 0;
 let comboTime = parseInt(localStorage.getItem("comboTimeout")) || 10000;
-let comboTimeout;
+let comboTimeout = null
 let Push_up_interval;
 let clicked = parseInt(localStorage.getItem("clicked")) || 0;
 let gold = parseInt(localStorage.getItem("gold")) || 0;
@@ -46,35 +46,32 @@ function gain_str(increase_by, multiplier) {
         click_str_gain = (increase_by + str_gain) * (multiplier + combo) * (10 * (combo % 10));
         str += click_str_gain
         combo += 0.01;
-
-    }
-    else if (combo % 10 !== 0) {
+    } else if (combo % 10 !== 0) {
         click_str_gain = (increase_by + str_gain) * (multiplier + combo) 
         str += click_str_gain
         combo += 0.01;
-    str += (increase_by + str_gain) * (multiplier + combo);
-    click_str_gain = (increase_by + str_gain) * (multiplier + combo)
-    combo += 1;
-    document.getElementById('click_strength').innerHTML = "Click Str Gain: " + formatNumber(click_str_gain);
-    document.getElementById('combo').innerHTML = "Combo: " + formatNumber(combo);
-    document.getElementById('Strength').innerHTML = "Strength: " + formatNumber(str);
+    }
 
-    clearTimeout(comboTimeout);
+    // Clear the previous timeout if it exists
+    if (comboTimeout) {
+        clearTimeout(comboTimeout);
+    }
+
+    // Set a new timeout
     comboTimeout = setTimeout(() => {
         combo = 0;
         document.getElementById('combo').innerHTML = "Combo: 0";
         alert("Your combo has reset!");
-    }, comboTime); 
-        localStorage.setItem("combo", combo);
-    }; 
-    
-    localStorage.setItem("str", str);
+    }, comboTime);
+
     localStorage.setItem("combo", combo);
+    localStorage.setItem("str", str);
     localStorage.setItem("click_str_gain", click_str_gain);
     localStorage.setItem("clicked", clicked);
     checkUpgrades();
     update_window_str();
 }
+
 
 
 
@@ -415,7 +412,6 @@ function update_window_str() {
     else {
         document.getElementById('combo').innerHTML = "Combo: " + formatNumber(combo);
     }
-    document.getElementById("combo").innerText = "Combo: " + formatNumber(combo);
 }
 
 

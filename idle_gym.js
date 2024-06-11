@@ -20,8 +20,8 @@ let gold = parseInt(localStorage.getItem("gold")) || 0;
 /// Html Related JS ///
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "8rem";
-    document.getElementById("main_Page").style.marginLeft = "9.5rem";
+    document.getElementById("mySidenav").style.width = "10rem";
+    document.getElementById("main_Page").style.marginLeft = "11.5rem";
     document.getElementById("main_Page").style.transition = "0.9s";
     
 }
@@ -567,4 +567,17 @@ function fightboss(){
     localStorage.setItem("enemy_str", enemy_str);
     document.getElementById("fightboss").style.display = "none";
     document.getElementById("finalboss").src = localStorage.getItem("finalboss_src");
+}
+
+var money = 0;
+var currentMoney = document.getElementById("currentMoney");
+
+function addOne() {
+  money++;
+  currentMoney.innerHTML = money;
+
+  var moneyAnimation = document.createElement("p");
+  moneyAnimation.innerHTML = "+1";
+  document.getElementById("moneyAnimation").appendChild(moneyAnimation);
+  moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
 }

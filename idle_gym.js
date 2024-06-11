@@ -41,23 +41,28 @@ function closeNav() {
 
 function gain_str(increase_by, multiplier) {
     clicked += 1;
-
-    if (combo % 10 === 0) {
+    if (combo >= 10) {
         click_str_gain = (increase_by + str_gain) * (multiplier + combo) * (10 * (combo % 10));
         str += click_str_gain
-        combo += 0.01;
-    } else if (combo % 10 !== 0) {
+    } else{
         click_str_gain = (increase_by + str_gain) * (multiplier + combo) 
         str += click_str_gain
         combo += 0.01;
     }
 
     // Clear the previous timeout if it exists
+    // This is important as it prevents running
+    // multiple timers that overlap with each other
+    // and makes sure that it does not build up, thus
+    // causing the game to slow down.
     if (comboTimeout) {
         clearTimeout(comboTimeout);
     }
 
     // Set a new timeout
+    // This sets a new timer and basically after the previous
+    // timer is clear from the code above, it starts and counts down
+    // from combo time unless user clicks it again and resets timer.
     comboTimeout = setTimeout(() => {
         combo = 0;
         document.getElementById('combo').innerHTML = "Combo: 0";

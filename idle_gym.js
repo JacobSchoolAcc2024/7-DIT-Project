@@ -23,8 +23,8 @@ let boss_hp = parseInt(localStorage.getItem("enemy_hp")) || 1000000;
 /// Html Related JS ///
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "8rem";
-    document.getElementById("main_Page").style.marginLeft = "9.5rem";
+    document.getElementById("mySidenav").style.width = "10rem";
+    document.getElementById("main_Page").style.marginLeft = "11.5rem";
     document.getElementById("main_Page").style.transition = "0.9s";
     
 }

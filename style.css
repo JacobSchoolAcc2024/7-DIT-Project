@@ -17,12 +17,14 @@
 
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-:root {
+* {
     font-family: "VT323", monospace;
     font-size: 20px;
-    --bg-primary: rgb(167, 167, 167);
+    --bg-primary: rgb(141, 141, 141);
     overflow-x: hidden;
-    --clr: #1e9bff
+    --clr: #1e9bff;
+    margin: 0;
+    padding: 0;
 }
 
 .sidenav {
@@ -134,7 +136,7 @@ body {
   .bar1, .bar2, .bar3 {
     width: 1.5rem;
     height: 0.2rem;
-    background-color: rgb(0, 0, 0);
+    background-color: black;
     transition: 0.4s;
     margin-bottom: 0.24rem;
     border-radius: 1rem;
@@ -178,7 +180,7 @@ body {
     display: flex;
     margin: 0;
     padding: 0;
-    background-color: var(--bg-primary);
+    background-color: rgb(141, 141, 141);
     width: 100%;
     height: 4rem; 
   }
@@ -266,4 +268,26 @@ button:hover .tooltip-text {
   position: relative;
   top: 200px;
   left: 300px;
+#moneyAnimation {
+  height: 500px;
+  border: 1px solid;
+  width: 200px;
+  float: right;
+  position: relative; /* Added */
+}
+
+@keyframes moneyAnimation {
+  0% {
+    opacity: 100%;
+    top: 0;
+  }
+  100% {
+    opacity: 100%;
+    top: -50px;
+  }
+}
+
+.moneyAnimation {
+  animation: moneyAnimation 1s forwards;
+  position: absolute;
 }

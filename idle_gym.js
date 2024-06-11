@@ -17,6 +17,9 @@ let comboTimeout = null
 let Push_up_interval;
 let clicked = parseInt(localStorage.getItem("clicked")) || 0;
 let gold = parseInt(localStorage.getItem("gold")) || 0;
+let boss_str = parseInt(localStorage.getItem("boss_str")) || 2000000;
+let boss_level = parseInt(localStorage.getItem("boss_level")) || 100000;
+let boss_hp = parseInt(localStorage.getItem("enemy_hp")) || 1000000;
 /// Html Related JS ///
 
 function openNav() {
@@ -192,6 +195,12 @@ function purchase_exercise(exerciseName){
             Container_id: "pull_up_container",
             cost: 5000,
             Bought: parseInt(localStorage.getItem("pull_up_Bought")) || 0,
+        }
+        ,Boss: {
+            button_id: "fightboss",
+            Container_id: "boss_container",
+            cost: 0,
+            Bought: parseInt(localStorage.getItem("boss_Bought")) || 0,
         }
     }
     const exerciseData = Exercises[exerciseName];
@@ -432,6 +441,15 @@ function update_enemy_window_str() {
 
 }
 
+function update_boss_window_str() {
+    document.getElementById("player_str_2").innerText = "Player Strength: " + formatNumber(str);
+    document.getElementById("BOSS_HP").innerText = "BOSS HP: " + formatNumber(boss_hp);
+    document.getElementById("player_HP_2").innerText = "Player HP: " + formatNumber(player_hp);
+    document.getElementById("BOSS_level").innerText = "BOSS Level: " + formatNumber(boss_level);
+    document.getElementById("BOSS_str").innerText = "BOSS Strength: " + formatNumber(boss_str);
+
+}
+
 
 
 function toggle(className, button_id) {
@@ -483,6 +501,7 @@ setInterval(update_enemy_window_str,1);
 setInterval(checkUpgrades, 100);
 setInterval(update_window_str, 100);
 setInterval(update_enemy_window_str, 100);
+setInterval(update_boss_window_str,100);
 
 window.onload = function () {
     restoreAutoGain();
@@ -505,6 +524,8 @@ function fightEnemy() {
     if (player_hp <= 0) {
         document.getElementById("fight").style.display = "block";
         player_hp = 0;
+        str = 0;
+        localStorage.setItem("str", str);
         localStorage.setItem("enemy_hp", enemy_hp);
         localStorage.clear();
         auto_pushup_purchases = 0;
@@ -514,9 +535,10 @@ function fightEnemy() {
     } 
     if (enemy_hp <= 0) {
         enemy_level++;
-        player_hp = 100 * enemy_level;
         enemy_hp = 100 * enemy_level;
-        enemy_str += 2;
+        enemy_str = enemy_level* 2;
+        gold+=1;
+        localStorage.setItem("gold", gold);
         localStorage.setItem("enemy_hp", enemy_hp);
         localStorage.setItem("enemy_str", enemy_str);
         localStorage.setItem("player_hp", player_hp);
@@ -556,15 +578,46 @@ function buyHP() {
 }
 
 function fightboss(){
-    alert("Jacob is coming");
-    finalboss.src = 'finalboss.png';
-    localStorage.setItem("finalboss_src", "finalboss.png");
-    enemy_hp = 99999999999;
-    enemy_level = 1000000000000;
-    enemy_str = 666666666666666;
-    localStorage.setItem("enemy_hp", enemy_hp);
-    localStorage.setItem("enemy_level", enemy_level);
-    localStorage.setItem("enemy_str", enemy_str);
-    document.getElementById("fightboss").style.display = "none";
-    document.getElementById("finalboss").src = localStorage.getItem("finalboss_src");
+    if (player_hp > 0){
+        // Update player and boss HP based on combat
+        player_hp -= boss_str;
+        boss_hp -= str;
+        }
+        
+        // Check if the player or boss has been defeated
+        if (player_hp <= 0) {
+        document.getElementById("fight").style.display = "block";
+        player_hp = 0;
+        str = 0;
+        localStorage.setItem("str", str);
+        localStorage.setItem("boss_hp", boss_hp);
+        localStorage.clear();
+        auto_pushup_purchases = 0;
+        localStorage.setItem("auto_pushup_purchases", auto_pushup_purchases);
+        clearInterval(Push_up_interval);
+        localStorage.removeItem("Push_up_interval");
+        } 
+        if (boss_hp <= 0) {
+        boss_level+=100;
+        boss_hp = 10000000 * boss_level;
+        boss_str += boss_level * boss_level;
+        gold+=100000;
+        localStorage.setItem("gold", gold);
+        localStorage.setItem("boss_hp", boss_hp);
+        localStorage.setItem("boss_str", boss_str);
+        localStorage.setItem("player_hp", player_hp);
+        }
+        
+        localStorage.setItem("boss_level", boss_level);
+        localStorage.setItem("player_hp", player_hp);
+        localStorage.setItem("boss_hp", boss_hp);
+        localStorage.setItem("boss_str", boss_str);
+        
+        // Update localStorage with new values
+        str_gain = parseInt(localStorage.getItem("str_gain"));
+        boss_hp = parseInt(localStorage.getItem("boss_hp"));
+        player_hp = parseInt(localStorage.getItem("player_hp"));
+        boss_str = parseInt(localStorage.getItem("boss_str"));
+        boss_level = parseInt(localStorage.getItem("boss_level"));
+        
 }

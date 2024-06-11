@@ -261,3 +261,9 @@ button:hover .tooltip-text {
   box-shadow: 0 0 35px var(--clr);
 
 }
+
+.boss {
+  position: relative;
+  top: 200px;
+  left: 300px;
+}

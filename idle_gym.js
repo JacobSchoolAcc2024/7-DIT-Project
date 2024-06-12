@@ -569,15 +569,13 @@ function fightboss(){
     document.getElementById("finalboss").src = localStorage.getItem("finalboss_src");
 }
 
-var money = 0;
-var currentMoney = document.getElementById("currentMoney");
+var money = 0   
 
 function addOne() {
-  money++;
-  currentMoney.innerHTML = money;
+    money++;
 
-  var moneyAnimation = document.createElement("p");
-  moneyAnimation.innerHTML = "+1";
-  document.getElementById("moneyAnimation").appendChild(moneyAnimation);
-  moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
-}
+    var moneyAnimation = document.createElement("p");
+    moneyAnimation.innerHTML = "+" + formatNumber(click_str_gain);
+    document.getElementById("moneyAnimation").appendChild(moneyAnimation);
+    moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
+  }

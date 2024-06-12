@@ -265,6 +265,10 @@ button:hover .tooltip-text {
 
 }
 
+.boss {
+  position: relative;
+  top: 200px;
+  left: 300px;
 #moneyAnimation {
   margin: 0;
   padding: 0;

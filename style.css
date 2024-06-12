@@ -1,13 +1,293 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&family=VT323&display=swap');
 
-:root {
-    font-family: "Quicksand", sans-serif;
+
+
+
+
+
+
+
+
+
+
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+* {
+    font-family: "VT323", monospace;
     font-size: 20px;
-    --bg-primary: rgb(20, 0, 51);
+    --bg-primary: rgb(141, 141, 141);
+    overflow-x: hidden;
+    --clr: #1e9bff;
+    margin: 0;
+    padding: 0;
 }
 
 .sidenav {
-    height: 60%;
+    height: 100%;
     width: 0;
     position: fixed;
+    background-color: black;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.9s;
+    margin: auto;
+    font-family: "Pixelify Sans", sans-serif;
+    top: 0;
+    left: 0;
+    border-right: 0.1px solid black;
+    text-align: center;
+}
+
+body {
+  margin: 0;
+}
+
+
+
+#upgrades{
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 20%;
+  width: 11%;
+}
+
+.status_text{
+    position: relative;
+    margin-top: 1rem;
+    overflow-y: hidden;
+}
+.sidenav a {
+    text-decoration: none;
+    font-size: 1rem;
+    color:white;
+    transition: 0.3s;
+    display: block;
+    padding-right: 0;
+}
+
+.closebtn {
+  margin-top: 0.4rem;
+  padding: 0px 8px 0px 0px;
+  transform: rotate(90deg);
+  transition: 0.7s;
+}
+
+.menu_Item {
+    display: block;
+    padding: 12px 12px 12px 12px;
+    margin: 10px 0px 40px 0px;
+    font-size: 1rem;
+    padding: 3%;
+    width: 100%;
+}
+
+.sidenav .menu_Item:hover{
+    color: #f1f1f1;
+    padding: 8px 0px 8px 0px;
+    background-color: darkgreen;
+}
+
+  .sidenav .closebtn:hover {
+    color: darkgreen;
+    transform: rotate(0deg);
+  }
+
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  .upgrades .closebtn:hover {
+    color: #f1f1f1;
+    transform: rotate(0deg);
+  }
+
+  .upgrades .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  
+  .upgrades a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #818181;
+    transition: 0.3s;
+    display: block;
+    padding-right: 0;
+  }
+
+  #main_Page {
+    margin-top: 1.5rem;
+    margin-left: 1.5rem;
+  }
+
+  .bar1, .bar2, .bar3 {
+    width: 1.5rem;
+    height: 0.2rem;
+    background-color: black;
+    transition: 0.4s;
+    margin-bottom: 0.24rem;
+    border-radius: 1rem;
+
+  }
+
+  
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 10px;}
+    .sidenav a {font-size: 10rem;}
+
+  }
+
+  .container {
+    display: flexbox;
+    height: 8rem;
+    width: 10rem;
+    margin: auto;
+    justify-content: center;
+  }
+
+  .flex_container {
+    display: flex;
+    margin-top: 5rem;
+  }
+  .upgrades {
+    display: flexbox;
+    margin-left: auto;
+    width: 10rem;
+  }
+
+  .menu_container {
+    display: inline-block;
+    margin-bottom: 2rem;
+    margin-top: 1.5rem;
+    margin-left: 1.2rem;
+    justify-content: end;
+  }
+
+  .top_bar {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(141, 141, 141);
+    width: 100%;
+    height: 4rem; 
+  }
+
+
+  button {
+    font-family: "Pixelify Sans", sans-serif;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    box-shadow:
+      inset -2px 2px 1px 1px grey,
+      inset -2px -2px 1px 1px lightgray,
+      inset 2px 0px 1px 1px lightgray;
+  }
+
+  button:hover{
+    box-shadow:
+      inset -2px 2px 1px 1px lightgray,
+      inset -2px -2px 1px 1px gray,
+      inset 2px 0px 1px 1px gray;
+  }
+  
+  .status_text {
+    margin-bottom: 4rem;
+  }
+
+  #purchase_pull_up {
+    margin-top: 4rem;
+  }
+
+  #status_button {
+    margin-top: 4.9rem;
+  }
+
+  .tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Show the tooltip text when hovering over the button */
+button:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+.starting_buttons {
+  margin-top: 25%;
+  text-align: center;
+
+}
+
+.starting {
+  width: 30%;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-shadow: 0px 0.5px 0px #000;
+  letter-spacing: 0.1rem;
+  transition: 0.3s;
+  text-decoration: none;
+  color: white;
+  padding: 0.5rem 0 0.5rem 0;
+
+}
+
+.starting:hover{
+  background: var(--clr);
+  letter-spacing: 0.15rem;
+  box-shadow: 0 0 35px var(--clr);
+
+}
+
+.boss {
+  position: relative;
+  top: 200px;
+  left: 300px;
+#moneyAnimation {
+  height: 500px;
+  border: 1px solid;
+  width: 200px;
+  float: right;
+  position: relative; /* Added */
+}
+
+@keyframes moneyAnimation {
+  0% {
+    opacity: 100%;
+    top: 0;
+  }
+  100% {
+    opacity: 100%;
+    top: -50px;
+  }
+}
+
+.moneyAnimation {
+  animation: moneyAnimation 1s forwards;
+  position: absolute;
 }

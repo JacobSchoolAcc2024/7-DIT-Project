@@ -28,16 +28,16 @@
 </head>
 <body>
     <div class="main" id="main_Page">
-        <div class="exercises">
-            <p><button id="push_up"  onclick="gain_str(0, 1)"
+        <div class="exercises" id="exercises">
+            <button id="push_up"  onclick="gain_str(0, 1), addOne()"
             >Push-up</button>
             <button id="pull_up" onclick="gain_str(2, 2)"  style="display: none;">
             Pull Up</button>
         </div>
             <div id="moneyAnimation">
                 <div class="status_text" id="Strength"> Strength: 0</div>
-                <div class="status_text" id="combo">Combo: 0</div>
             </div>
+                <div class="status_text" id="combo">Combo: 0</div>
         <button id="closeUpgrades" onclick="toggleUpgrades()">Upgrades</button>
         <div id ="upgrades">
             <div>
@@ -75,6 +75,9 @@
             </div>
         </div>
         <button class="status_text"  onclick="reset()">Reset Progress</button>
+        <div class="footer">
+            <button id="closeUpgrades" onclick="toggleUpgrades()">Upgrades</button>
+        </div>
 </body>
     
 </html>

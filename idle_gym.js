@@ -582,6 +582,30 @@ function buyHP() {
 }
 
 function fightboss(){
+    alert("Jacob is coming");
+    finalboss.src = 'finalboss.png';
+    localStorage.setItem("finalboss_src", "finalboss.png");
+    enemy_hp = 99999999999;
+    enemy_level = 1000000000000;
+    enemy_str = 666666666666666;
+    localStorage.setItem("enemy_hp", enemy_hp);
+    localStorage.setItem("enemy_level", enemy_level);
+    localStorage.setItem("enemy_str", enemy_str);
+    document.getElementById("fightboss").style.display = "none";
+    document.getElementById("finalboss").src = localStorage.getItem("finalboss_src");
+}
+
+var money = 0   
+
+function addOne() {
+    money++;
+
+    var moneyAnimation = document.createElement("p");
+    moneyAnimation.innerHTML = "+" + formatNumber(click_str_gain);
+    document.getElementById("moneyAnimation").appendChild(moneyAnimation);
+    moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
+  }
+
     if (player_hp > 0){
         // Update player and boss HP based on combat
         player_hp -= boss_str;
@@ -624,4 +648,5 @@ function fightboss(){
         boss_str = parseInt(localStorage.getItem("boss_str"));
         boss_level = parseInt(localStorage.getItem("boss_level"));
         
-}
+
+

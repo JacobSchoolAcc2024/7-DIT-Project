@@ -2,38 +2,80 @@
 <html lang="en">
     <title>Idle_gym</title>
 <head>
-    <link rel="stylesheet" href="stlye.css">
+    <link rel="stylesheet" href="style.css">
 </head>
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="index.html" class="menu_Item">HOME</a>
-        <a href="upgrade.html" class="menu_Item">UPGRADES</a>
         <a href="market.html" class="menu_Item">MARKET</a>
+        <a href="train.html" class="menu_Item">TRAIN</a>
         <a href="boss.html" class="menu_Item">BOSS</a>
         <a href="help.html" class="menu_Item">HELP</a>
         <a href="contact.html" class="menu_Item">CONTACT</a>
         <a href="about.html" class="menu_Item">ABOUT</a>
-    </div>
+ </div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="idle_gym.js"></script>
-    <span onclick="openNav()">Menu</span>
+    <div class="top_bar">
+        <div class="menu_container" onclick="openNav()">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+    </div>
 </head>
 <body>
-    <div class="exercises"></div>
-    <button id="push_up"  onclick="gain_str(1, 'strenght')">Push-up</button>
-    <div class="status">
-        <div id="strenght"> Strenght: 0</div>
-    </div>
-    <div class="upgrades">
-        <div>
-            <div id="upgrade1_" style="display: none;">
-                <button id="upgrade1" onclick="upgrade_str(1, 20)">Upgrade push up (x1)</button>
-                <a id="cost1">Cost: 20 str</a>
+    <div class="main" id="main_Page">
+        <div class="exercises">
+            <p><button id="push_up"  onclick="gain_str(0, 1)"
+            >Push-up</button>
+            <button id="pull_up" onclick="gain_str(2, 2)"  style="display: none;">
+            Pull Up</button>
+        </div>
+            <div id="moneyAnimation">
+                <div class="status_text" id="Strength"> Strength: 0</div>
+                <div class="status_text" id="combo">Combo: 0</div>
+            </div>
+        <button id="closeUpgrades" onclick="toggleUpgrades()">Upgrades</button>
+        <div id ="upgrades">
+            <div>
+                <button id="progressive_overload" onclick="upgrade_str(2, 10, 1, 1, 'Progressive_Overload')"
+                 disabled>Progressive Overload
+                 <span class="tooltip-text">This upgrade increases your strength gain.</span>
+                </button>
+                <a class="status_text" id="progressive_overload_cost">Cost: 10 str
+                </a>
+            </div>
+
+            <div id="pull_up_container">
+                <button id="purchase_pull_up" onclick="purchase_exercise('Pull_up')">
+                    Purchase Pull Up</button>
+                    <p class="status_text" id="pull_up_requirements">
+                        Requirements:
+                        5,000 Strength
+                        Progressive Overload (3)
+                    </p>
+            </div>
+            <div>
+                <button id="auto_pushup" onclick="purchase_auto(1, 1, 'Auto_Pushup', parseInt(localStorage.getItem('auto_pushup_purchases')) || 0)" disabled>
+                    Buy Auto Pushup</button>
+                <a id="auto_pushup_cost">Cost: 500 str
+                </a>
             </div>
         </div>
-
-    </div>
+        <div class="status_text">
+            </div>
+            <button id="status_button" onclick="toggle('status', 'status_button')">Show Status</button>
+            <div class="status" style="display: none;">
+                <div id="strength_gain">Current Strength Gain: 1</div>
+                <div class="status_text" id="auto_str">Current Auto Strength Gain: 0</div>
+                <div class="status_text" id="click_strength">Click Strength: 1</div>
+            </div>
+        </div>
+        <button class="status_text"  onclick="reset()">Reset Progress</button>
 </body>
+    
 </html>
+

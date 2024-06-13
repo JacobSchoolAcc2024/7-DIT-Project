@@ -5,7 +5,7 @@ let str = parseInt(localStorage.getItem("str")) || 0;
 let str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
 let auto_push_up_multiplier = parseInt(localStorage.getItem("auto_push_up_multiplier")) || 1;
 let enemy_hp = parseInt(localStorage.getItem("enemy_hp")) || 100;
-let player_hp = parseInt(localStorage.getItem("player_hp")) || 100;
+let player_hp = parseInt(localStorage.getItem("player_hp")) || str/3;
 let enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
 let enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
 let auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
@@ -179,7 +179,9 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
 
 function auto_gain_str(increase_by) {
     str += increase_by;
+    player_hp += increase_by/3;
     localStorage.setItem("str",str);
+    localStorage.setItem("player_hp",player_hp);
     checkUpgrades();
     update_window_str()
 }
@@ -438,6 +440,7 @@ function update_enemy_window_str() {
     document.getElementById("player_HP").innerText = "Player HP: " + formatNumber(player_hp);
     document.getElementById("enemy_level").innerText = "Enemy Level: " + formatNumber(enemy_level);
     document.getElementById("enemy_str").innerText = "Enemy Strength: " + formatNumber(enemy_str);
+    document.getElementById("gold_num").innerText = "Gold: " + formatNumber(gold);
 
 }
 
@@ -447,6 +450,7 @@ function update_boss_window_str() {
     document.getElementById("player_HP_2").innerText = "Player HP: " + formatNumber(player_hp);
     document.getElementById("BOSS_level").innerText = "BOSS Level: " + formatNumber(boss_level);
     document.getElementById("BOSS_str").innerText = "BOSS Strength: " + formatNumber(boss_str);
+    document.getElementById("gold_num_2").innerText = "Gold: " + formatNumber(gold);
 
 }
 

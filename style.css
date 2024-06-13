@@ -289,5 +289,5 @@ button:hover .tooltip-text {
 
 .moneyAnimation {
   animation: moneyAnimation 1s forwards;
-  position: absolute;
+  position: absolute;  
 }

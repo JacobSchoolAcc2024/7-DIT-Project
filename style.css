@@ -3,13 +3,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&family=VT323&display=swap');
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
+
+
+
 :root {
-    font-family: "Quicksand", sans-serif;
-=======
-=======
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
+    font-family: "Quicksand", sans-serif;}
 
 
 
@@ -24,14 +22,8 @@
 
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-<<<<<<< HEAD
-*{
-    font-family: "VT323", monospace;
->>>>>>> Stashed changes
-=======
 * {
     font-family: "VT323", monospace;
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
     font-size: 20px;
     --bg-primary: rgb(141, 141, 141);
     overflow-x: hidden;
@@ -44,11 +36,6 @@
     height: 100%;
     width: 0;
     position: fixed;
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
     background-color: black;
     overflow-x: hidden;
     padding-top: 60px;
@@ -282,23 +269,19 @@ button:hover .tooltip-text {
 
 }
 
-<<<<<<< HEAD
+
 .boss{
   position: relative;
   top: 200px;
-  left: 300px;
->>>>>>> Stashed changes
-=======
-.boss {
-  position: relative;
-  top: 200px;
-  left: 300px;
+  left: 300px;}
+
+
 #moneyAnimation {
   height: 500px;
   border: 1px solid;
   width: 200px;
   float: right;
-  position: relative; /* Added */
+  position: relative; 
 }
 
 @keyframes moneyAnimation {
@@ -315,5 +298,4 @@ button:hover .tooltip-text {
 .moneyAnimation {
   animation: moneyAnimation 1s forwards;
   position: absolute;
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
 }

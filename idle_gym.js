@@ -179,6 +179,7 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
 
 function auto_gain_str(increase_by) {
     str += increase_by;
+    addOne()
     player_hp += increase_by/3;
     localStorage.setItem("str",str);
     localStorage.setItem("player_hp",player_hp);
@@ -595,10 +596,8 @@ function fightboss(){
     document.getElementById("finalboss").src = localStorage.getItem("finalboss_src");
 }
 
-var money = 0   
 
 function addOne() {
-    money++;
 
     var moneyAnimation = document.createElement("p");
     moneyAnimation.innerHTML = "+" + formatNumber(click_str_gain);

@@ -280,11 +280,18 @@ button:hover .tooltip-text {
 @keyframes moneyAnimation {
   0% {
     opacity: 1;
+    margin-bottom: 10px;
     top: 0;
+    right: -100px;
+  }
+  50%{
+    color: lightgreen;
+    opacity: 50%;
   }
   100% {
     opacity: 0;
-    top: -50px;
+    color: green;
+    top: -100px;
   }
 }
 

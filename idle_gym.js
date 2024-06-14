@@ -34,15 +34,6 @@ function closeNav() {
     document.getElementById("main_Page").style.marginLeft = "1.5rem";
 }
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-function gain_str(increase_by, id) {
-    str += increase_by + str_gain
-    document.getElementById(id).innerHTML = "Strenght: " + str;
-    update_window(id, "Strenght :", str);
-=======
-=======
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
 
 
 
@@ -53,15 +44,8 @@ function gain_str(increase_by, id) {
 
 function gain_str(increase_by, multiplier) {
     clicked += 1;
-<<<<<<< HEAD
-
-    // I used the % operator to divde combo by ten and added it to the multiplier.
-    if (combo >= 10) {
-        click_str_gain = (increase_by + str_gain) * (multiplier + combo) * (10 * ((combo % 10) + 1));
-=======
     if (combo >= 10) {
         click_str_gain = (increase_by + str_gain) * (multiplier + combo) * (10 * (combo % 10));
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
         str += click_str_gain
     } else{
         click_str_gain = (increase_by + str_gain) * (multiplier + combo) 
@@ -94,16 +78,9 @@ function gain_str(increase_by, multiplier) {
     localStorage.setItem("clicked", clicked);
     checkUpgrades();
     update_window_str();
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
 }
 
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
 
 
 function upgrade_str(increase_by, cost, multiplier, multiplier_increase_by, upgradeName) {
@@ -191,110 +168,13 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
         localStorage.setItem("Push_up_interval", Push_up_interval);
         checkUpgrades();
         update_window_str();
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
     } else {
         console.log(requiredCost);
     }
 }
 
-<<<<<<< HEAD
-function update_window(id, name, variable) {
-    document.getElementById(id).innerHTML = name + variable;
-=======
 
 
-function upgrade_str(increase_by, cost, multiplier, multiplier_increase_by, upgradeName) {
-   
-    const upgrades = {
-        Progressive_Overload: {
-            button_id: "progressive_overload",
-            cost_id: "progressive_overload_cost",
-            cost: 10,
-            multiplier: parseInt(localStorage.getItem("Progressive_Overload_multiplier")) || 1,
-            Progressive_Overload_Bought: parseInt(localStorage.getItem("Progressive_Overload_Bought")) || 0,
-        },
-    
-    };
-    const upgradeData = upgrades[upgradeName];
-    if (upgradeName == 'Progressive_Overload') {
-        const requiredCost = Math.round(cost ** upgradeData.multiplier);
-        upgradeData.Progressive_Overload_Bought += 1;
-        str -= requiredCost;
-        str_gain += (increase_by ** upgradeData.multiplier) * Math.pow(2, multiplier);
-        auto_str += str_gain / 10;
-        upgradeData.multiplier += multiplier_increase_by + 1;
-    }
-
-
-    localStorage.setItem("str", str);
-    localStorage.setItem("str_gain", str_gain);
-    localStorage.setItem("auto_str", auto_str);
-    localStorage.setItem(upgradeName + "_multiplier", upgradeData.multiplier);
-    localStorage.setItem(upgradeName + "_Bought", upgradeData.Progressive_Overload_Bought);
-    checkUpgrades();
-    update_window_str();
-    
-}
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-/// Automatic gain of Strength.
-
-
-
-function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
-    const upgrades = {
-        Auto_Pushup: {
-            button_id: "auto_pushup",
-            cost_id: "auto_pushup_cost",
-            cost: 500,
-            time: parseInt(localStorage.getItem("Auto_Pushup_time")) || 2000,
-            multiplier: parseInt(localStorage.getItem("Auto_Pushup_multiplier")) || 1,
-            auto_pushup_purchases: parseInt(localStorage.getItem("auto_pushup_purchases")) || 0,
-        }
-    };
-    
-    const upgradeData = upgrades[upgradeName];
-    if (upgradeName == 'Auto_Pushup') {
-        const time = upgradeData.time;
-        const baseCost = upgradeData.cost;
-        const requiredCost = Math.round(baseCost * Math.pow(0.5, upgradeData.auto_pushup_purchases));
-        str -= requiredCost;
-        upgradeData.auto_pushup_purchases += 1;
-        upgradeData.multiplier += multiplier_increase_by;
-
-        // Calculate auto_str based on updated multiplier
-        auto_str += (increase_by ** upgradeData.multiplier)
-        * Math.pow(2, upgradeData.auto_pushup_purchases) * (str_gain/4);
-        str_gain += (increase_by ** upgradeData.multiplier);
-        if (upgradeData.time <= 0) {
-            upgradeData.time == 100;
-        }
-        else {
-            upgradeData.time -= 100;
-        }
-        localStorage.setItem(upgradeName + "_multiplier", upgradeData.multiplier);
-        localStorage.setItem("auto_pushup_purchases", upgradeData.auto_pushup_purchases);
-        localStorage.setItem("Auto_Pushup_time", upgradeData.time);
-        clearInterval(Push_up_interval);
-        Push_up_interval = setInterval(() => auto_gain_str(auto_str), time);
-        localStorage.setItem("Push_up_interval", Push_up_interval);
-        }
-    localStorage.setItem("str", str);
-    localStorage.setItem("str_gain", str_gain);
-    localStorage.setItem("auto_str", auto_str);
-    console.log(auto_str, time)
-    checkUpgrades();
-    update_window_str();
-        }
-        
-        
-
-=======
-
-
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
 
 
 function auto_gain_str(increase_by) {
@@ -304,23 +184,12 @@ function auto_gain_str(increase_by) {
     localStorage.setItem("player_hp",player_hp);
     checkUpgrades();
     update_window_str()
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
 }
 
 
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-setInterval(update_window, 500);
-setInterval(check_upgrades, 500);
-=======
-=======
 ///Purchase New Exercise////
 
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
 function purchase_exercise(exerciseName){
     const Exercises ={
         Pull_up: {
@@ -329,15 +198,12 @@ function purchase_exercise(exerciseName){
             cost: 5000,
             Bought: parseInt(localStorage.getItem("pull_up_Bought")) || 0,
         }
-<<<<<<< HEAD
-=======
         ,Boss: {
             button_id: "fightboss",
             Container_id: "boss_container",
             cost: 0,
             Bought: parseInt(localStorage.getItem("boss_Bought")) || 0,
         }
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
     }
     const exerciseData = Exercises[exerciseName];
     const requiredCost = exerciseData.cost;
@@ -782,14 +648,5 @@ function addOne() {
         boss_str = parseInt(localStorage.getItem("boss_str"));
         boss_level = parseInt(localStorage.getItem("boss_level"));
         
-<<<<<<< HEAD
 
 
-=======
-<<<<<<< HEAD
-}
->>>>>>> Stashed changes
-=======
-}
->>>>>>> 64fd47eae139db7f2021827cd42db12d7d2583fe
->>>>>>> main

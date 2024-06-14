@@ -165,6 +165,7 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
         // Clear existing interval and set a new one
         clearInterval(Push_up_interval);
         Push_up_interval = setInterval(() => auto_gain_str(auto_str), time);
+        Push_up_interval = setInterval(() => auto_gain_str(auto_str, upgradeName), time);
         localStorage.setItem("Push_up_interval", Push_up_interval);
         checkUpgrades();
         update_window_str();
@@ -177,9 +178,9 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
 
 
 
-function auto_gain_str(increase_by) {
+function auto_gain_str(increase_by, id) {
     str += increase_by;
-    addOne()
+    addOne(id)
     player_hp += increase_by/3;
     localStorage.setItem("str",str);
     localStorage.setItem("player_hp",player_hp);
@@ -597,12 +598,21 @@ function fightboss(){
 }
 
 
-function addOne() {
+function addOne(id) {
+
 
     var moneyAnimation = document.createElement("p");
-    moneyAnimation.innerHTML = "+" + formatNumber(click_str_gain);
-    document.getElementById("moneyAnimation").appendChild(moneyAnimation);
-    moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
+    if (id == 'push_up'){
+        moneyAnimation.innerHTML = "+" + formatNumber(click_str_gain);
+        document.getElementById("moneyAnimation").appendChild(moneyAnimation);
+        moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
+    }
+    else if (id == 'Auto_Pushup'){
+        moneyAnimation.innerHTML = "+" + formatNumber(auto_str);
+        document.getElementById("moneyAnimation").appendChild(moneyAnimation);
+        moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
+    }
+
   }
 
     if (player_hp > 0){

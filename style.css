@@ -6,11 +6,6 @@
 
 
 
-:root {
-    font-family: "Quicksand", sans-serif;}
-
-
-
 
 
 
@@ -30,6 +25,7 @@
     --clr: #1e9bff;
     margin: 0;
     padding: 0;
+    --paper: #f7da88;
 }
 
 .sidenav {
@@ -185,7 +181,7 @@ body {
     display: flex;
     margin: 0;
     padding: 0;
-    background-color: rgb(141, 141, 141);
+    background-color: #f7da88;
     width: 100%;
     height: 4rem; 
   }
@@ -269,33 +265,49 @@ button:hover .tooltip-text {
 
 }
 
-
 .boss{
   position: relative;
   top: 200px;
-  left: 300px;}
-
-
+  left: 300px;
+}
 #moneyAnimation {
-  height: 500px;
-  border: 1px solid;
-  width: 200px;
-  float: right;
-  position: relative; 
+  margin: 0;
+  padding: 0;
+  border: 1px solid black;
+  position: relative;
 }
 
 @keyframes moneyAnimation {
   0% {
-    opacity: 100%;
+    opacity: 1;
+    margin-bottom: 10px;
     top: 0;
+    right: -100px;
+  }
+  50%{
+    color: lightgreen;
+    opacity: 50%;
   }
   100% {
-    opacity: 100%;
-    top: -50px;
+    opacity: 0;
+    color: green;
+    top: -100px;
   }
 }
 
 .moneyAnimation {
   animation: moneyAnimation 1s forwards;
   position: absolute;
+  left: 5%;
+}
+
+.footer {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  background-color: #f7da88a4;
+  width: 100%;
+  height: 20%; 
+  position: absolute;
+  bottom: 0;
 }

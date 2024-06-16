@@ -5,7 +5,7 @@ let str = parseInt(localStorage.getItem("str")) || 0;
 let str_gain = parseInt(localStorage.getItem("str_gain")) ||1;
 let auto_push_up_multiplier = parseInt(localStorage.getItem("auto_push_up_multiplier")) || 1;
 let enemy_hp = parseInt(localStorage.getItem("enemy_hp")) || 100;
-let player_hp = parseInt(localStorage.getItem("player_hp")) || 100;
+let player_hp = parseInt(localStorage.getItem("player_hp")) || str/3;
 let enemy_str = parseInt(localStorage.getItem("enemy_str")) || 2;
 let enemy_level = parseInt(localStorage.getItem("enemy_level")) || 1;
 let auto_str = parseInt(localStorage.getItem("auto_str")) || 0;
@@ -164,7 +164,7 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
         console.log(auto_str, time)
         // Clear existing interval and set a new one
         clearInterval(Push_up_interval);
-        Push_up_interval = setInterval(() => auto_gain_str(auto_str), time);
+        Push_up_interval = setInterval(() => auto_gain_str(auto_str, upgradeName), time);
         localStorage.setItem("Push_up_interval", Push_up_interval);
         checkUpgrades();
         update_window_str();
@@ -177,9 +177,12 @@ function purchase_auto(increase_by, multiplier_increase_by, upgradeName) {
 
 
 
-function auto_gain_str(increase_by) {
+function auto_gain_str(increase_by, id) {
     str += increase_by;
+    addOne(id)
+    player_hp += increase_by/3;
     localStorage.setItem("str",str);
+    localStorage.setItem("player_hp",player_hp);
     checkUpgrades();
     update_window_str()
 }
@@ -438,6 +441,7 @@ function update_enemy_window_str() {
     document.getElementById("player_HP").innerText = "Player HP: " + formatNumber(player_hp);
     document.getElementById("enemy_level").innerText = "Enemy Level: " + formatNumber(enemy_level);
     document.getElementById("enemy_str").innerText = "Enemy Strength: " + formatNumber(enemy_str);
+    document.getElementById("gold_num").innerText = "Gold: " + formatNumber(gold);
 
 }
 
@@ -447,6 +451,7 @@ function update_boss_window_str() {
     document.getElementById("player_HP_2").innerText = "Player HP: " + formatNumber(player_hp);
     document.getElementById("BOSS_level").innerText = "BOSS Level: " + formatNumber(boss_level);
     document.getElementById("BOSS_str").innerText = "BOSS Strength: " + formatNumber(boss_str);
+    document.getElementById("gold_num_2").innerText = "Gold: " + formatNumber(gold);
 
 }
 
@@ -578,6 +583,37 @@ function buyHP() {
 }
 
 function fightboss(){
+    alert("Jacob is coming");
+    finalboss.src = 'finalboss.png';
+    localStorage.setItem("finalboss_src", "finalboss.png");
+    enemy_hp = 99999999999;
+    enemy_level = 1000000000000;
+    enemy_str = 666666666666666;
+    localStorage.setItem("enemy_hp", enemy_hp);
+    localStorage.setItem("enemy_level", enemy_level);
+    localStorage.setItem("enemy_str", enemy_str);
+    document.getElementById("fightboss").style.display = "none";
+    document.getElementById("finalboss").src = localStorage.getItem("finalboss_src");
+}
+
+
+function addOne(id) {
+
+
+    var moneyAnimation = document.createElement("p");
+    if (id == 'push_up'){
+        moneyAnimation.innerHTML = "+" + formatNumber(click_str_gain);
+        document.getElementById("moneyAnimation").appendChild(moneyAnimation);
+        moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
+    }
+    else if (id == 'Auto_Pushup'){
+        moneyAnimation.innerHTML = "+" + formatNumber(auto_str);
+        document.getElementById("moneyAnimation").appendChild(moneyAnimation);
+        moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
+    }
+
+  }
+
     if (player_hp > 0){
         // Update player and boss HP based on combat
         player_hp -= boss_str;
@@ -620,4 +656,5 @@ function fightboss(){
         boss_str = parseInt(localStorage.getItem("boss_str"));
         boss_level = parseInt(localStorage.getItem("boss_level"));
         
-}
+
+

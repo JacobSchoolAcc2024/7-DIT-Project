@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&family=VT323&display=swap');
-
-
+@import url('https://fonts.googleapis.com/css2?family=Graduate&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arbutus&family=Graduate&display=swap');
 
 
 
@@ -18,7 +18,7 @@
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 * {
-    font-family: "VT323", monospace;
+    font-family: "Arbutus", serif;
     font-size: 20px;
     --bg-primary: rgb(141, 141, 141);
     overflow-x: hidden;
@@ -129,15 +129,15 @@ body {
     padding-right: 0;
   }
 
-  #main_Page {
-    margin-top: 1.5rem;
-    margin-left: 1.5rem;
+  .main_Page {
+    background-color:rgb(247, 241, 233);
+ 
   }
 
   .bar1, .bar2, .bar3 {
     width: 1.5rem;
     height: 0.2rem;
-    background-color: black;
+    background-color: rgb(255, 255, 255);
     transition: 0.4s;
     margin-bottom: 0.24rem;
     border-radius: 1rem;
@@ -181,14 +181,14 @@ body {
     display: flex;
     margin: 0;
     padding: 0;
-    background-color: #f7da88;
+    background-image: url(brown-paper.jpeg);
     width: 100%;
     height: 4rem; 
   }
 
 
   button {
-    font-family: "Pixelify Sans", sans-serif;
+    font-family: "Arbutus", serif;
     padding: 0.5rem 0.5rem 0.5rem 0.5rem;
     box-shadow:
       inset -2px 2px 1px 1px grey,
@@ -346,3 +346,26 @@ button:hover .tooltip-text {
 
 }
 
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 15rem;
+  background-image: url(vintage-paper.avif);
+
+}
+
+.upgrades_div {
+  position: fixed;
+  right: 0;
+  top: 4rem;
+  background-image: url(quest-paper.jpg);
+  height: 100%;
+  width: 20%;
+}
+
+#clicker_upgrade {
+  display: block;
+  margin: auto;
+}

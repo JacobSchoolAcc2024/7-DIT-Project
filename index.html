@@ -12,7 +12,7 @@
         }
     </style>
 </head>
-<body>
+<body class="main_Page">
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="index.html" class="menu_Item">HOME</a>
@@ -39,15 +39,16 @@
         <button onclick="reset()">Reset</button>
     </div>
     <div>
-        <div>
-            <button id="clicker_upgrade"  onclick="purchase_upgrade('clicker_upgrade')">
-                Train Fist:
-            </button>
-            <a id="clicker_upgrade_cost">2 Gold </a>
-        </div>
-        
+
 
     </div>
+    <div class="upgrades_div">
+        <button id="clicker_upgrade"  onclick="purchase_upgrade('clicker_upgrade')">
+            Train Fist:
+        </button>
+        <a id="clicker_upgrade_cost">2 Gold </a>
+    </div>
+
     <script src="clicker.js"></script>
 </body>
 </html>

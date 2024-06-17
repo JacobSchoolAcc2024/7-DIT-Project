@@ -2,7 +2,7 @@
 
 let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
 let gold = parseInt(localStorage.getItem('gold')) || 0;
-let enemey_level = parseInt(localStorage.getItem('enemy_level')) || 1;
+let enemy = parseInt(localStorage.getItem('enemy_level')) || 1;
 
 
 
@@ -128,8 +128,8 @@ function drawHPParticle() {
     ctx.font = `${HP_PARTICLE_SIZE}px Arial`;
     ctx.fillStyle = 'red';
     ctx.fillText(hpParticle.text, hpParticle.x, hpParticle.y); // Use hpParticle.text
-    hpParticle.y -= 2;
-    hpParticle.duration--;
+    hpParticle.y -= 3;
+    hpParticle.duration -= 0.1;
 
     if (hpParticle.duration <= 0) {
       hpParticle = null;
@@ -208,11 +208,11 @@ canvas.addEventListener('click', () => {
     currentHP -= playerDmg;
     localStorage.setItem('currentHP', currentHP);
     if (currentHP <= 0) {
-      MAX_HP += 5 + (20 * (enemey_level / 10));
+      MAX_HP += 5 + (10 * (enemy / 20));
       localStorage.setItem('MAX_HP', MAX_HP);
       currentHP = MAX_HP;
       localStorage.setItem('currentHP', currentHP);
-      gold += 1 + (2 * (enemey_level / 10));
+      gold += 1 + (2 * (enemy / 10));
       localStorage.setItem('gold', gold);
       update_inventory();
     }
@@ -242,7 +242,7 @@ function reset(){
 
 function update_inventory(){
     gold_status = document.getElementById('gold');
-    gold_status.innerHTML = "Gold:" + gold;
+    gold_status.innerHTML = "Gold:" + gold.toFixed(2);
 }
 
 function formatNumber(num) {
@@ -275,7 +275,8 @@ function purchase_upgrade(id){
   const baseCost = upgrade.cost;
 
   if (id == "clicker_upgrade"){
-    const requiredCost = baseCost + formatNumber((baseCost * Math.pow(1.15, upgrade.clicker_upgrade_purchased)));
+    const requiredCost = baseCost + (1.5 * upgrade.clicker_upgrade_purchased);
+    document.getElementById(upgrade.cost_id).innerHTML = requiredCost + " Gold";
     if (gold >= requiredCost){
       upgrade.clicker_upgrade_purchased += 1;
       gold -= requiredCost;
@@ -284,12 +285,41 @@ function purchase_upgrade(id){
       document.getElementById(upgrade.cost_id).innerHTML = requiredCost + " Gold";
       console.log(upgrade.clicker_upgrade_purchased);
       console.log(requiredCost);
-  }}
+    }
+    else{
+      console.log(requiredCost);
+    }
+
+  }
 
   localStorage.setItem('gold', gold);
   localStorage.setItem('playerDmg', playerDmg); 
   update_inventory();
-
-  
-
 }
+
+function check_upgrades(){
+  const Upgrades = {
+    clicker_upgrade: {
+      button_id: "clicker_upgrade",
+      cost_id: "clicker_upgrade_cost",
+      cost: 2,
+      clicker_upgrade_purchased: parseInt(localStorage.getItem('clicker_upgrade_purchased')) || 0,
+    }
+  }
+
+  for (const upgrade in Upgrades) {
+    if (upgrade == "clicker_upgrade"){
+      const requiredCost = Upgrades[upgrade].cost + (1.5 * Upgrades[upgrade].clicker_upgrade_purchased);
+      if (gold >= requiredCost){
+        document.getElementById(Upgrades[upgrade].button_id).disabled = false;
+        document.getElementById(Upgrades[upgrade].cost_id).innerHTML = requiredCost + " Gold";
+      }
+      else{
+        document.getElementById(Upgrades[upgrade].button_id).disabled = true;
+        document.getElementById(Upgrades[upgrade].cost_id).innerHTML = requiredCost + " Gold";
+      }
+    }
+  }
+}
+
+setInterval(check_upgrades, 100);

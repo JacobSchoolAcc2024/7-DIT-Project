@@ -47,6 +47,7 @@ backgroundLayer3.src = "layer-3.png"
 const backgroundLayer4 = new Image();
 backgroundLayer4.src = "layer-4.png"
 
+
 // Create a new button element
 
 // const startButton = document.createElement('button');
@@ -87,8 +88,7 @@ window.onload = function() {
 
 // When the user clicks on the "Start Game" button, redirect to the game page
 startGameButton.onclick = function() {
-  window.location.href = 'start.html'; // Replace 'index.html' with your game page
-};
+  window.location.href = 'start.html';};
 
 // // When the user clicks on <span> (x), close the modal
 // closeModal.onclick = function() {
@@ -113,14 +113,6 @@ function start_timer(){
 }
 
 setInterval(start_timer, 1000)
-
-
-
-
-
-
-
-
 
 
 

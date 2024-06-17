@@ -421,7 +421,7 @@ function update_window_str() {
         document.getElementById('push_up').innerHTML = "Click me!";
     }
     else {
-        document.getElementById('push_up').innerHTML = "Push up";
+        document.getElementById('enemy').innerHTML = "Push up";
     }
     if (combo <= 1){
         document.getElementById('combo').innerHTML = "Combo: " + combo.toFixed(2);
@@ -599,15 +599,9 @@ function fightboss(){
 
 function addOne(id) {
 
-
     var moneyAnimation = document.createElement("p");
-    if (id == 'push_up'){
+    if (id == 'enemy'){
         moneyAnimation.innerHTML = "+" + formatNumber(click_str_gain);
-        document.getElementById("moneyAnimation").appendChild(moneyAnimation);
-        moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
-    }
-    else if (id == 'Auto_Pushup'){
-        moneyAnimation.innerHTML = "+" + formatNumber(auto_str);
         document.getElementById("moneyAnimation").appendChild(moneyAnimation);
         moneyAnimation.classList.add("moneyAnimation"); // Add the class that animates
     }

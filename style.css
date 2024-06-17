@@ -311,3 +311,38 @@ button:hover .tooltip-text {
   position: absolute;
   bottom: 0;
 }
+
+/* .enemies {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Set the height to the full viewport height */
+/* }
+
+
+#enemy {
+  background-image: url('enemy.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: none;
+  width: 100px;
+  height: 100px;
+  cursor: pointer; */
+/* }
+
+
+#enemy:hover {
+  transform: scale(1.1); /* Slightly increase the size on hover */
+/* } */
+
+#canvas1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: black 1px 2px 3px 10px;
+  background-color: wheat;
+
+}
+

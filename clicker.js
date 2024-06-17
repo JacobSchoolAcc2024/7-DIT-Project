@@ -245,6 +245,14 @@ function update_inventory(){
     gold_status.innerHTML = "Gold:" + gold;
 }
 
+function formatNumber(num) {
+  const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion"
+      , " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
+  ];
+  const suffixIndex = Math.floor(Math.log10(Math.abs(num)) / 3);
+  const formattedNum = parseFloat((num / Math.pow(1000, suffixIndex)).toFixed(2));
+  return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");
+}
 
 
 
@@ -267,15 +275,16 @@ function purchase_upgrade(id){
   const baseCost = upgrade.cost;
 
   if (id == "clicker_upgrade"){
-    upgrade.clicker_upgrade_purchased += 1;
-    const requiredCost = baseCost + (baseCost * Math.pow(1.15, upgrade.clicker_upgrade_purchased));
-    gold -= requiredCost;
-    playerDmg += 1;
-    localStorage.setItem('clicker_upgrade_purchased', upgrade.clicker_upgrade_purchased);
-    document.getElementById(upgrade.cost_id).innerHTML = requiredCost + " Gold";
-    console.log(upgrade.clicker_upgrade_purchased);
-    console.log(requiredCost);
-  }
+    const requiredCost = baseCost + formatNumber((baseCost * Math.pow(1.15, upgrade.clicker_upgrade_purchased)));
+    if (gold >= requiredCost){
+      upgrade.clicker_upgrade_purchased += 1;
+      gold -= requiredCost;
+      playerDmg += 1;
+      localStorage.setItem('clicker_upgrade_purchased', upgrade.clicker_upgrade_purchased);
+      document.getElementById(upgrade.cost_id).innerHTML = requiredCost + " Gold";
+      console.log(upgrade.clicker_upgrade_purchased);
+      console.log(requiredCost);
+  }}
 
   localStorage.setItem('gold', gold);
   localStorage.setItem('playerDmg', playerDmg); 

@@ -88,7 +88,7 @@ window.onload = function() {
 
 // When the user clicks on the "Start Game" button, redirect to the game page
 startGameButton.onclick = function() {
-  window.location.href = 'start.html';};
+  window.location.href = 'new_index.html';};
 
 // // When the user clicks on <span> (x), close the modal
 // closeModal.onclick = function() {

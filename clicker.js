@@ -37,7 +37,7 @@ let gameSpeed = 20;
 let framex = 0;
 let framey = 0;
 let gameframe = 0;
-const staggerframes = 10;
+const staggerframes = 3;
 const staggerframes_hurt = 1.5;
 let isHurt = false;
 
@@ -322,12 +322,17 @@ function check_upgrades(){
   for (const upgrade in Upgrades) {
     if (upgrade == "clicker_upgrade"){
       const requiredCost = Upgrades[upgrade].cost + (1.5 * Upgrades[upgrade].clicker_upgrade_purchased);
+      button = document.getElementById(Upgrades[upgrade].button_id);
       if (gold >= requiredCost){
-        document.getElementById(Upgrades[upgrade].button_id).disabled = false;
+        button.disabled = false;
+        button.style.background = "green";
+        button.style.color = "white";
         document.getElementById(Upgrades[upgrade].cost_id).innerHTML = requiredCost + " Gold";
       }
       else{
-        document.getElementById(Upgrades[upgrade].button_id).disabled = true;
+        button.style.background = "red";
+        button.style.color = "white";
+        button.disabled = true;
         document.getElementById(Upgrades[upgrade].cost_id).innerHTML = requiredCost + " Gold";
       }
     }

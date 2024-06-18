@@ -8,7 +8,11 @@
     <title>Document</title>
     <style>
         body {
-            background-color: darkgrey;
+            background-image: url(vintage-paper.avif);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
     </style>
 </head>
@@ -31,22 +35,27 @@
         </div>
     </div>
     <button>
-
         <canvas id="canvas1"></canvas>
     </button>
     <div>
         <a id="gold">Gold: 0</a>
-        <button onclick="reset()">Reset</button>
+        <button class = "tooltip" onclick="reset()">Reset
+            <span class="tooltiptext1">Resets the game.</span>
+        </button>
     </div>
     <div>
 
 
     </div>
     <div class="upgrades_div">
-        <button id="clicker_upgrade"  onclick="purchase_upgrade('clicker_upgrade')">
+        <button class ="tooltip" id="clicker_upgrade"  onclick="purchase_upgrade('clicker_upgrade')">
             Train Fist:
+            <span id="clicker_upgrade_cost">2 Gold (0)</span>
+            <span class="tooltiptext">Increases damage by 1.</span>
         </button>
-        <a id="clicker_upgrade_cost">2 Gold </a>
+    </div>
+    <div>
+        <button>Previous Level</button>
     </div>
 
     <script src="clicker.js"></script>

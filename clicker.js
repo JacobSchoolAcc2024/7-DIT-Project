@@ -12,9 +12,12 @@ function closeNav() {
 }
 
 
+
+
 let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
 let gold = parseInt(localStorage.getItem('gold')) || 0;
-let enemy = parseInt(localStorage.getItem('enemy_level')) || 1;
+let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
+let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
 
 
 
@@ -27,11 +30,18 @@ const CANVAS_WIDTH = canvas.width = 500;
 const CANVAS_HEIGHT = canvas.height = 500;
 const player_width = 79;
 const player_height = 69;
+const deadPlayerWidth = 92; // 553 / 6 = 92.16666... (rounded down)
 const playerImage = new Image();
 const playerHurtImage = new Image();
+const playerDeadImage = new Image();
+const playerAttackImage = new Image();
 playerHurtImage.src = 'HURT.png';
+playerDeadImage.src = 'DEATH.png';
+playerAttackImage.src = 'ATTACK.png';
 const hurt_width = 79;
 const hurt_height = 69;
+const deathFrameWidth = 79; // 553 / 6 = 92.16666... (rounded down)
+const deathFrameHeight = 69;
 let gameSpeed = 20;
 
 let framex = 0;
@@ -39,7 +49,11 @@ let framey = 0;
 let gameframe = 0;
 const staggerframes = 3;
 const staggerframes_hurt = 1.5;
+const staggerframes_dead = 1;
+const staggerframes_attack = 2;
 let isHurt = false;
+let isDead = false;
+let isAttacking = false;
 
 // HP bar variables
 let MAX_HP = parseInt(localStorage.getItem('MAX_HP')) || 20;
@@ -113,7 +127,7 @@ const layer4 = new Layer(backgroundLayer4, 0.8);
 function drawHPBar() {
 
   // Draw HP bar background
-  ctx.fillStyle = 'gray';
+  ctx.fillStyle = 'red';
   ctx.fillRect(HP_BAR_X, HP_BAR_Y, HP_BAR_WIDTH, HP_BAR_HEIGHT);
 
   // Draw HP bar
@@ -132,7 +146,7 @@ function drawHPBar() {
 function drawHPText() {
   ctx.font = '16px Arial';
   ctx.fillStyle = 'white';
-  ctx.fillText(`${currentHP}/${MAX_HP}`, HP_TEXT_X, HP_TEXT_Y);
+  ctx.fillText(`${currentHP.toFixed(2)}/${MAX_HP.toFixed(2)}`, HP_TEXT_X, HP_TEXT_Y);
 }
 
 function drawHPParticle() {
@@ -152,79 +166,178 @@ function drawHPParticle() {
 
 function animate1() {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+  // Update and draw background layers
   layer1.update();
   layer1.draw();
   layer2.update();
   layer2.draw();
-
+  layer3.update();
+  layer3.draw();
+  layer4.update();
+  layer4.draw();
 
   drawHPBar();
   drawHPParticle();
 
-  if (isHurt) {
-    // Draw hurt animation frames
-    ctx.drawImage(
-      playerHurtImage,
-      framex * hurt_width,
-      0,
-      hurt_width,
-      hurt_height,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-    if (gameframe % staggerframes_hurt === 0) {
-      if (framex < 3) framex++;
-      else {
-        framex = 0;
-        isHurt = false;
-      }
-    }
+  if (isDead) {
+    drawDeadAnimation();
+  } else if (isHurt) {
+    drawHurtAnimation();
+  } else if (isAttacking) {
+    drawAttackAnimation();
   } else {
-    // Draw idle animation frames
-    ctx.drawImage(
-      playerImage,
-      framex * player_width,
-      framey * player_height,
-      player_width,
-      player_height,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-    if (gameframe % staggerframes === 0) {
-      if (framex < 3) framex++;
-      else framex = 0;
-    }
+    drawIdleAnimation();
   }
-  ctx.font = '2vw Robotto';
-  ctx.fillStyle = 'white';
-  ctx.fillText('Newbie Demon Fly', 10, CANVAS_HEIGHT - 430);
+
+  drawEnemyLevel();
+
   gameframe++;
   requestAnimationFrame(animate1);
 }
+
+function drawDeadAnimation() {
+  ctx.drawImage(
+    playerDeadImage,
+    framex * deathFrameWidth,
+    0,
+    deathFrameWidth,
+    deathFrameHeight,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  if (gameframe % staggerframes_dead === 0) {
+    if (framex < 5) framex++;
+    else {
+      framex = 0;
+      isDead = false;
+    }
+  }
+}
+
+function drawHurtAnimation() {
+  ctx.drawImage(
+    playerHurtImage,
+    framex * hurt_width,
+    0,
+    hurt_width,
+    hurt_height,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  if (gameframe % staggerframes_hurt === 0) {
+    if (framex < 3) framex++;
+    else {
+      framex = 0;
+      isHurt = false;
+    }
+  }
+}
+
+function drawAttackAnimation() {
+  ctx.drawImage(
+    playerAttackImage,
+    framex * player_width,
+    0,
+    player_width,
+    player_height,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  if (enemy_level % 5 === 0) {
+    if (gameframe % staggerframes_attack === 0) {
+      if (framex < 7) framex++;
+      else {
+        framex = 0;
+        isAttacking = true;
+      }
+    }
+  } else {
+    isAttacking = false;
+  }
+}
+
+function drawIdleAnimation() {
+  ctx.drawImage(
+    playerImage,
+    framex * player_width,
+    framey * player_height,
+    player_width,
+    player_height,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  if (gameframe % staggerframes === 0) {
+    if (framex < 3) framex++;
+    else framex = 0;
+  }
+}
+
+function drawEnemyLevel() {
+  ctx.font = '2vw Robotto';
+
+  if (enemy_level % 5 === 0) {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(0, CANVAS_HEIGHT - 30, CANVAS_WIDTH, 30); // Draw red background
+    ctx.fillStyle = 'white'; // Set text color to white
+    ctx.fillText('Boss Demon Fly Level: ' + enemy_level, 1, CANVAS_HEIGHT - 10);
+  } else {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, CANVAS_HEIGHT - 35, CANVAS_WIDTH, 30); // Draw white background
+    ctx.fillStyle = 'green'; // Set text color to green
+    ctx.fillText('Newbie Demon Fly Level: ' + enemy_level, 1, CANVAS_HEIGHT - 10);
+  }
+}
+
+
 
 function drawLoop() {
   drawHPText();
   requestAnimationFrame(drawLoop);
 }
 
-canvas.addEventListener('click', () => {
+
+canvas.addEventListener('click', handle_click)
+
+function handle_click(){
   if (!isHurt) {
     isHurt = true;
     framex = 0;
     currentHP -= playerDmg;
     localStorage.setItem('currentHP', currentHP);
     if (currentHP <= 0) {
-      MAX_HP += 5 + (10 * (enemy / 20));
+      isDead = true;
+      framex = 0;
+      enemy_level += 1;
+      if (enemy_level % 5 === 0) {
+        isAttacking = true
+        framex = 0;
+        MAX_HP += 5 + (20 * (enemy_level / 15));
+      }
+      else{
+        MAX_HP += 5 + (10 * (enemy_level / 20));
+        console.log(MAX_HP);
+        console.log(enemy_level);
+      }
       localStorage.setItem('MAX_HP', MAX_HP);
+      localStorage.setItem('enemy_level', enemy_level);
+      MAX_HP.toFixed(2);
       currentHP = MAX_HP;
+      currentHP.toFixed(2);
       localStorage.setItem('currentHP', currentHP);
-      gold += 1 + (2 * (enemy / 10));
+      gold += 1 + (6 * (enemy_level / 10));
       localStorage.setItem('gold', gold);
       update_inventory();
     }
@@ -238,7 +351,8 @@ canvas.addEventListener('click', () => {
       text: HP_PARTICLE_TEXT, // Add the text property
     };
   }
-});
+}
+
 
 
 animate1();
@@ -288,13 +402,11 @@ function purchase_upgrade(id){
 
   if (id == "clicker_upgrade"){
     const requiredCost = baseCost + (1.5 * upgrade.clicker_upgrade_purchased);
-    document.getElementById(upgrade.cost_id).innerHTML = requiredCost + " Gold";
     if (gold >= requiredCost){
-      upgrade.clicker_upgrade_purchased += 1;
+      upgrade.clicker_upgrade_purchased += 1.5;
       gold -= requiredCost;
       playerDmg += 1;
       localStorage.setItem('clicker_upgrade_purchased', upgrade.clicker_upgrade_purchased);
-      document.getElementById(upgrade.cost_id).innerHTML = requiredCost + " Gold";
       console.log(upgrade.clicker_upgrade_purchased);
       console.log(requiredCost);
     }
@@ -321,19 +433,20 @@ function check_upgrades(){
 
   for (const upgrade in Upgrades) {
     if (upgrade == "clicker_upgrade"){
-      const requiredCost = Upgrades[upgrade].cost + (1.5 * Upgrades[upgrade].clicker_upgrade_purchased);
-      button = document.getElementById(Upgrades[upgrade].button_id);
+      data = Upgrades[upgrade];
+      const requiredCost = data.cost + (1.5 * data.clicker_upgrade_purchased);
+      button = document.getElementById(data.button_id);
       if (gold >= requiredCost){
         button.disabled = false;
         button.style.background = "green";
         button.style.color = "white";
-        document.getElementById(Upgrades[upgrade].cost_id).innerHTML = requiredCost + " Gold";
+        document.getElementById(data.cost_id).innerHTML = requiredCost + " Gold" + " (" + data.clicker_upgrade_purchased + ")";
       }
       else{
-        button.style.background = "red";
+        button.style.background = "darkred";
         button.style.color = "white";
         button.disabled = true;
-        document.getElementById(Upgrades[upgrade].cost_id).innerHTML = requiredCost + " Gold";
+        document.getElementById(data.cost_id).innerHTML = requiredCost + " Gold" + " (" + data.clicker_upgrade_purchased + ")";
       }
     }
   }

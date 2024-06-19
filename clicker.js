@@ -14,7 +14,7 @@ function closeNav() {
 
 
 
-let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
+let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 100;
 let gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
@@ -47,10 +47,10 @@ let gameSpeed = 20;
 let framex = 0;
 let framey = 0;
 let gameframe = 0;
-const staggerframes = 3;
+const staggerframes = 7;
 const staggerframes_hurt = 1.5;
-const staggerframes_dead = 1;
-const staggerframes_attack = 2;
+const staggerframes_dead = 3;
+const staggerframes_attack = 5;
 let isHurt = false;
 let isDead = false;
 let isAttacking = false;
@@ -81,6 +81,15 @@ const backgroundLayer3 = new Image();
 backgroundLayer3.src = "layer-3.png"
 const backgroundLayer4 = new Image();
 backgroundLayer4.src = "layer-4.png";
+
+// Boss timer variables
+const BOSS_TIMER_X = 10;
+const BOSS_TIMER_Y = 10;
+const BOSS_TIMER_WIDTH = CANVAS_WIDTH - 20;
+const BOSS_TIMER_HEIGHT = 10;
+const maxBossTimer = 30;
+let bossTimer = parseInt(localStorage.getItem('bossTimer')) || maxBossTimer;
+
 
 //Animation var//
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -123,6 +132,19 @@ const layer1 = new Layer(backgroundLayer1, 0.2);
 const layer2 = new Layer(backgroundLayer2, 0.4);
 const layer3 = new Layer(backgroundLayer3, 0.6);
 const layer4 = new Layer(backgroundLayer4, 0.8);
+
+
+function drawBossTimer(){
+  ctx.fillStyle = 'white';
+  ctx.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH, BOSS_TIMER_HEIGHT);
+  if (bossTimer > 0) {
+    
+
+  }
+
+
+}
+
 
 function drawHPBar() {
 
@@ -176,7 +198,7 @@ function animate1() {
   layer3.draw();
   layer4.update();
   layer4.draw();
-
+  drawBossTimer();
   drawHPBar();
   drawHPParticle();
 
@@ -324,21 +346,18 @@ function handle_click(){
       if (enemy_level % 5 === 0) {
         isAttacking = true
         framex = 0;
-        MAX_HP += 5 + (20 * (enemy_level / 15));
+        MAX_HP += 10 + (20 * (enemy_level / 10));
+        gold += 1 + (12 * (enemy_level / 5));
       }
       else{
         MAX_HP += 5 + (10 * (enemy_level / 20));
-        console.log(MAX_HP);
-        console.log(enemy_level);
+        gold += 1 + (6 * (enemy_level / 10));
       }
       localStorage.setItem('MAX_HP', MAX_HP);
-      localStorage.setItem('enemy_level', enemy_level);
+      localStorage.setItem('gold', gold);
       MAX_HP.toFixed(2);
       currentHP = MAX_HP;
       currentHP.toFixed(2);
-      localStorage.setItem('currentHP', currentHP);
-      gold += 1 + (6 * (enemy_level / 10));
-      localStorage.setItem('gold', gold);
       update_inventory();
     }
 

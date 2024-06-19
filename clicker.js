@@ -14,7 +14,7 @@ function closeNav() {
 
 
 
-let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 100;
+let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 50;
 let gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
@@ -84,11 +84,13 @@ backgroundLayer4.src = "layer-4.png";
 
 // Boss timer variables
 const BOSS_TIMER_X = 10;
-const BOSS_TIMER_Y = 10;
+const BOSS_TIMER_Y = 30;
 const BOSS_TIMER_WIDTH = CANVAS_WIDTH - 20;
-const BOSS_TIMER_HEIGHT = 10;
-const maxBossTimer = 30;
-let bossTimer = parseInt(localStorage.getItem('bossTimer')) || maxBossTimer;
+const BOSS_TIMER_HEIGHT = 10
+const TIMER_DECREASE_RATE = 1 / 60; // Decrease 1 second per frame (assuming 60 FPS)
+let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 30;
+let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
+
 
 
 //Animation var//
@@ -135,12 +137,19 @@ const layer4 = new Layer(backgroundLayer4, 0.8);
 
 
 function drawBossTimer(){
-  ctx.fillStyle = 'white';
-  ctx.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH, BOSS_TIMER_HEIGHT);
-  if (bossTimer > 0) {
-    
 
-  }
+    let remainingTime = MAX_BOSS_TIME - bossTimer;
+    let timerRatio = remainingTime / MAX_BOSS_TIME;
+
+    // Draw the timer background
+    ctx.fillStyle = 'black';
+    ctx.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH, BOSS_TIMER_HEIGHT);
+  
+    // Draw the timer bar
+    ctx.fillStyle = `rgb(${255 * timerRatio}, ${255 * timerRatio}, ${255 * timerRatio})`; // Gradually change color from white to black
+    ctx.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH * timerRatio, BOSS_TIMER_HEIGHT);
+
+  
 
 
 }
@@ -198,25 +207,38 @@ function animate1() {
   layer3.draw();
   layer4.update();
   layer4.draw();
-  drawBossTimer();
+
   drawHPBar();
   drawHPParticle();
-
   if (isDead) {
     drawDeadAnimation();
   } else if (isHurt) {
     drawHurtAnimation();
   } else if (isAttacking) {
+    drawBossTimer();
     drawAttackAnimation();
+    bossTimer += TIMER_DECREASE_RATE;
+    localStorage.setItem('bossTimer', bossTimer);
+    // Check if the boss timer has reached the maximum time
+    if (bossTimer >= MAX_BOSS_TIME) {
+    // Handle the boss timer reaching the maximum time
+    // (e.g., reset the timer, trigger a game over, etc.)
+    bossTimer = 0;
+    localStorage.setItem('bossTimer', bossTimer);
+    }
+
   } else {
     drawIdleAnimation();
   }
 
   drawEnemyLevel();
 
+
+
   gameframe++;
   requestAnimationFrame(animate1);
 }
+
 
 function drawDeadAnimation() {
   ctx.drawImage(
@@ -308,7 +330,7 @@ function drawIdleAnimation() {
 }
 
 function drawEnemyLevel() {
-  ctx.font = '1.8rem Robotto';
+  ctx.font = '1.5rem Robotto';
 
   if (enemy_level % 5 === 0) {
     ctx.fillStyle = 'red';
@@ -343,21 +365,22 @@ function handle_click(){
       isDead = true;
       framex = 0;
       enemy_level += 1;
+      localStorage.setItem('enemy_level', enemy_level);
       if (enemy_level % 5 === 0) {
         isAttacking = true
         framex = 0;
-        MAX_HP += 10 + (20 * (enemy_level / 10));
+        MAX_HP += Math.round(10 + (20 * (enemy_level / 10)));
+        localStorage.setItem('MAX_HP', MAX_HP);
+        currentHP = MAX_HP;
         gold += 1 + (12 * (enemy_level / 5));
       }
       else{
-        MAX_HP += 5 + (10 * (enemy_level / 20));
+        MAX_HP += Math.round(5 + (10 * (enemy_level / 20)));
+        localStorage.setItem('MAX_HP', MAX_HP);
+        currentHP = MAX_HP;
         gold += 1 + (6 * (enemy_level / 10));
       }
-      localStorage.setItem('MAX_HP', MAX_HP);
       localStorage.setItem('gold', gold);
-      MAX_HP.toFixed(2);
-      currentHP = MAX_HP;
-      currentHP.toFixed(2);
       update_inventory();
     }
 
@@ -383,6 +406,7 @@ drawLoop();
 
 function reset(){
     localStorage.clear();
+    location.reload()
 }
 
 function update_inventory(){

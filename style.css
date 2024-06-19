@@ -388,24 +388,31 @@ body {
   background-image: url(quest-paper.jpg);
   height: 100%;
   width: 20%;
+  text-align: center;
+  border-left: 0.1rem rgb(48, 48, 48) solid;
+  border-radius: 0.2rem;
 }
 
-#clicker_upgrade {
-  display: block;
-  margin: auto;
-}
 
-#gold{
-  display: flex;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 20%;
-  height: 30%;
-  background-image: url(quest-paper.jpg);
-  border-radius: 25px;
+#gold {
   font-size: 2rem;
-  color: black;
-  margin-top: 1rem;
-  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+img {
+  display: inline-block;
+  height: 2rem;
+  margin-top: 3rem;
+}
+
+.gold_plate_background {
+  width: 100%;
+  background-image: url(gold-plate.jpg);
+  border: 0.1rem rgb(48, 48, 48) solid;
+  border-radius: 0.2rem;
+  padding-bottom: 3rem;
+}
+
+.upgrades_div p{
+  font-size: 2rem;
 }

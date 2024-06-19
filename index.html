@@ -8,7 +8,7 @@
     <title>Document</title>
     <style>
         body {
-            background-image: url(vintage-paper.avif);
+            background-image: url(old-pap.webp);
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -38,7 +38,6 @@
         <canvas id="canvas1"></canvas>
     </button>
     <div>
-        <a id="gold">Gold: 0</a>
         <button class = "tooltip" onclick="reset()">Reset
             <span class="tooltiptext1">Resets the game.</span>
         </button>
@@ -48,6 +47,11 @@
 
     </div>
     <div class="upgrades_div">
+        <div class="gold_plate_background">
+            <img src="noun-coin-6929625.png">
+            <span id="gold">Gold: 0</span>
+        </div>
+        <p>Upgrades</p>
         <button class ="tooltip" id="clicker_upgrade"  onclick="purchase_upgrade('clicker_upgrade')">
             Train Fist:
             <span id="clicker_upgrade_cost">2 Gold (0)</span>

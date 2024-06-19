@@ -41,7 +41,7 @@ playerAttackImage.src = 'ATTACK.png';
 const hurt_width = 79;
 const hurt_height = 69;
 const deathFrameWidth = 79; // 553 / 6 = 92.16666... (rounded down)
-const deathFrameHeight = 69;
+const deathFrameHeight = 75;
 let gameSpeed = 20;
 
 let framex = 0;
@@ -49,7 +49,7 @@ let framey = 0;
 let gameframe = 0;
 const staggerframes = 7;
 const staggerframes_hurt = 1.5;
-const staggerframes_dead = 3;
+const staggerframes_dead = 4;
 const staggerframes_attack = 5;
 let isHurt = false;
 let isDead = false;
@@ -166,7 +166,7 @@ function drawHPBar() {
 }
 
 function drawHPText() {
-  ctx.font = '16px Arial';
+  ctx.font = '1rem Arial';
   ctx.fillStyle = 'white';
   ctx.fillText(`${currentHP.toFixed(2)}/${MAX_HP.toFixed(2)}`, HP_TEXT_X, HP_TEXT_Y);
 }
@@ -308,7 +308,7 @@ function drawIdleAnimation() {
 }
 
 function drawEnemyLevel() {
-  ctx.font = '2vw Robotto';
+  ctx.font = '1.8rem Robotto';
 
   if (enemy_level % 5 === 0) {
     ctx.fillStyle = 'red';

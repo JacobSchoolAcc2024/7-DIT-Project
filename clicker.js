@@ -158,9 +158,11 @@ function drawBossTimer() {
     if (bossTimer >= MAX_BOSS_TIME) {
       bossTimer = 0;
       enemy_level -= 1;
-      MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
+      localStorage.setItem('enemy_level', enemy_level);
+      MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
       localStorage.setItem('MAX_HP', MAX_HP);
       currentHP = MAX_HP;
+      localStorage.setItem('currentHP', currentHP);
       gold -= 1 + Math.round((6 * (enemy_level / 10)));
       localStorage.setItem('gold', gold);
       localStorage.setItem('currentHP', currentHP);
@@ -547,13 +549,13 @@ function update_inventory() {
     lock_button = document.getElementById('lock_stage');
     lock_button.style.backgroundColor = "red";
     lock_button.style.color = "white";
-    lock_button.innerHTML = 'Lock Stage';
+    lock_button.innerHTML = 'Unlock Stage';
   }
   else{
     lock_button = document.getElementById('lock_stage');
     lock_button.style.backgroundColor = "green";
     lock_button.style.color = "white";
-    lock_button.innerHTML = "Unlock Stage";
+    lock_button.innerHTML = "Lock Stage";
   }
 
 }

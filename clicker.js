@@ -18,6 +18,8 @@ let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
 let gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
+let enemy_level_increase = parseInt(localStorage.getItem('enemy_level_increase')) || 1;
+let islock_stage = localStorage.getItem('lock_stage') || 'false';
 
 
 
@@ -383,10 +385,10 @@ function handle_click() {
       localStorage.setItem('bossTimer', bossTimer);
       isDead = true;
       framex = 0;
-      enemy_level += 1;
-      localStorage.setItem('enemy_level', enemy_level);
       update_enemy();
       update_inventory();
+      enemy_level += enemy_level_increase;
+      localStorage.setItem('enemy_level', enemy_level);
     }
 
     // Create a new HP particle with updated text
@@ -436,26 +438,71 @@ function showGoldGainedAnimation(goldGained) {
 }
 
 function update_enemy(){
-  if ((enemy_level) % 5 === 0) {
+    if (islock_stage === 'false'){
+      not_locked_stage();
+    }
+    else{
+      locked_stage();
+    }
+  
+  }
+  
+function not_locked_stage(){
+  if ((enemy_level + 1) % 5 === 0) {
     isAttacking = true
     framex = 0;
     MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
     localStorage.setItem('MAX_HP', MAX_HP);
     currentHP = MAX_HP;
-    calculate_gold_gain();
+    if(islock_stage === 'false'){
+      calculate_gold_gain();
+    }
+    else{
+      lock_stage_gold_gain();
+    }
   }
-
   else {
     MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
     localStorage.setItem('MAX_HP', MAX_HP);
     currentHP = MAX_HP;
     calculate_gold_gain();
     }
+
+}
+
+function locked_stage(){
+  if ((enemy_level) % 5 === 0) {
+    isAttacking = true
+    framex = 0;
+    MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
+    localStorage.setItem('MAX_HP', MAX_HP);
+    currentHP = MAX_HP;
+    if(islock_stage === 'false'){
+      calculate_gold_gain();
+    }
+    else{
+      lock_stage_gold_gain();
+    }
   }
-  
+  else {
+    MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
+    localStorage.setItem('MAX_HP', MAX_HP);
+    currentHP = MAX_HP;
+    calculate_gold_gain();
+    }
+
+}
+
+
+
+
+
+
+
+
 
 function calculate_gold_gain(){
-  if ((enemy_level - 1) % 5 === 0) {
+  if (enemy_level % 5 === 0) {
     const goldGained = 10 + Math.round((12 * (enemy_level / 5)));
     gold += goldGained;
     localStorage.setItem('gold', gold);
@@ -468,7 +515,18 @@ function calculate_gold_gain(){
 
 }
 
-
+function lock_stage_gold_gain(){
+  if ((enemy_level) % 5 === 0) {
+    const goldGained = 5 + Math.round((8 * (enemy_level / 7)));
+    gold += goldGained;
+    localStorage.setItem('gold', gold);
+    showGoldGainedAnimation(goldGained)}
+  else{
+    const goldGained = 1 + Math.round((4 * (enemy_level / 12)))
+    gold += goldGained;
+    localStorage.setItem('gold', gold);
+    showGoldGainedAnimation(goldGained)}
+}
 
 
 
@@ -485,6 +543,19 @@ function update_inventory() {
     max_enemy_level = enemy_level;
     localStorage.setItem('max_enemy_level', max_enemy_level);
   }
+  if (islock_stage === 'true') {
+    lock_button = document.getElementById('lock_stage');
+    lock_button.style.backgroundColor = "red";
+    lock_button.style.color = "white";
+    lock_button.innerHTML = 'Lock Stage';
+  }
+  else{
+    lock_button = document.getElementById('lock_stage');
+    lock_button.style.backgroundColor = "green";
+    lock_button.style.color = "white";
+    lock_button.innerHTML = "Unlock Stage";
+  }
+
 }
 
 function formatNumber(num) {
@@ -569,10 +640,11 @@ function check_upgrades() {
 }
 
 function previous_level() {
-  enemy_level -= 1
+  enemy_level -= enemy_level_increase;
+  bossTimer = 0
+  localStorage.setItem('enemy_level', enemy_level);
   if (enemy_level < 1) {
-    alert("You are already at the lowest level!");
-    enemy_level += 1;
+    enemy_level += enemy_level_increase;
   }
   if ((enemy_level) % 5 === 0) {
     localStorage.setItem('enemy_level', enemy_level);
@@ -591,9 +663,10 @@ function previous_level() {
 }
 
 function next_level() {
-  enemy_level += 1
+  enemy_level += enemy_level_increase;
+  bossTimer = 0
+  localStorage.setItem('enemy_level', enemy_level);
   if (enemy_level > max_enemy_level) {
-    alert("You have already reached the max level!");
     enemy_level -= 1;
   }
   else {
@@ -613,3 +686,19 @@ function next_level() {
     }
   }
 }
+
+function lock_stage(){
+  if (islock_stage === 'false'){
+    enemy_level_increase = 0;
+    localStorage.setItem('enemy_level_increase', enemy_level_increase);
+    islock_stage = 'true';
+    localStorage.setItem('islock_stage', islock_stage);
+  }
+  else{
+    enemy_level_increase = 1;
+    localStorage.setItem('enemy_level_increase', enemy_level_increase);
+    islock_stage = 'false';
+    localStorage.setItem('islock_stage', islock_stage);
+  }
+}
+

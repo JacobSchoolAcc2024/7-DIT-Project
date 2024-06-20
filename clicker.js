@@ -3,7 +3,7 @@ function openNav() {
   document.getElementById("mySidenav").style.width = "10rem";
   document.getElementById("main_Page").style.marginLeft = "11.5rem";
   document.getElementById("main_Page").style.transition = "0.9s";
-  
+
 }
 
 function closeNav() {
@@ -103,33 +103,33 @@ let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
 ///Animation Functions//
 /////////////////////////////////////////////////////////////////////////////////////////
 
-class Layer{
-    constructor(image, speedModifier){
-        this.x = 0;
-        this.y = 0;
-        this.width = 550;
-        this.height = 500;
-        this.x2 = this.width;
-        this.image = image;
-        this.speedModifier = speedModifier;
-        this.speed = gameSpeed * this.speedModifier;
+class Layer {
+  constructor(image, speedModifier) {
+    this.x = 0;
+    this.y = 0;
+    this.width = 550;
+    this.height = 500;
+    this.x2 = this.width;
+    this.image = image;
+    this.speedModifier = speedModifier;
+    this.speed = gameSpeed * this.speedModifier;
+  }
+  update() {
+    this.speed = gameSpeed * this.speedModifier;
+    if (this.x <= -this.width) {
+      this.x = this.width + this.x2 - this.speed;
     }
-    update(){
-        this.speed = gameSpeed * this.speedModifier;
-        if (this.x <= -this.width){
-            this.x = this.width + this.x2 - this.speed;
-        }
-        if (this.x2 <= -this.width){
-            this.x2 = this.width + this.x - this.speed;
-        }
-        this.x = Math.floor(this.x - this.speed);
-        this.x2 = Math.floor(this.x2 - this.speed);
+    if (this.x2 <= -this.width) {
+      this.x2 = this.width + this.x - this.speed;
+    }
+    this.x = Math.floor(this.x - this.speed);
+    this.x2 = Math.floor(this.x2 - this.speed);
 
-    }
-    draw(){
-        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-        ctx.drawImage(this.image, this.x2, this.y, this.width, this.height);
-    }
+  }
+  draw() {
+    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    ctx.drawImage(this.image, this.x2, this.y, this.width, this.height);
+  }
 }
 
 const layer1 = new Layer(backgroundLayer1, 0.2);
@@ -138,15 +138,15 @@ const layer3 = new Layer(backgroundLayer3, 0.6);
 const layer4 = new Layer(backgroundLayer4, 0.8);
 
 
-function drawBossTimer(){
+function drawBossTimer() {
 
-    let remainingTime = MAX_BOSS_TIME - bossTimer;
-    let timerRatio = remainingTime / MAX_BOSS_TIME;
-     if (enemy_level % 5 == 0) {
+  let remainingTime = MAX_BOSS_TIME - bossTimer;
+  let timerRatio = remainingTime / MAX_BOSS_TIME;
+  if (enemy_level % 5 == 0) {
     // Draw the timer background
     ctx.fillStyle = 'white';
     ctx.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH, BOSS_TIMER_HEIGHT);
-  
+
     // Draw the timer bar
     ctx.fillStyle = `rgb(${255 * timerRatio}, ${255 * timerRatio}, ${255 * timerRatio})`; // Gradually change color from white to black
     ctx.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH * timerRatio, BOSS_TIMER_HEIGHT);
@@ -154,19 +154,19 @@ function drawBossTimer(){
     localStorage.setItem('bossTimer', bossTimer);
     // Check if the boss timer has reached the maximum time
     if (bossTimer >= MAX_BOSS_TIME) {
-    bossTimer = 0;
-    enemy_level -= 1;
-    MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
-    localStorage.setItem('MAX_HP', MAX_HP);
-    currentHP = MAX_HP;
-    gold -= 1 + Math.round((6 * (enemy_level / 10)));
-    localStorage.setItem('gold', gold);
-    localStorage.setItem('currentHP', currentHP);
-    localStorage.setItem('enemy_level', enemy_level);
-    localStorage.setItem('bossTimer', bossTimer);
+      bossTimer = 0;
+      enemy_level -= 1;
+      MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
+      localStorage.setItem('MAX_HP', MAX_HP);
+      currentHP = MAX_HP;
+      gold -= 1 + Math.round((6 * (enemy_level / 10)));
+      localStorage.setItem('gold', gold);
+      localStorage.setItem('currentHP', currentHP);
+      localStorage.setItem('enemy_level', enemy_level);
+      localStorage.setItem('bossTimer', bossTimer);
     }
   }
-  }
+}
 
 
 function drawHPBar() {
@@ -372,7 +372,7 @@ function drawLoop() {
 
 
 
-function handle_click(){
+function handle_click() {
   if (!isHurt) {
     isHurt = true;
     framex = 0;
@@ -385,22 +385,7 @@ function handle_click(){
       framex = 0;
       enemy_level += 1;
       localStorage.setItem('enemy_level', enemy_level);
-      if (enemy_level % 5 === 0) {
-        isAttacking = true
-        framex = 0;
-        MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
-        localStorage.setItem('MAX_HP', MAX_HP);
-        currentHP = MAX_HP;
-        gold += 1 + Math.round((12 * (enemy_level / 5)));
-      }
-      else{
-        MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
-        localStorage.setItem('MAX_HP', MAX_HP);
-        currentHP = MAX_HP;
-        gold += 1 + Math.round((6 * (enemy_level / 10)));
-      }
-
-      localStorage.setItem('gold', gold);
+      update_enemy();
       update_inventory();
     }
 
@@ -423,23 +408,88 @@ drawLoop();
 ////////////////////////////////
 //Utilities
 
-function reset(){
-    localStorage.clear();
-    location.reload()
+function showGoldGainedAnimation(goldGained) {
+  // Create a new div element
+  const goldGainedElement = document.createElement('div');
+  goldGainedElement.textContent = `+${goldGained} Gold`;
+  goldGainedElement.style.position = 'absolute';
+  goldGainedElement.style.left = (CANVAS_WIDTH + 100) + 'px';
+  goldGainedElement.style.top = (CANVAS_HEIGHT / 2) + 'px';
+  goldGainedElement.style.fontSize = '24px';
+  goldGainedElement.style.color = 'gold';
+  goldGainedElement.style.opacity = 1;
+
+  // Append the element to the document
+  document.body.appendChild(goldGainedElement);
+
+  // Animation
+  let opacity = 1;
+  const animationInterval = setInterval(() => {
+    opacity -= 0.1;
+    goldGainedElement.style.opacity = opacity;
+
+    if (opacity <= 0) {
+      clearInterval(animationInterval);
+      document.body.removeChild(goldGainedElement);
+    }
+  }, 100);
 }
 
-function update_inventory(){
-    gold_status = document.getElementById('gold');
-    gold_status.innerHTML = "Gold: " + gold;
-    if (enemy_level > max_enemy_level){
-      max_enemy_level = enemy_level;
-      localStorage.setItem('max_enemy_level', max_enemy_level);
+function update_enemy(){
+  if ((enemy_level) % 5 === 0) {
+    isAttacking = true
+    framex = 0;
+    MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
+    localStorage.setItem('MAX_HP', MAX_HP);
+    currentHP = MAX_HP;
+    calculate_gold_gain();
+  }
+
+  else {
+    MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
+    localStorage.setItem('MAX_HP', MAX_HP);
+    currentHP = MAX_HP;
+    calculate_gold_gain();
     }
+  }
+  
+
+function calculate_gold_gain(){
+  if ((enemy_level - 1) % 5 === 0) {
+    const goldGained = 10 + Math.round((12 * (enemy_level / 5)));
+    gold += goldGained;
+    localStorage.setItem('gold', gold);
+    showGoldGainedAnimation(goldGained)}
+  else{
+    const goldGained = 1 + Math.round((6 * (enemy_level / 10)))
+    gold += goldGained;
+    localStorage.setItem('gold', gold);
+    showGoldGainedAnimation(goldGained)}
+
+}
+
+
+
+
+
+
+function reset() {
+  localStorage.clear();
+  location.reload()
+}
+
+function update_inventory() {
+  gold_status = document.getElementById('gold');
+  gold_status.innerHTML = "Gold: " + gold;
+  if (enemy_level > max_enemy_level) {
+    max_enemy_level = enemy_level;
+    localStorage.setItem('max_enemy_level', max_enemy_level);
+  }
 }
 
 function formatNumber(num) {
   const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion"
-      , " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
+    , " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
   ];
   const suffixIndex = Math.floor(Math.log10(Math.abs(num)) / 3);
   const formattedNum = parseFloat((num / Math.pow(1000, suffixIndex)).toFixed(2));
@@ -453,7 +503,7 @@ function formatNumber(num) {
 //////////////////////////////////////////////////////////////////////////////////////////
 //Game //
 
-function purchase_upgrade(id){
+function purchase_upgrade(id) {
   const Upgrades = {
     clicker_upgrade: {
       button_id: "clicker_upgrade",
@@ -466,9 +516,9 @@ function purchase_upgrade(id){
   const upgrade = Upgrades[id];
   const baseCost = upgrade.cost;
 
-  if (id == "clicker_upgrade"){
+  if (id == "clicker_upgrade") {
     const requiredCost = baseCost + (1.5 * upgrade.clicker_upgrade_purchased);
-    if (gold >= requiredCost){
+    if (gold >= requiredCost) {
       upgrade.clicker_upgrade_purchased += 1.5;
       gold -= requiredCost;
       playerDmg += 1;
@@ -476,18 +526,18 @@ function purchase_upgrade(id){
       console.log(upgrade.clicker_upgrade_purchased);
       console.log(requiredCost);
     }
-    else{
+    else {
       console.log(requiredCost);
     }
 
   }
 
   localStorage.setItem('gold', gold);
-  localStorage.setItem('playerDmg', playerDmg); 
+  localStorage.setItem('playerDmg', playerDmg);
   update_inventory();
 }
 
-function check_upgrades(){
+function check_upgrades() {
   const Upgrades = {
     clicker_upgrade: {
       button_id: "clicker_upgrade",
@@ -498,17 +548,17 @@ function check_upgrades(){
   }
 
   for (const upgrade in Upgrades) {
-    if (upgrade == "clicker_upgrade"){
+    if (upgrade == "clicker_upgrade") {
       data = Upgrades[upgrade];
       const requiredCost = data.cost + (1.5 * data.clicker_upgrade_purchased);
       button = document.getElementById(data.button_id);
-      if (gold >= requiredCost){
+      if (gold >= requiredCost) {
         button.disabled = false;
         button.style.background = "green";
         button.style.color = "white";
         document.getElementById(data.cost_id).innerHTML = requiredCost + " Gold" + " (" + data.clicker_upgrade_purchased + ")";
       }
-      else{
+      else {
         button.style.background = "darkred";
         button.style.color = "white";
         button.disabled = true;
@@ -518,13 +568,13 @@ function check_upgrades(){
   }
 }
 
-function previous_level(){
+function previous_level() {
   enemy_level -= 1
-  if (enemy_level < 1){
+  if (enemy_level < 1) {
     alert("You are already at the lowest level!");
     enemy_level += 1;
   }
-  if (enemy_level % 5 === 0){
+  if ((enemy_level) % 5 === 0) {
     localStorage.setItem('enemy_level', enemy_level);
     MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
     localStorage.setItem('MAX_HP', MAX_HP);
@@ -540,19 +590,20 @@ function previous_level(){
   }
 }
 
-function next_level(){
+function next_level() {
   enemy_level += 1
-  if (enemy_level > max_enemy_level){
+  if (enemy_level > max_enemy_level) {
     alert("You have already reached the max level!");
     enemy_level -= 1;
   }
-  else{
-    if (enemy_level % 5 === 0){
+  else {
+    if ((enemy_level) % 5 === 0) {
       localStorage.setItem('enemy_level', enemy_level);
       MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
       localStorage.setItem('MAX_HP', MAX_HP);
       currentHP = MAX_HP;
-      localStorage.setItem('currentHP', currentHP);}
+      localStorage.setItem('currentHP', currentHP);
+    }
     else {
       localStorage.setItem('enemy_level', enemy_level);
       MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
@@ -560,5 +611,5 @@ function next_level(){
       currentHP = MAX_HP;
       localStorage.setItem('currentHP', currentHP);
     }
-}
+  }
 }

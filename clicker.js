@@ -37,7 +37,7 @@ const playerImage = new Image();
 const playerHurtImage = new Image();
 const playerDeadImage = new Image();
 const playerAttackImage = new Image();
-playerHurtImage.src = 'New_HURT.png';
+playerHurtImage.src = 'HURT.png';
 playerDeadImage.src = 'DEATH.png';
 playerAttackImage.src = 'New_ATTACK.png';
 const hurt_width = 79;
@@ -47,10 +47,11 @@ const deathFrameHeight = 90;
 let gameSpeed = 20;
 
 let framex = 0;
+let hurt_framex = 3;
 let framey = 0;
 let gameframe = 0;
 const staggerframes = 7;
-const staggerframes_hurt = 2.5;
+const staggerframes_hurt = 12;
 const staggerframes_dead = 4;
 const staggerframes_attack = 5;
 let isHurt = false;
@@ -321,7 +322,7 @@ function drawHurtAnimation() {
   localStorage.setItem('currentHP', currentHP);
   ctx.drawImage(
     playerHurtImage,
-    framex * hurt_width,
+    hurt_framex * hurt_width,
     0,
     hurt_width,
     hurt_height,
@@ -332,9 +333,9 @@ function drawHurtAnimation() {
   );
 
   if (gameframe % staggerframes_hurt === 0) {
-    if (framex < 3) framex++;
+    if (hurt_framex < 3) hurt_framex++;
     else {
-      framex = 0;
+      hurt_framex = 3;
       isHurt = false;
     }
   }
@@ -421,7 +422,22 @@ function drawLoop() {
 
 
 function handle_click() {
+ 
   if (!isHurt) {
+    if (isAttacking){
+      currentHP -= playerDmg;
+      localStorage.setItem('currentHP', currentHP);
+      if (currentHP <= 0){
+        bossTimer = 0
+        localStorage.setItem('bossTimer', bossTimer);
+        isDead = true;  
+        framex = 0    
+        update_enemy();
+        update_inventory();
+      
+      }
+    }
+    else{
     isHurt = true;
     framex = 0;
     currentHP -= playerDmg;
@@ -432,7 +448,7 @@ function handle_click() {
       isDead = true;
       framex = 0;
       update_enemy();
-      update_inventory();
+      update_inventory();}
     }
 
     // Create a new HP particle with updated text

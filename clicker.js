@@ -421,23 +421,25 @@ function drawLoop() {
 
 
 
+let isClickDisabled = false; // Add a flag to track if the click is disabled
+
 function handle_click() {
- 
-  if (!isHurt) {
-    if (isAttacking){
-      currentHP -= playerDmg;
-      localStorage.setItem('currentHP', currentHP);
-      if (currentHP <= 0){
-        bossTimer = 0
-        localStorage.setItem('bossTimer', bossTimer);
-        isDead = true;  
-        framex = 0    
-        update_enemy();
-        update_inventory();
-      
-      }
-    }
-    else{
+  if (!isClickDisabled) { // Check if the click is not disabled
+    isClickDisabled = true; // Disable the click
+
+    if (!isHurt) {
+      if (isAttacking) {
+        currentHP -= playerDmg;
+        localStorage.setItem('currentHP', currentHP);
+        if (currentHP <= 0) {
+          bossTimer = 0
+          localStorage.setItem('bossTimer', bossTimer);
+          isDead = true;
+          framex = 0
+          update_enemy();
+          update_inventory();
+        }
+  } else {
     isHurt = true;
     framex = 0;
     currentHP -= playerDmg;
@@ -448,10 +450,11 @@ function handle_click() {
       isDead = true;
       framex = 0;
       update_enemy();
-      update_inventory();}
+      update_inventory();
     }
-
-    // Create a new HP particle with updated text
+  }
+        
+      // Create a new HP particle with updated text
     const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
     hpParticles.push({
       x: canvas.width - 100,
@@ -460,7 +463,14 @@ function handle_click() {
       text: HP_PARTICLE_TEXT, // Add the text property
     });
   }
+
+  // Add a delay of 500 milliseconds (0.5 seconds) before re-enabling the click
+  setTimeout(function() {
+    isClickDisabled = false; // Re-enable the click
+  }, 100); // Adjust the delay time as needed (in milliseconds)
 }
+}
+
 
 canvas.addEventListener('click', handle_click)
 animate1();

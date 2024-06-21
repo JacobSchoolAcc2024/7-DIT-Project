@@ -363,10 +363,10 @@ body {
 
 #canvas1 {
   position: absolute;
-  top: 50%;
+  top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: black 1px 2px 3px 10px;
+  border: #f7da88 10px solid;
   background-color: wheat;
 
 }

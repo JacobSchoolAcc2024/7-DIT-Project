@@ -27,7 +27,6 @@ function drawSwordAnimation() {
     }
     gameframe++;
     requestAnimationFrame(drawSwordAnimation);
-
 }
 
 function drawDirtyIceCreamAnimation() {

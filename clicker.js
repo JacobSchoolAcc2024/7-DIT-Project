@@ -18,8 +18,8 @@ let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
 let gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
-let enemy_level_increase = parseInt(localStorage.getItem('enemy_level_increase')) || 1;
-let islock_stage = localStorage.getItem('lock_stage') || 'false';
+let islock_stage = parseInt(localStorage.getItem('islock_stage')) || 2;
+
 
 
 
@@ -28,29 +28,29 @@ let islock_stage = localStorage.getItem('lock_stage') || 'false';
 /////////////////////////////////////////////////////////////////////////////////////
 const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
-const CANVAS_WIDTH = canvas.width = 500;
-const CANVAS_HEIGHT = canvas.height = 500;
+const CANVAS_WIDTH = canvas.width = 600;
+const CANVAS_HEIGHT = canvas.height = 650;
 const player_width = 79;
-const player_height = 69;
+const player_height = 70;
 const deadPlayerWidth = 92; // 553 / 6 = 92.16666... (rounded down)
 const playerImage = new Image();
 const playerHurtImage = new Image();
 const playerDeadImage = new Image();
 const playerAttackImage = new Image();
-playerHurtImage.src = 'HURT.png';
+playerHurtImage.src = 'New_HURT.png';
 playerDeadImage.src = 'DEATH.png';
-playerAttackImage.src = 'ATTACK.png';
+playerAttackImage.src = 'New_ATTACK.png';
 const hurt_width = 79;
 const hurt_height = 69;
-const deathFrameWidth = 79; // 553 / 6 = 92.16666... (rounded down)
-const deathFrameHeight = 75;
+const deathFrameWidth = 77; // 553 / 6 = 92.16666... (rounded down)
+const deathFrameHeight = 90;
 let gameSpeed = 20;
 
 let framex = 0;
 let framey = 0;
 let gameframe = 0;
 const staggerframes = 7;
-const staggerframes_hurt = 1.5;
+const staggerframes_hurt = 2.5;
 const staggerframes_dead = 4;
 const staggerframes_attack = 5;
 let isHurt = false;
@@ -62,10 +62,26 @@ let MAX_HP = parseInt(localStorage.getItem('MAX_HP')) || 6;
 let currentHP = parseInt(localStorage.getItem('currentHP')) || MAX_HP;
 const HP_BAR_HEIGHT = 20;
 const HP_BAR_X = 10;
-const HP_BAR_Y = 10;
+const HP_BAR_Y = 5;
 const HP_BAR_WIDTH = CANVAS_WIDTH - 20;
 const HP_TEXT_X = HP_BAR_X + 5;
 const HP_TEXT_Y = HP_BAR_Y + 15;
+
+
+// Player HP bar variables
+let player_MAX_HP = parseInt(localStorage.getItem('player_MAX_HP')) || 10;
+let player_currentHP = parseInt(localStorage.getItem('player_currentHP')) || player_MAX_HP;
+const PLAYER_HP_BAR_HEIGHT = 25;
+const PLAYER_HP_BAR_X = 10;
+const PLAYER_HP_BAR_Y = 30;
+const PLAYER_HP_BAR_WIDTH = CANVAS_WIDTH - 20;
+const PLAYER_HP_TEXT_X = PLAYER_HP_BAR_X + 5;
+const PLAYER_HP_TEXT_Y = PLAYER_HP_BAR_Y + 20;
+
+
+
+
+
 
 // HP particle variables
 const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
@@ -88,9 +104,9 @@ backgroundLayer4.src = "layer-4.png";
 
 // Boss timer variables
 const BOSS_TIMER_X = 10;
-const BOSS_TIMER_Y = 30;
+const BOSS_TIMER_Y = 25;
 const BOSS_TIMER_WIDTH = CANVAS_WIDTH - 20;
-const BOSS_TIMER_HEIGHT = 10
+const BOSS_TIMER_HEIGHT = 5
 const TIMER_DECREASE_RATE = 1 / 60; // Decrease 1 second per frame (assuming 60 FPS)
 let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 15;
 let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
@@ -109,8 +125,8 @@ class Layer {
   constructor(image, speedModifier) {
     this.x = 0;
     this.y = 0;
-    this.width = 550;
-    this.height = 500;
+    this.width = 650;
+    this.height = 900;
     this.x2 = this.width;
     this.image = image;
     this.speedModifier = speedModifier;
@@ -146,11 +162,11 @@ function drawBossTimer() {
   let timerRatio = remainingTime / MAX_BOSS_TIME;
   if (enemy_level % 5 == 0) {
     // Draw the timer background
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = 'black';
     ctx.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH, BOSS_TIMER_HEIGHT);
 
     // Draw the timer bar
-    ctx.fillStyle = `rgb(${255 * timerRatio}, ${255 * timerRatio}, ${255 * timerRatio})`; // Gradually change color from white to black
+    ctx.fillStyle = 'white';
     ctx.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH * timerRatio, BOSS_TIMER_HEIGHT);
     bossTimer += TIMER_DECREASE_RATE;
     localStorage.setItem('bossTimer', bossTimer);
@@ -173,10 +189,29 @@ function drawBossTimer() {
 }
 
 
+function drawPlayerHPBar(){
+  
+  // Draw HP bar background
+  ctx.fillStyle = 'blue';
+  ctx.fillRect(PLAYER_HP_BAR_X, PLAYER_HP_BAR_Y, PLAYER_HP_BAR_WIDTH, PLAYER_HP_BAR_HEIGHT);
+  if (player_currentHP > 0) {
+    const hpRatio = player_currentHP / player_MAX_HP;
+    const hpBarWidth = PLAYER_HP_BAR_WIDTH * hpRatio;
+    ctx.fillStyle = 'darkgreen';
+    ctx.fillRect(PLAYER_HP_BAR_X, PLAYER_HP_BAR_Y, hpBarWidth, PLAYER_HP_BAR_HEIGHT);
+  } else {
+    // If currentHP is 0, make the HP bar completely red
+    ctx.fillStyle ='red';
+    ctx.fillRect(PLAYER_HP_BAR_X, PLAYER_HP_BAR_Y, PLAYER_HP_BAR_WIDTH, PLAYER_HP_BAR_HEIGHT);
+
+  }
+}
+
+
 function drawHPBar() {
 
   // Draw HP bar background
-  ctx.fillStyle = 'red';
+  ctx.fillStyle = 'darkred';
   ctx.fillRect(HP_BAR_X, HP_BAR_Y, HP_BAR_WIDTH, HP_BAR_HEIGHT);
 
   // Draw HP bar
@@ -196,6 +231,12 @@ function drawHPText() {
   ctx.font = '1rem Arial';
   ctx.fillStyle = 'white';
   ctx.fillText(`${currentHP.toFixed(2)}/${MAX_HP.toFixed(2)}`, HP_TEXT_X, HP_TEXT_Y);
+}
+
+function drawPlayerHpText() {
+  ctx.font = '1rem Arial';
+  ctx.fillStyle = 'white';
+  ctx.fillText(`Player HP: ${player_currentHP.toFixed(2)}/${player_MAX_HP.toFixed(2)}`, PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y);
 }
 
 function drawHPParticle() {
@@ -231,6 +272,7 @@ function animate1() {
   check_upgrades();
   update_inventory();
   drawHPBar();
+  drawPlayerHPBar();
   drawBossTimer();
   drawHPParticle();
 
@@ -299,6 +341,7 @@ function drawHurtAnimation() {
 }
 
 function drawAttackAnimation() {
+  
 
   ctx.drawImage(
     playerAttackImage,
@@ -350,18 +393,18 @@ function drawEnemyLevel() {
   ctx.font = '1.5rem Robotto';
 
   if (enemy_level % 5 === 0) {
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = 'darkred';
     ctx.fillRect(0, CANVAS_HEIGHT - 30, CANVAS_WIDTH, 30); // Draw red background
     ctx.fillStyle = 'white'; // Set text color to white
-    ctx.fillText('Boss Demon Fly Level: ' + enemy_level, 1, CANVAS_HEIGHT - 10);
-    ctx.fillText('Max Level: ' + max_enemy_level, CANVAS_WIDTH - 150, CANVAS_HEIGHT - 10);
+    ctx.fillText('Boss Demon Fly Level: ' + enemy_level, 1, CANVAS_HEIGHT - 5);
+    ctx.fillText('Max Level: ' + max_enemy_level, CANVAS_WIDTH - 150, CANVAS_HEIGHT - 5);
 
   } else {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, CANVAS_HEIGHT - 30, CANVAS_WIDTH, 30); // Draw white background
     ctx.fillStyle = 'green'; // Set text color to green
-    ctx.fillText('Newbie Demon Fly Level: ' + enemy_level, 1, CANVAS_HEIGHT - 10);
-    ctx.fillText('Max Level: ' + max_enemy_level, CANVAS_WIDTH - 150, CANVAS_HEIGHT - 10);
+    ctx.fillText('Newbie Demon Fly Level: ' + enemy_level, 1, CANVAS_HEIGHT - 5);
+    ctx.fillText('Max Level: ' + max_enemy_level, CANVAS_WIDTH - 150, CANVAS_HEIGHT - 5);
 
   }
 }
@@ -371,6 +414,7 @@ function drawEnemyLevel() {
 
 function drawLoop() {
   drawHPText();
+  drawPlayerHpText();
   requestAnimationFrame(drawLoop);
 }
 
@@ -389,8 +433,6 @@ function handle_click() {
       framex = 0;
       update_enemy();
       update_inventory();
-      enemy_level += enemy_level_increase;
-      localStorage.setItem('enemy_level', enemy_level);
     }
 
     // Create a new HP particle with updated text
@@ -428,19 +470,23 @@ function showGoldGainedAnimation(goldGained) {
 
   // Animation
   let opacity = 1;
+  let yOffset = 0;
   const animationInterval = setInterval(() => {
-    opacity -= 0.1;
+    opacity -= 0.05;
+    yOffset -= 20; // Adjust this value to control the upward speed
     goldGainedElement.style.opacity = opacity;
+    goldGainedElement.style.top = (CANVAS_HEIGHT / 2 + yOffset) + 'px';
 
     if (opacity <= 0) {
       clearInterval(animationInterval);
       document.body.removeChild(goldGainedElement);
     }
-  }, 100);
+  }, 500); // Update every 60th of a second (assuming 60 FPS)
 }
 
+
 function update_enemy(){
-    if (islock_stage === 'false'){
+    if (islock_stage === 2){
       not_locked_stage();
     }
     else{
@@ -450,61 +496,58 @@ function update_enemy(){
   }
   
 function not_locked_stage(){
-  if ((enemy_level + 1) % 5 === 0) {
-    isAttacking = true
-    framex = 0;
-    MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
-    localStorage.setItem('MAX_HP', MAX_HP);
-    currentHP = MAX_HP;
-    if(islock_stage === 'false'){
-      calculate_gold_gain();
-    }
-    else{
-      lock_stage_gold_gain();
-    }
-  }
-  else {
-    MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
-    localStorage.setItem('MAX_HP', MAX_HP);
-    currentHP = MAX_HP;
-    calculate_gold_gain();
-    }
-
-}
-
-function locked_stage(){
+  enemy_level += 1;
+  localStorage.setItem('enemy_level', enemy_level);
   if ((enemy_level) % 5 === 0) {
     isAttacking = true
     framex = 0;
     MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
     localStorage.setItem('MAX_HP', MAX_HP);
     currentHP = MAX_HP;
-    if(islock_stage === 'false'){
+    localStorage.setItem('currentHP', currentHP);
+    if(islock_stage === 2){
       calculate_gold_gain();
     }
     else{
-      lock_stage_gold_gain();
+      calculate_gold_gain();
     }
   }
   else {
     MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
     localStorage.setItem('MAX_HP', MAX_HP);
     currentHP = MAX_HP;
+    localStorage.setItem('currentHP', currentHP);
     calculate_gold_gain();
+    }
+
+}
+
+function locked_stage(){
+  enemy_level += 0;
+  localStorage.setItem('enemy_level', enemy_level);
+  if ((enemy_level) % 5 === 0) {
+    isAttacking = true
+    framex = 0;
+    MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
+    localStorage.setItem('MAX_HP', MAX_HP);
+    currentHP = MAX_HP;
+    localStorage.setItem('currentHP', currentHP);
+    lock_stage_gold_gain();
+  }
+  else {
+    MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
+    localStorage.setItem('MAX_HP', MAX_HP);
+    currentHP = MAX_HP;
+    localStorage.setItem('currentHP', currentHP);
+    lock_stage_gold_gain();
     }
 
 }
 
 
 
-
-
-
-
-
-
 function calculate_gold_gain(){
-  if (enemy_level % 5 === 0) {
+  if ((enemy_level - 1) % 5 === 0) {
     const goldGained = 10 + Math.round((12 * (enemy_level / 5)));
     gold += goldGained;
     localStorage.setItem('gold', gold);
@@ -519,12 +562,12 @@ function calculate_gold_gain(){
 
 function lock_stage_gold_gain(){
   if ((enemy_level) % 5 === 0) {
-    const goldGained = 5 + Math.round((8 * (enemy_level / 7)));
+    const goldGained = 10 + Math.round((12 * (enemy_level / 5)));
     gold += goldGained;
     localStorage.setItem('gold', gold);
     showGoldGainedAnimation(goldGained)}
   else{
-    const goldGained = 1 + Math.round((4 * (enemy_level / 12)))
+    const goldGained = 1 + Math.round((6 * (enemy_level / 10)))
     gold += goldGained;
     localStorage.setItem('gold', gold);
     showGoldGainedAnimation(goldGained)}
@@ -545,7 +588,7 @@ function update_inventory() {
     max_enemy_level = enemy_level;
     localStorage.setItem('max_enemy_level', max_enemy_level);
   }
-  if (islock_stage === 'true') {
+  if (islock_stage === 1) {
     lock_button = document.getElementById('lock_stage');
     lock_button.style.backgroundColor = "red";
     lock_button.style.color = "white";
@@ -642,11 +685,17 @@ function check_upgrades() {
 }
 
 function previous_level() {
-  enemy_level -= enemy_level_increase;
-  bossTimer = 0
+  if (islock_stage === 2){
+    enemy_level -= 1
+  }
+  else{
+    enemy_level += 0
+  }
   localStorage.setItem('enemy_level', enemy_level);
+  bossTimer = 0
+  localStorage.setItem('bossTimer', bossTimer);
   if (enemy_level < 1) {
-    enemy_level += enemy_level_increase;
+    enemy_level += 1;
   }
   if ((enemy_level) % 5 === 0) {
     localStorage.setItem('enemy_level', enemy_level);
@@ -665,9 +714,15 @@ function previous_level() {
 }
 
 function next_level() {
-  enemy_level += enemy_level_increase;
-  bossTimer = 0
+  if (islock_stage === 2){
+    enemy_level += 1
+  }
+  else{
+    enemy_level += 0
+  }
   localStorage.setItem('enemy_level', enemy_level);
+  bossTimer = 0
+  localStorage.setItem('bossTimer', bossTimer);
   if (enemy_level > max_enemy_level) {
     enemy_level -= 1;
   }
@@ -690,16 +745,12 @@ function next_level() {
 }
 
 function lock_stage(){
-  if (islock_stage === 'false'){
-    enemy_level_increase = 0;
-    localStorage.setItem('enemy_level_increase', enemy_level_increase);
-    islock_stage = 'true';
+  if (islock_stage === 2){
+    islock_stage = 1;
     localStorage.setItem('islock_stage', islock_stage);
   }
-  else{
-    enemy_level_increase = 1;
-    localStorage.setItem('enemy_level_increase', enemy_level_increase);
-    islock_stage = 'false';
+  else if (islock_stage === 1){
+    islock_stage = 2;
     localStorage.setItem('islock_stage', islock_stage);
   }
 }

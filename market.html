@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-    <title>Idle_gym</title>
+    <title>Market</title>
+    <audio controls loop>
+        <source src="BGM-1.m4a" type="audio/mpeg">
+    </audio>
 <head>
-    <link rel="stylesheet" href="market.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <style>
     body {
@@ -37,14 +40,21 @@
         <button id="weight_vest_1">
             
         </button>
-        <button id ='epic_word' onclick="drawSwordAnimation()">epic sword</button>
-        <button id ='dirtyicecream' onclick="drawDirtyIceCreamAnimation()">dirty icecream</button>
+        <button id ='w_word' onclick="drawWSwordAnimation()">Wood Sword</button>
+        <button id ='epic_word' onclick="drawSwordAnimation()">Epic Sword</button>
+        <button id ='d_word' onclick="drawDSwordAnimation()">Diamond Sword</button>
+        <button id ='dirtyicecream' onclick="drawDirtyIceCreamAnimation()">Dirty Icecream</button>
+        <div class="market_price" id="market_price">Price: </div>
+        <div class="market_gold" id="market_gold">Gold: </div>
+        <button id ='purchase' onclick="purchaseItem()">purchase</button>
+        <button onclick="test()">test</button>
         <a id="weight_vest_cost"></a>
     </div>
 </head>
 <body>
     <canvas id = "market_canvas"> </canvas>
     <script src="market.js"></script>
+    <script src="clicker.js"></script>
 </body>
 </html>
 

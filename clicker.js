@@ -13,9 +13,8 @@ function closeNav() {
 
 
 
-
 let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
-let gold = parseInt(localStorage.getItem('gold')) || 0;
+var gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
 let islock_stage = parseInt(localStorage.getItem('islock_stage')) || 2;
@@ -126,11 +125,8 @@ let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 15;
 let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
 
 
-
 //Animation var//
 ///////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 ///Animation Functions//
 /////////////////////////////////////////////////////////////////////////////////////////

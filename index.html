@@ -41,6 +41,12 @@
         <button class = "tooltip" onclick="reset()">Reset
             <span class="tooltiptext1">Resets the game.</span>
         </button>
+        <p id="player_damage"   class="status">Player Damage: 1 | </p>
+        <p  id="boss_damage" class="status">Boss Damage: ? | </p>
+        <P id="player_level" class="status">Player Level: 1 | </P>
+        <p id="skill_points" class="status">Skill Points: 0 | </p>
+        <button id="Strength" onclick="add_stat('Strength')">Strength (0) || + ||</button>
+        <button id="Stamina" onclick="add_stat('Stamina')">Stamina (0) || + ||</button>
     </div>
     <div>
 
@@ -51,11 +57,17 @@
             <img src="noun-coin-6929625.png">
             <span id="gold">Gold: 0</span>
         </div>
+        <button id="purchase" onclick="purchase_amount()">1x</button>
         <p>Upgrades</p>
         <button class ="tooltip" id="clicker_upgrade"  onclick="purchase_upgrade('clicker_upgrade')">
             Train Fist:
             <span id="clicker_upgrade_cost">2 Gold (0)</span>
-            <span class="tooltiptext">Increases damage by 1.</span>
+            <span class="tooltiptext">Increases damage</span>
+        </button>
+        <button class="tooltip" id="hp_upgrade" onclick="purchase_upgrade('hp_upgrade')">
+            Train Stamina:
+            <span id="hp_upgrade_cost">10 gold (0)</span>
+            <span class="tooltiptext">Increases Hp</span>
         </button>
         <button class="tooltip"   onclick="previous_level()">Previous Level
             <span class="tooltiptext">Goes back 1 stage</span>

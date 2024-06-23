@@ -417,3 +417,10 @@ img {
   font-size: 2rem;
 }
 
+.status{
+  border: #000 4px solid;
+  width: fit-content;
+  height: auto;
+  background-color: white;
+  font-size: 2vw;
+}

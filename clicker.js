@@ -23,8 +23,8 @@ let click_delay  = parseInt(localStorage.getItem('click_delay')) || 100;
 
 
 ///Boss Attack
-let boss_damage = parseInt(localStorage.getItem('boss_attack')) || 5;
-let boss_attack_time = parseInt(localStorage.getItem('boss_attack_time')) || 2000;
+let boss_damage = parseInt(localStorage.getItem('boss_attack')) || 20;
+let boss_attack_time = parseInt(localStorage.getItem('boss_attack_time')) || 500;
 let bossAttackInterval;
 
 //Hp Restore
@@ -34,6 +34,9 @@ let hpRegenInterval;
 let regen_multiplier = parseInt(localStorage.getItem('regen_multiplier')) || 1;
 
 
+///Purchase
+let buy_upgrade = parseInt(localStorage.getItem('buy_upgrade')) || 1;
+let amount_able = parseInt(localStorage.getItem('amount_able')) || 1;
 
 
 
@@ -93,6 +96,18 @@ const PLAYER_HP_TEXT_X = PLAYER_HP_BAR_X + 5;
 const PLAYER_HP_TEXT_Y = PLAYER_HP_BAR_Y + 20;
 
 
+// Player Level bar variables
+let player_MAX_XP = parseInt(localStorage.getItem('player_MAX_XP')) || 1000;
+let current_xp = parseInt(localStorage.getItem('current_xp')) || 0;
+let player_level = parseInt(localStorage.getItem('player_level')) || 1;
+let xp_multiply = parseInt(localStorage.getItem('xp_multiply')) || 0;
+let skill_points = parseInt(localStorage.getItem('skill_points')) || 0;
+const PLAYER_XP_BAR_HEIGHT = 20;
+const PLAYER_XP_BAR_X = 10;
+const PLAYER_XP_BAR_Y = CANVAS_HEIGHT - 60;
+const PLAYER_XP_BAR_WIDTH = CANVAS_WIDTH - 20;
+const PLAYER_XP_TEXT_X = PLAYER_XP_BAR_X + 5;
+const PLAYER_XP_TEXT_Y = PLAYER_XP_BAR_Y + 15;
 
 
 
@@ -124,6 +139,14 @@ const BOSS_TIMER_HEIGHT = 5
 const TIMER_DECREASE_RATE = 1 / 60; // Decrease 1 second per frame (assuming 60 FPS)
 let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 15;
 let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
+
+
+/// Stat Variables
+strength_stat_multi = parseInt(localStorage.getItem('strength_stat_multi')) || 1;
+strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_multi_added')) || 0;
+stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
+stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
+
 
 
 
@@ -221,6 +244,25 @@ function drawPlayerHPBar(){
   }
 }
 
+function drawPlayerXpBar(){
+  ctx.fillStyle = 'white';
+  ctx.fillRect(PLAYER_XP_BAR_X, PLAYER_XP_BAR_Y, PLAYER_XP_BAR_WIDTH, PLAYER_XP_BAR_HEIGHT);
+  if (current_xp <= player_MAX_XP) {
+    const XPRatio = current_xp / player_MAX_XP;
+    const XPBarWidth = PLAYER_XP_BAR_WIDTH * XPRatio;
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(PLAYER_XP_BAR_X, PLAYER_XP_BAR_Y, XPBarWidth, PLAYER_XP_BAR_HEIGHT);
+  }
+
+}
+
+
+
+
+
+
+
+
 function drawHPBar() {
 
   // Draw HP bar background
@@ -243,13 +285,20 @@ function drawHPBar() {
 function drawHPText() {
   ctx.font = '1rem Arial';
   ctx.fillStyle = 'white';
-  ctx.fillText(`${currentHP.toFixed(2)}/${MAX_HP.toFixed(2)}`, HP_TEXT_X, HP_TEXT_Y);
+  ctx.fillText(`HP: ${currentHP.toFixed(2)}/${MAX_HP.toFixed(2)}`, HP_TEXT_X, HP_TEXT_Y);
 }
 
 function drawPlayerHpText() {
   ctx.font = '1rem Arial';
   ctx.fillStyle = 'white';
   ctx.fillText(`Player HP: ${player_currentHP.toFixed(2)}/${player_MAX_HP.toFixed(2)}`, PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y);
+}
+
+function drawPlayerXpText(){
+  ctx.font = '1rem Arial';
+  ctx.fillStyle = 'black';
+  ctx.fillText(`Player XP: ${current_xp.toFixed(2)}/${player_MAX_XP.toFixed(2)}`, PLAYER_XP_TEXT_X, PLAYER_XP_TEXT_Y);
+
 }
 
 function drawHPParticle() {
@@ -284,6 +333,7 @@ function animate1() {
   update_inventory();
   drawHPBar();
   drawPlayerHPBar();
+  drawPlayerXpBar();
   drawBossTimer();
   drawHPParticle();
 
@@ -424,6 +474,7 @@ function drawEnemyLevel() {
 function drawLoop() {
   drawHPText();
   drawPlayerHpText();
+  drawPlayerXpText();
   requestAnimationFrame(drawLoop);
 }
 
@@ -546,12 +597,8 @@ function not_locked_stage(){
     localStorage.setItem('MAX_HP', MAX_HP);
     currentHP = MAX_HP;
     localStorage.setItem('currentHP', currentHP);
-    if(islock_stage === 2){
-      calculate_gold_gain();
-    }
-    else{
-      calculate_gold_gain();
-    }
+    calculate_gold_gain();
+    gain_xp_unlocked();
   }
   else {
     MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
@@ -559,6 +606,7 @@ function not_locked_stage(){
     currentHP = MAX_HP;
     localStorage.setItem('currentHP', currentHP);
     calculate_gold_gain();
+    gain_xp_unlocked();
     }
 
 }
@@ -574,6 +622,7 @@ function locked_stage(){
     currentHP = MAX_HP;
     localStorage.setItem('currentHP', currentHP);
     lock_stage_gold_gain();
+    gain_xp_locked();
   }
   else {
     MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
@@ -581,6 +630,7 @@ function locked_stage(){
     currentHP = MAX_HP;
     localStorage.setItem('currentHP', currentHP);
     lock_stage_gold_gain();
+    gain_xp_locked();
     }
 
 }
@@ -619,8 +669,24 @@ function reset() {
 }
 
 function update_inventory() {
+  const player_level_button = document.getElementById('player_level');
+  const skill_points_button = document.getElementById('skill_points');
+  const str_stat_button = document.getElementById('Strength');
+  const stamina_stat_button = document.getElementById('Stamina');
   gold_status = document.getElementById('gold');
-  gold_status.innerHTML = "Gold: " + gold;
+  boss_dps = 2 * boss_damage
+  gold_status.innerHTML = "Gold: " + formatNumber(gold);
+  player_damage_status = document.getElementById('player_damage');
+  boss_damage_status = document.getElementById('boss_damage');
+  player_damage_status.innerHTML = "Player Damage: " + formatNumber(playerDmg) + " |";
+  boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " |";
+  player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level) + ' | ';
+  skill_points_button.innerHTML = 'Skill Points: ' + formatNumber(skill_points) + ' | ';
+  str_stat_button.innerHTML = 'Strength: (' + strength_stat_multi_added +
+  ')' + ' ||' + '+' + '||';
+  stamina_stat_button.innerHTML = 'Stamina: (' + stamina_stat_multi_added +
+  ')' + ' ||' + '+' + '||';
+
   if (enemy_level > max_enemy_level) {
     max_enemy_level = enemy_level;
     localStorage.setItem('max_enemy_level', max_enemy_level);
@@ -662,6 +728,13 @@ function purchase_upgrade(id) {
       cost: 2,
       clicker_upgrade_purchased: parseInt(localStorage.getItem('clicker_upgrade_purchased')) || 0,
       click_multiplier: parseInt(localStorage.getItem('click_multiplier')) || 1,
+    },
+    hp_upgrade: {
+      button_id: "hp_upgrade",
+      cost_id: "hp_upgrade_cost",
+      cost: 5,
+      hp_upgrade_purchased: parseInt(localStorage.getItem('hp_upgrade_purchased')) || 0,
+      hp_multiplier: parseInt(localStorage.getItem('hp_multiplier')) || 1,
     }
   }
 
@@ -670,31 +743,77 @@ function purchase_upgrade(id) {
 
   if (id == "clicker_upgrade") {
     const requiredCost = baseCost + (1.5 * upgrade.clicker_upgrade_purchased);
-    if (gold >= requiredCost) {
-      upgrade.clicker_upgrade_purchased += 1;
-      gold -= requiredCost;
-      if (upgrade.clicker_upgrade_purchased % 10 === 0){
-        upgrade.click_multiplier += 1
-        localStorage.setItem('click_multiplier', upgrade.click_multiplier)
-        playerDmg += (1 + upgrade.click_multiplier) * upgrade.click_multiplier
-      }
-      else{
-        playerDmg += 1;
-      }
-      localStorage.setItem('clicker_upgrade_purchased', upgrade.clicker_upgrade_purchased);
-      console.log(upgrade.clicker_upgrade_purchased);
-      console.log(requiredCost);
-    }
-    else {
-      console.log(requiredCost);
-    }
+    const new_requiredCost = check_cost(requiredCost);
+    buy_clicker_upgrade(new_requiredCost, 'clicker_upgrade');
+  }
 
+  else if (id == "hp_upgrade"){
+    const requiredCost = baseCost + (1.5 * upgrade.hp_upgrade_purchased);
+    const new_requiredCost = check_cost(requiredCost);
+    buy_hp_upgrade(new_requiredCost, 'hp_upgrade');
   }
 
   localStorage.setItem('gold', gold);
   localStorage.setItem('playerDmg', playerDmg);
+  localStorage.setItem('player_MAX_HP', player_MAX_HP);
+  localStorage.setItem('player_currentHP', player_currentHP);
   update_inventory();
 }
+
+
+function buy_clicker_upgrade(new_requiredCost, id){
+  const Upgrades = {
+    clicker_upgrade: {
+      button_id: "clicker_upgrade",
+      cost_id: "clicker_upgrade_cost",
+      cost: 2,
+      clicker_upgrade_purchased: parseInt(localStorage.getItem('clicker_upgrade_purchased')) || 0,
+      click_multiplier: parseInt(localStorage.getItem('click_multiplier')) || 1,
+    }}
+
+  const upgrade = Upgrades[id];
+  baseCost = upgrade.cost
+  if (gold >= new_requiredCost) {
+    upgrade.clicker_upgrade_purchased += amount_able;
+    gold -= new_requiredCost;
+    upgrade.click_multiplier += 0.1
+    const add_playerDmg = Math.round(amount_able + amount_able * upgrade.click_multiplier);
+    playerDmg += add_playerDmg;
+    playerDmg = Math.round(playerDmg * (1 + (strength_stat_multi / 100)));
+    localStorage.setItem('click_multiplier', upgrade.click_multiplier)
+    localStorage.setItem('clicker_upgrade_purchased', upgrade.clicker_upgrade_purchased);
+  }
+
+}
+
+
+function buy_hp_upgrade(new_requiredCost, id){
+  Upgrades = {hp_upgrade: {
+    button_id: "hp_upgrade",
+    cost_id: "hp_upgrade_cost",
+    cost: 5,
+    hp_upgrade_purchased: parseInt(localStorage.getItem('hp_upgrade_purchased')) || 0,
+    hp_multiplier: parseInt(localStorage.getItem('hp_multiplier')) || 1,
+  }}
+
+  upgrade = Upgrades[id]
+  if (gold >= new_requiredCost){
+    upgrade.hp_upgrade_purchased += amount_able;
+    gold -= new_requiredCost;
+    upgrade.hp_multiplier += 0.1;
+    const add_hp = Math.round(amount_able + amount_able * (amount_able ** upgrade.hp_multiplier));
+    player_MAX_HP += add_hp;
+    player_MAX_HP = Math.round(player_MAX_HP * (1 + (stamina_stat_multi / 100)));
+    if (enemy_level % 5 !== 0){
+      player_currentHP = player_MAX_HP;
+    }
+    localStorage.setItem('hp_multiplier', upgrade.hp_multiplier)
+    localStorage.setItem('hp_upgrade_purchased', upgrade.hp_upgrade_purchased);
+  }
+
+}
+
+
 
 function check_upgrades() {
   const Upgrades = {
@@ -703,6 +822,13 @@ function check_upgrades() {
       cost_id: "clicker_upgrade_cost",
       cost: 2,
       clicker_upgrade_purchased: parseInt(localStorage.getItem('clicker_upgrade_purchased')) || 0,
+    },
+    hp_upgrade: {
+      button_id: "hp_upgrade",
+      cost_id: "hp_upgrade_cost",
+      cost: 5,
+      hp_upgrade_purchased: parseInt(localStorage.getItem('hp_upgrade_purchased')) || 0,
+      hp_multiplier: parseInt(localStorage.getItem('hp_multiplier')) || 1,
     }
   }
 
@@ -710,22 +836,58 @@ function check_upgrades() {
     if (upgrade == "clicker_upgrade") {
       data = Upgrades[upgrade];
       const requiredCost = data.cost + (1.5 * data.clicker_upgrade_purchased);
+      const new_requiredCost = check_cost(requiredCost);
       button = document.getElementById(data.button_id);
-      if (gold >= requiredCost) {
-        button.disabled = false;
-        button.style.background = "green";
-        button.style.color = "white";
-        document.getElementById(data.cost_id).innerHTML = requiredCost + " Gold" + " (" + data.clicker_upgrade_purchased + ")";
-      }
-      else {
-        button.style.background = "darkred";
-        button.style.color = "white";
-        button.disabled = true;
-        document.getElementById(data.cost_id).innerHTML = requiredCost + " Gold" + " (" + data.clicker_upgrade_purchased + ")";
-      }
+      upgrade_check(data, new_requiredCost, button, data.clicker_upgrade_purchased, upgrade, 'clicker_upgrade')
+    }
+    else if (upgrade == 'hp_upgrade'){
+      data = Upgrades[upgrade];
+      const requiredCost = data.cost + (1.5 * data.hp_upgrade_purchased);
+      const new_requiredCost = check_cost(requiredCost);
+      button = document.getElementById(data.button_id);
+      upgrade_check(data, new_requiredCost, button, data.hp_upgrade_purchased, upgrade, 'hp_upgrade')
     }
   }
 }
+
+function upgrade_check(data, requiredCost, button, amount_purchased, upgrade, name){
+  if (upgrade == name) {
+    if (gold >= requiredCost) {
+      button.disabled = false;
+      button.style.background = "green";
+      button.style.color = "white";
+      document.getElementById(data.cost_id).innerHTML = requiredCost + " Gold" + " (" + amount_purchased + ")" + 
+      ' Purchase Amount: ' + amount_able;
+    }
+    else {
+      button.style.background = "darkred";
+      button.style.color = "white";
+      button.disabled = true;
+      document.getElementById(data.cost_id).innerHTML = requiredCost + " Gold" + " (" + amount_purchased + ")" + 
+      ' Purchase Amount: ' + amount_able;    }
+  }
+}
+function check_cost(requiredCost) {
+  if (buy_upgrade === 'Max') {
+    maxPurchases = Math.floor(gold / requiredCost);
+    if (maxPurchases === 0){
+      maxPurchases = 1
+    }
+    amount_able = maxPurchases;
+    localStorage.setItem('amount_able', amount_able);
+    const new_requiredCost = requiredCost * maxPurchases;
+    return new_requiredCost;
+  }
+  else{
+    const new_requiredCost = requiredCost * buy_upgrade;
+    return new_requiredCost;
+  }
+}
+
+
+
+
+
 
 function previous_level() {
   if (islock_stage === 2){
@@ -809,12 +971,12 @@ function lock_stage(){
 
 function bossAttack(){
   isAttacking = true;
-  boss_damage = 10 + (10 * (enemy_level/5))
+  boss_damage = Math.round(6 + enemy_level * (15 * (enemy_level / 20)))
   localStorage.setItem('boss_damage', boss_damage);
-  console.log('Boss Damage: ' , boss_damage)
   player_currentHP -= boss_damage;
   localStorage.setItem('player_currentHP', player_currentHP);
   check_player_hp();
+  update_inventory();
 }
 
 function start_bossAttack() {
@@ -842,8 +1004,11 @@ function restore_BossAttack() {
 function check_player_hp(){
   if (player_currentHP <= 0){
     stop_bossAttack();
-    enemy_level -= 1;
+    if (islock_stage === 2){
+      enemy_level -= 2;
+    }
     localStorage.setItem('enemy_level', enemy_level);
+    update_enemy();
     player_currentHP = player_MAX_HP;
     localStorage.setItem('player_currentHP', player_currentHP);
   }
@@ -863,3 +1028,119 @@ function resetPlayerHP(){
   localStorage.setItem('player_currentHP', player_currentHP);
 }
 
+function purchase_amount(){
+  button = document.getElementById('purchase')
+  if (buy_upgrade === 1){
+    button.innerHTML = '10x';
+    buy_upgrade = 10;
+    amount_able = 10;
+    localStorage.setItem('buy_upgrade', buy_upgrade);
+    localStorage.setItem('amount_able', amount_able);
+  }
+  else if (buy_upgrade === 10){
+    button.innerHTML = '100x';
+    buy_upgrade = 100;
+    amount_able = 100;
+    localStorage.setItem('buy_upgrade', buy_upgrade);
+    localStorage.setItem('amount_able', amount_able);
+  }
+  else if (buy_upgrade === 100){
+    button.innerHTML = 'Max';
+    buy_upgrade = 'Max';
+    localStorage.setItem('buy_upgrade', buy_upgrade);
+  }
+  else if (buy_upgrade === 'Max'){
+    button.innerHTML = '1x';
+    buy_upgrade = 1;
+    amount_able = 1;
+    localStorage.setItem('amount_able', amount_able);
+    localStorage.setItem('buy_upgrade', buy_upgrade);
+  }
+} 
+
+function gain_xp_locked(){
+  let xp_add;
+  let level_add;
+  if (enemy_level % 5 === 0){
+    xp_add = 100 + 10 * (((200 * enemy_level)/100) * 1.5)
+    console.log('Boss XP GAINED: ' , xp_add)
+
+  }
+  else{
+    xp_add = 100 + (((100 * enemy_level)/100) * 1.5)
+    console.log('Mob XP GAINED: ' , xp_add)
+
+  }
+  current_xp += xp_add;
+  if (current_xp >= player_MAX_XP){
+    xp_multiply += 1;
+    player_MAX_XP = 1000 + 1000 * xp_multiply;
+    level_add = Math.floor(player_MAX_XP/current_xp);
+    player_level += level_add;
+    current_xp = 0;
+    skill_points += level_add * 3;
+    localStorage.setItem('skill_points', skill_points);
+  }
+  localStorage.setItem('player_level', player_level);
+  localStorage.setItem('current_xp', current_xp);
+  localStorage.setItem('player_MAX_XP', player_MAX_XP);
+  localStorage.setItem('xp_multiply', xp_multiply);
+
+}
+
+
+function gain_xp_unlocked(){
+  let xp_add;
+  let level_add;
+  if ((enemy_level - 1) % 5 === 0){
+    xp_add = 100 + 10 * (((200 * enemy_level)/100) * 1.5)
+    console.log('Boss XP GAINED: ' , xp_add)
+
+  }
+  else{
+    xp_add = 100 + (((100 * enemy_level)/100) * 1.5)
+    console.log('Mob XP GAINED: ' , xp_add)
+
+  }
+  current_xp += xp_add;
+  if (current_xp >= player_MAX_XP){
+    xp_multiply += 1;
+    player_MAX_XP = 1000 + 1000 * xp_multiply;
+    level_add = Math.floor(player_MAX_XP/current_xp);
+    player_level += level_add;
+    current_xp = 0;
+    localStorage.setItem('player_level', player_level);
+    skill_points += level_add * 3;
+    localStorage.setItem('skill_points', skill_points);
+  }
+  localStorage.setItem('current_xp', current_xp);
+  localStorage.setItem('player_MAX_XP', player_MAX_XP);
+  localStorage.setItem('xp_multiply', xp_multiply);
+}
+
+function add_stat(stat){
+  if (stat === 'Strength'){
+    if (skill_points >= 1){
+      skill_points -= 1;
+      strength_stat_multi += 0.01
+      strength_stat_multi_added += 1;
+      playerDmg = Math.round(playerDmg * (1 + (strength_stat_multi / 100)));
+      localStorage.setItem('strength_stat_multi', strength_stat_multi);
+      localStorage.setItem('strength_stat_multi_added', strength_stat_multi_added);
+      localStorage.setItem('skill_points', skill_points);
+      localStorage.setItem('playerDMG', playerDmg);
+    }
+  }
+  else if (stat === 'Stamina'){
+    if (skill_points >= 1){
+      skill_points -= 1;
+      stamina_stat_multi += 0.01;
+      stamina_stat_multi_added += 1;
+      player_MAX_HP = Math.round(player_MAX_HP * (1 + (stamina_stat_multi / 100)));
+      localStorage.setItem('stamina_stat_multi', stamina_stat_multi);
+      localStorage.setItem('stamina_stat_multi_added', stamina_stat_multi_added);
+      localStorage.setItem('skill_points', skill_points);
+      localStorage.setItem('player_MAX_HP', player_MAX_HP);
+    }
+  }
+}

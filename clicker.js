@@ -1141,3 +1141,19 @@ function add_stat(stat){
     }
   }
 }
+
+////music playing
+const audioElementTwo = document.getElementById('BGM-2');
+const playPauseBtnTwo = document.getElementById('play_audio_2');
+let isPlayingTwo = false;
+
+function togglePlayPauseTwo() {
+  if (isPlayingTwo) {
+    audioElementTwo.pause();
+    playPauseBtnTwo.textContent = 'Play';
+  } else {
+    audioElementTwo.play();
+    playPauseBtnTwo.textContent = 'Pause';
+  }
+  isPlayingTwo = !isPlayingTwo;
+}

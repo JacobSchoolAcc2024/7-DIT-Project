@@ -17,6 +17,7 @@ const spriteHeight = 256;
 const frameX=0;
 const frameY=0;
 let marketPrice = 0;
+let purchasedItems = [];
 
 function formatNumber(num) {
     const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion"
@@ -28,10 +29,10 @@ function formatNumber(num) {
 }
 
 const priceDict = {
-    "Epic Sword": 9999,
+    "Epic Sword": 9,
     "Wood Sword": 5,
-    "Diamond Sword": 799,
-    "Dirty Icecream": 2499,
+    "Diamond Sword": 7,
+    "Dirty Icecream": 2,
   };
 
 
@@ -59,15 +60,45 @@ function drawDirtyIceCreamAnimation() {
     marketPrice = priceDict["Dirty Icecream"];
 }
 
-function purchaseItem(){
-    if(gold>=marketPrice){
-        gold-=marketPrice;
-        localStorage.setItem("gold",gold)
+function getWeaponNameByPrice(price) {
+    for (const [weaponName, weaponPrice] of Object.entries(priceDict)) {
+      if (weaponPrice === price) {
+        return weaponName;
+      }
     }
-}
+    return null; 
+  }
+
+
+function purchaseItem() {
+    NameOfWeapon = getWeaponNameByPrice(marketPrice);
+    if (gold >= marketPrice && !purchasedItems.includes(marketPrice)) {
+        gold -= marketPrice;
+        purchasedItems.push(NameOfWeapon);
+        localStorage.setItem("gold", gold);
+        localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
+    }
+  }
 function update_window() {
     document.getElementById('market_price').innerHTML = "Price: " + formatNumber(marketPrice);
     document.getElementById('market_gold').innerHTML = "Gold: " + formatNumber(gold);
+    document.getElementById("purchaseItem").innerHTML = "purchase Item" + purchasedItems;
 }
+
+const audioElement = document.getElementById('BGM-1');
+const playPauseBtn = document.getElementById('play_audio_1');
+let isPlaying = false;
+
+function togglePlayPause() {
+  if (isPlaying) {
+    audioElement.pause();
+    playPauseBtn.textContent = 'Play';
+  } else {
+    audioElement.play();
+    playPauseBtn.textContent = 'Pause';
+  }
+  isPlaying = !isPlaying;
+}
+
 
 setInterval(update_window, 100);

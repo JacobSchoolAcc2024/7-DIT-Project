@@ -320,9 +320,9 @@ body {
   top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: #f7da88 10px solid;
+  border: #521400 10px solid;
   background-color: wheat;
-
+  border-radius: 2rem;
 }
 
 .footer {
@@ -343,7 +343,7 @@ body {
   height: 100%;
   width: 20%;
   text-align: center;
-  border-left: 0.1rem rgb(48, 48, 48) solid;
+  border-left: 0.2rem rgb(48, 48, 48) double;
   border-radius: 0.2rem;
 }
 
@@ -372,15 +372,6 @@ img {
   font-size: 2rem;
 }
 
-<<<<<<< Updated upstream
-.status{
-  border: #000 4px solid;
-  width: fit-content;
-  height: auto;
-  background-color: white;
-  font-size: 2vw;
-}#market_canvas {
-=======
 .stage_setting {
   position: absolute;
   bottom: 10%;
@@ -388,19 +379,16 @@ img {
 }
 
 #market_canvas {
->>>>>>> Stashed changes
   border: 4px solid black;
   display: block;
   position: absolute;
   transform: translate(-50%,-50%);
   top:50%;
   left:50%;
-  width: 300px;
-  height: 300px;
+  width: 18.75rem;
+  height: 18.75rem;
   background-color: aqua;
 }
-<<<<<<< Updated upstream
-=======
 
 #market_canvas {
   border: 4px solid black;
@@ -413,4 +401,34 @@ img {
   height: 300px;
   background-color: aqua;
 }
->>>>>>> Stashed changes
+
+.player_stats {
+  position: fixed;
+  width: 20%;
+  top: 4rem;
+  background-image: url(quest-paper.jpg);
+  height: 100%;
+  text-align: center;
+  border-right: 0.2rem black double;
+}
+
+p {
+  font-family: "Lugrasimo", cursive;
+}
+
+
+.wood_plate_background {
+  font-family: "Lugrasimo", cursive;
+  width: 100%;
+  background-image: url(wood_plate.avif);
+  border: 0.2rem black double;
+  border-radius: 0.2rem;
+  padding-bottom: 3rem;
+  margin-bottom: 3rem;
+}
+
+.wood {
+  font-size: 2rem;
+  margin-bottom: 3rem;
+}
+ 

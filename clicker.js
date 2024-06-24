@@ -448,7 +448,7 @@ function drawIdleAnimation() {
 }
 
 function drawEnemyLevel() {
-  ctx.font = '1.5rem Robotto';
+  ctx.font = '1.2rem Lugrasimo';
 
   if (enemy_level % 5 === 0) {
     ctx.fillStyle = 'darkred';

@@ -12,7 +12,7 @@
     <title>Document</title>
     <style>
         body {
-            background-image: url(old-pap.webp);
+            background-image: url(dark-brown-bg.avif);
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -73,17 +73,17 @@
             <span id="hp_upgrade_cost">10 gold (0)</span>
             <span class="tooltiptext">Increases Hp</span>
         </button>
-        <button class="tooltip"   onclick="previous_level()">Previous Level
-            <span class="tooltiptext">Goes back 1 stage</span>
-        </button>
-        <button class="tooltip"  onclick="next_level()">Next Level
-            <span class="tooltiptext">Goes forward 1 stage</span>
-        </button>
-        <button  class="tooltip" id="lock_stage" onclick="lock_stage()">Lock stage
-            <span class="tooltiptext">Locks the stage. To unlock stage click again.</span>
-        </button>
-    </div>
-    <div>
+        <div class="stage_setting">
+            <button class="tooltip"   onclick="previous_level()">Previous Level
+                <span class="tooltiptext">Goes back 1 stage</span>
+            </button>
+            <button class="tooltip"  onclick="next_level()">Next Level
+                <span class="tooltiptext">Goes forward 1 stage</span>
+            </button>
+            <button  class="tooltip" id="lock_stage" onclick="lock_stage()">Lock stage
+                <span class="tooltiptext">Locks the stage. To unlock stage click again.</span>
+            </button>
+        </div>  
     </div>
 
     <script src="clicker.js"></script>

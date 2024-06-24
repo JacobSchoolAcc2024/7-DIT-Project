@@ -2,7 +2,7 @@
 <html lang="en">
     <title>Market</title>
 
-    <audio id="BGM-1">
+    <audio id="BGM-1" loop>
         <source src="BGM-1.m4a" type="audio/mpeg">
     </audio>
     <button id="play_audio_1" onclick="togglePlayPause()">Play</button>
@@ -42,15 +42,17 @@
         <button id="weight_vest_1">
             
         </button>
-        <button id ='wood sword' onclick="drawWSwordAnimation()">Wood Sword</button>
-        <button id ='epic sword' onclick="drawSwordAnimation()">Epic Sword</button>
-        <button id ='diamond sword' onclick="drawDSwordAnimation()">Diamond Sword</button>
-        <button id ='dirty icecream' onclick="drawDirtyIceCreamAnimation()">Dirty Icecream</button>
-        <div class="market_price" id="market_price">Price: </div>
-        <div class="market_gold" id="market_gold">Gold: </div>
+        <button id="wood sword" onclick="drawAnimation(w_Sword, 'Wood Sword')">Wood Sword</button>
+        <button id="epic sword" onclick="drawAnimation(epicSword, 'Epic Sword')">Epic Sword</button>
+        <button id="diamond sword" onclick="drawAnimation(d_Sword, 'Diamond Sword')">Diamond Sword</button>
+        <button id="dirty icecream" onclick="drawAnimation(dirtyIceCream, 'Dirty Icecream')">Dirty Icecream</button>
+        <button id="wood pickaxe" onclick="drawAnimation(w_pickaxe, 'Wood Pickaxe')">Wood Pickaxe</button>
+        <button id="iron pickaxe" onclick="drawAnimation(i_pickaxe, 'Iron Pickaxe')">Iron Pickaxe</button>
+        <button id="emerald pickaxe" onclick="drawAnimation(e_pickaxe, 'Emerald Pickaxe')">Emerald Pickaxe</button>
+        <div class="market price" id="market_price">Price: </div>
+        <div class="market gold" id="market_gold">Gold: </div>
         <button id ='purchase' onclick="purchaseItem()">purchase</button>
         <div class="purchaseItem" id="purchaseItem">purchase Item: </div>
-        <button onclick="test()">test</button>
         <a id="weight_vest_cost"></a>
     </div>
 </head>

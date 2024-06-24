@@ -3,11 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&family=VT323&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Graduate&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Arbutus&family=Graduate&display=swap');
-
-
-
-
+@import url('https://fonts.googleapis.com/css2?family=Lugrasimo&family=Playwrite+ES&display=swap');
 
 
 
@@ -18,8 +14,7 @@
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 * {
-    font-family: "Arbutus", serif;
-    font-size: 20px;
+    font-family: "Lugrasimo", cursive;
     --bg-primary: rgb(141, 141, 141);
     overflow-x: hidden;
     --clr: #1e9bff;
@@ -295,47 +290,6 @@ body {
   top: 200px;
   left: 300px;
 }
-#moneyAnimation {
-  margin: 0;
-  padding: 0;
-  border: 1px solid black;
-  position: relative;
-}
-
-@keyframes moneyAnimation {
-  0% {
-    opacity: 1;
-    margin-bottom: 10px;
-    top: 0;
-    right: -100px;
-  }
-  50%{
-    color: lightgreen;
-    opacity: 50%;
-  }
-  100% {
-    opacity: 0;
-    color: green;
-    top: -100px;
-  }
-}
-
-.moneyAnimation {
-  animation: moneyAnimation 1s forwards;
-  position: absolute;
-  left: 5%;
-}
-
-.footer {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  background-color: #f7da88a4;
-  width: 100%;
-  height: 20%; 
-  position: absolute;
-  bottom: 0;
-}
 
 /* .enemies {
   display: flex;
@@ -406,6 +360,7 @@ img {
 }
 
 .gold_plate_background {
+  font-family: "Lugrasimo", cursive;
   width: 100%;
   background-image: url(gold-plate.jpg);
   border: 0.1rem rgb(48, 48, 48) solid;
@@ -417,6 +372,7 @@ img {
   font-size: 2rem;
 }
 
+<<<<<<< Updated upstream
 .status{
   border: #000 4px solid;
   width: fit-content;
@@ -426,6 +382,15 @@ img {
 
   
 }#market_canvas {
+=======
+.stage_setting {
+  position: absolute;
+  bottom: 10%;
+  left: 6%;
+}
+
+#market_canvas {
+>>>>>>> Stashed changes
   border: 4px solid black;
   display: block;
   position: absolute;
@@ -436,3 +401,18 @@ img {
   height: 300px;
   background-color: aqua;
 }
+<<<<<<< Updated upstream
+=======
+
+#market_canvas {
+  border: 4px solid black;
+  display: block;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  top:50%;
+  left:50%;
+  width: 300px;
+  height: 300px;
+  background-color: aqua;
+}
+>>>>>>> Stashed changes

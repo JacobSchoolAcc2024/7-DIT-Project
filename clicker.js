@@ -23,7 +23,7 @@ let click_delay  = parseInt(localStorage.getItem('click_delay')) || 100;
 
 ///Boss Attack
 let boss_damage = parseInt(localStorage.getItem('boss_attack')) || 20;
-let boss_attack_time = parseInt(localStorage.getItem('boss_attack_time')) || 500;
+let boss_attack_time = parseInt(localStorage.getItem('boss_attack_time')) || 1000;
 let bossAttackInterval;
 
 //Hp Restore
@@ -512,7 +512,7 @@ function handle_click() {
   }
         
       // Create a new HP particle with updated text
-    const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
+    const HP_PARTICLE_TEXT = "-" + playerDmg.toFixed(2) + "HP";
     hpParticles.push({
       x: canvas.width - 100,
       y: canvas.height - 190,
@@ -529,9 +529,9 @@ function handle_click() {
 }
 
 
-canvas.addEventListener('click', handle_click)
 animate1();
 drawLoop();
+canvas.addEventListener('click', handle_click)
 
 
 
@@ -575,14 +575,14 @@ function showGoldGainedAnimation(goldGained) {
 }
 
 function update_enemy(){
-    if (islock_stage === 2){
-      not_locked_stage();
-    }
-    else{
-      locked_stage();
-    }
-    handleBossAttack();
+  if (islock_stage === 2){
+    not_locked_stage();
   }
+  else{
+    locked_stage();
+  }
+handleBossAttack();
+}
   
 function not_locked_stage(){
   enemy_level += 1;
@@ -700,7 +700,6 @@ function update_inventory() {
     lock_button.style.color = "white";
     lock_button.innerHTML = "Lock Stage";
   }
-
 }
 
 function formatNumber(num) {
@@ -776,7 +775,7 @@ function buy_clicker_upgrade(new_requiredCost, id){
     upgrade.click_multiplier += 0.1
     const add_playerDmg = Math.round(amount_able + amount_able * upgrade.click_multiplier);
     playerDmg += add_playerDmg;
-    playerDmg = Math.round(playerDmg * (1 + (strength_stat_multi / 100)));
+    // playerDmg = playerDmg * (1 + (strength_stat_multi / 20));
     localStorage.setItem('click_multiplier', upgrade.click_multiplier)
     localStorage.setItem('clicker_upgrade_purchased', upgrade.clicker_upgrade_purchased);
   }
@@ -800,7 +799,7 @@ function buy_hp_upgrade(new_requiredCost, id){
     upgrade.hp_multiplier += 0.1;
     const add_hp = Math.round(amount_able + amount_able * (amount_able ** upgrade.hp_multiplier));
     player_MAX_HP += add_hp;
-    player_MAX_HP = Math.round(player_MAX_HP * (1 + (stamina_stat_multi / 100)));
+    // player_MAX_HP = player_MAX_HP * (1 + (stamina_stat_multi / 20));
     if (enemy_level % 5 !== 0){
       player_currentHP = player_MAX_HP;
     }
@@ -956,13 +955,15 @@ function next_level() {
 
 function lock_stage(){
   handleBossAttack();
-  if (islock_stage === 2){
-    islock_stage = 1;
-    localStorage.setItem('islock_stage', islock_stage);
-  }
-  else if (islock_stage === 1){
-    islock_stage = 2;
-    localStorage.setItem('islock_stage', islock_stage);
+  if (enemy_level < max_enemy_level){
+    if (islock_stage === 2){
+      islock_stage = 1;
+      localStorage.setItem('islock_stage', islock_stage);
+    }
+    else if (islock_stage === 1){
+      islock_stage = 2;
+      localStorage.setItem('islock_stage', islock_stage);
+    }
   }
 }
 
@@ -1005,9 +1006,9 @@ function check_player_hp(){
       enemy_level -= 2;
     }
     localStorage.setItem('enemy_level', enemy_level);
-    update_enemy();
     player_currentHP = player_MAX_HP;
     localStorage.setItem('player_currentHP', player_currentHP);
+    handleBossAttack();
   }
 }
 
@@ -1059,7 +1060,7 @@ function gain_xp_locked(){
   let xp_add;
   let level_add;
   if (enemy_level % 5 === 0){
-    xp_add = 100 + 10 * (((200 * enemy_level)/100) * 1.5)
+    xp_add = 100 + 2 * (((200 * enemy_level)/100) * 1.5)
     console.log('Boss XP GAINED: ' , xp_add)
 
   }
@@ -1068,10 +1069,12 @@ function gain_xp_locked(){
     console.log('Mob XP GAINED: ' , xp_add)
 
   }
-  current_xp += xp_add;
+  if (player_currentHP >= 1){
+    current_xp += xp_add;
+  }
   if (current_xp >= player_MAX_XP){
     xp_multiply += 1;
-    player_MAX_XP = 1000 + 1000 * xp_multiply;
+    player_MAX_XP = 1000 + 2 * (1000 * xp_multiply + 100 * xp_multiply);
     level_add = Math.floor(player_MAX_XP/current_xp);
     player_level += level_add;
     current_xp = 0;
@@ -1090,7 +1093,7 @@ function gain_xp_unlocked(){
   let xp_add;
   let level_add;
   if ((enemy_level - 1) % 5 === 0){
-    xp_add = 100 + 10 * (((200 * enemy_level)/100) * 1.5)
+    xp_add = 100 + 2 * (((200 * enemy_level)/100) * 1.5)
     console.log('Boss XP GAINED: ' , xp_add)
 
   }
@@ -1099,10 +1102,11 @@ function gain_xp_unlocked(){
     console.log('Mob XP GAINED: ' , xp_add)
 
   }
-  current_xp += xp_add;
-  if (current_xp >= player_MAX_XP){
+  if (player_currentHP >= 1){
+    current_xp += xp_add;
+  }  if (current_xp >= player_MAX_XP){
     xp_multiply += 1;
-    player_MAX_XP = 1000 + 1000 * xp_multiply;
+    player_MAX_XP = 1000 + 2 * (1000 * xp_multiply + 100 * xp_multiply);
     level_add = Math.floor(player_MAX_XP/current_xp);
     player_level += level_add;
     current_xp = 0;
@@ -1119,9 +1123,9 @@ function add_stat(stat){
   if (stat === 'Strength'){
     if (skill_points >= 1){
       skill_points -= 1;
-      strength_stat_multi += 0.01
+      strength_stat_multi += 0.1
       strength_stat_multi_added += 1;
-      playerDmg = Math.round(playerDmg * (1 + (strength_stat_multi / 100)));
+      playerDmg = playerDmg * (1 + (strength_stat_multi / 50));
       localStorage.setItem('strength_stat_multi', strength_stat_multi);
       localStorage.setItem('strength_stat_multi_added', strength_stat_multi_added);
       localStorage.setItem('skill_points', skill_points);
@@ -1131,9 +1135,9 @@ function add_stat(stat){
   else if (stat === 'Stamina'){
     if (skill_points >= 1){
       skill_points -= 1;
-      stamina_stat_multi += 0.01;
+      stamina_stat_multi += 0.1;
       stamina_stat_multi_added += 1;
-      player_MAX_HP = Math.round(player_MAX_HP * (1 + (stamina_stat_multi / 100)));
+      player_MAX_HP = player_MAX_HP * (1 + (stamina_stat_multi / 50));
       localStorage.setItem('stamina_stat_multi', stamina_stat_multi);
       localStorage.setItem('stamina_stat_multi_added', stamina_stat_multi_added);
       localStorage.setItem('skill_points', skill_points);

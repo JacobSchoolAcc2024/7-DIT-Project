@@ -11,13 +11,19 @@ const w_Sword = new Image();
 w_Sword.src = 'w_Sword.png';
 const d_Sword = new Image();
 d_Sword.src = 'd_Sword.png';
+const e_pickaxe = new Image();
+e_pickaxe.src = 'e_pickaxe.png';
+const i_pickaxe = new Image();
+i_pickaxe.src = 'i_pickaxe.png';
+const w_pickaxe = new Image();
+w_pickaxe.src = 'w_pickaxe.png';
 
 const spriteWidth = 256;
 const spriteHeight = 256;
 const frameX=0;
 const frameY=0;
 let marketPrice = 0;
-let purchasedItems = [];
+let purchasedItems = JSON.parse(localStorage.getItem("purchasedItems")) || [];
 
 function formatNumber(num) {
     const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion"
@@ -33,32 +39,48 @@ const priceDict = {
     "Wood Sword": 5,
     "Diamond Sword": 7,
     "Dirty Icecream": 2,
+    'Wood Pickaxe': 1,
+    'Iron Pickaxe': 1.5,
+    'Emerald Pickaxe': 1.2,
   };
 
-
-function drawSwordAnimation() {
-    ctx2.clearRect(0,0,CANVASWIDTH,CANVASHEIGHT);
-    ctx2.drawImage(epicSword,frameX*spriteWidth-30,frameY*spriteHeight-10,spriteWidth,spriteHeight,0,0,spriteWidth,spriteHeight);
-    marketPrice = priceDict["Epic Sword"];
-}
-
-function drawWSwordAnimation() {
-    ctx2.clearRect(0,0,CANVASWIDTH,CANVASHEIGHT);
-    ctx2.drawImage(w_Sword,frameX*spriteWidth-30,frameY*spriteHeight-10,spriteWidth,spriteHeight,0,0,spriteWidth,spriteHeight);
-    marketPrice = priceDict["Wood Sword"];
-}
-
-function drawDSwordAnimation() {
-    ctx2.clearRect(0,0,CANVASWIDTH,CANVASHEIGHT);
-    ctx2.drawImage(d_Sword,frameX*spriteWidth-30,frameY*spriteHeight-10,spriteWidth,spriteHeight,0,0,spriteWidth,spriteHeight);
-    marketPrice = priceDict["Diamond Sword"];
-}
-
-function drawDirtyIceCreamAnimation() {
-    ctx2.clearRect(0,0,CANVASWIDTH,CANVASHEIGHT);
-    ctx2.drawImage(dirtyIceCream,frameX*spriteWidth-15,frameY*spriteHeight-30,spriteWidth,spriteHeight,0,0,spriteWidth,spriteHeight);
-    marketPrice = priceDict["Dirty Icecream"];
-}
+  function drawAnimation(weaponPic, weaponName) {
+    ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
+    switch (weaponName) {
+      case "Epic Sword":
+        ctx2.drawImage(epicSword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict["Epic Sword"];
+        break;
+      case "Wood Sword":
+        ctx2.drawImage(w_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict["Wood Sword"];
+        break;
+      case "Diamond Sword":
+        ctx2.drawImage(d_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict["Diamond Sword"];
+        break;
+      case "Dirty Icecream":
+        ctx2.drawImage(dirtyIceCream, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict["Dirty Icecream"];
+        break;
+      case 'Wood Pickaxe':
+        ctx2.drawImage(w_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict['Wood Pickaxe'];
+        break;
+      case 'Iron Pickaxe':
+        ctx2.drawImage(i_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict['Iron Pickaxe'];
+        break;
+      case 'Emerald Pickaxe':
+          ctx2.drawImage(e_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+          marketPrice = priceDict['Emerald Pickaxe'];
+          break;
+      default:
+        ctx2.drawImage(weaponPic, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict[weaponName];
+        break;
+    }
+  }
 
 function getWeaponNameByPrice(price) {
     for (const [weaponName, weaponPrice] of Object.entries(priceDict)) {
@@ -72,17 +94,18 @@ function getWeaponNameByPrice(price) {
 
 function purchaseItem() {
     NameOfWeapon = getWeaponNameByPrice(marketPrice);
-    if (gold >= marketPrice && !purchasedItems.includes(marketPrice)) {
+    if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
         gold -= marketPrice;
         purchasedItems.push(NameOfWeapon);
         localStorage.setItem("gold", gold);
         localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
     }
   }
+
 function update_window() {
     document.getElementById('market_price').innerHTML = "Price: " + formatNumber(marketPrice);
     document.getElementById('market_gold').innerHTML = "Gold: " + formatNumber(gold);
-    document.getElementById("purchaseItem").innerHTML = "purchase Item" + purchasedItems;
+    document.getElementById("purchaseItem").innerHTML = "purchase Item: " + purchasedItems;
 }
 
 const audioElement = document.getElementById('BGM-1');

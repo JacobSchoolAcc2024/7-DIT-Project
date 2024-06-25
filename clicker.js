@@ -23,7 +23,7 @@ let click_delay  = parseInt(localStorage.getItem('click_delay')) || 100;
 
 ///Boss Attack
 let boss_damage = parseInt(localStorage.getItem('boss_attack')) || 20;
-let boss_attack_time = parseInt(localStorage.getItem('boss_attack_time')) || 1000;
+let boss_attack_time = parseInt(localStorage.getItem('boss_attack_time')) || 500;
 let bossAttackInterval;
 
 //Hp Restore
@@ -110,6 +110,20 @@ const PLAYER_XP_TEXT_Y = PLAYER_XP_BAR_Y + 15;
 
 
 
+// Player Energy bar variables
+let player_MAX_ENERGY = parseInt(localStorage.getItem('player_MAX_ENERGY')) || 100;
+let current_energy = parseInt(localStorage.getItem('current_energy')) || player_MAX_ENERGY;
+let energy_multiplier = parseInt(localStorage.getItem('energy_multiplier')) || 1;
+const PLAYER_ENERGY_BAR_HEIGHT = 20;
+const PLAYER_ENERGY_BAR_WIDTH = CANVAS_WIDTH - 20;
+const PLAYER_ENERGY_BAR_X = 10;
+const PLAYER_ENERGY_BAR_Y = CANVAS_HEIGHT - 100;
+const PLAYER_ENERGY_TEXT_X = PLAYER_XP_BAR_X + 5;
+const PLAYER_ENERGY_TEXT_Y = PLAYER_XP_BAR_Y + 15;
+
+
+
+
 
 // HP particle variables
 const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
@@ -184,6 +198,48 @@ class Layer {
   }
 }
 
+
+class bar {
+  constructor(height, width, x, y, text_y, text_x, max, current, color, color2){
+    this.bar_height = height;
+    this.bar_width = width;
+    this.bar_x = x;
+    this.bar_y = y;
+    this.bar_text_y = text_y;
+    this.bar_text_x = text_x;
+    this.bar_max = max;
+    this.bar_current = current;
+    this.bar_color = color;
+    this.bar_color_2 = color2
+    // this.bar_symbol = symbol;
+  }
+  drawHPBar(){
+    ctx.fillStyle = this.bar_color;
+    ctx.fillRect(this.bar_x, this.bar_y, this.bar_width, this.bar_height);
+    if (this.bar_current > 0){
+      const ratio = this.bar_current / this.bar_max;
+      const width = this.bar_width * ratio;
+      ctx.fillStyle = this.bar_color_2;
+      ctx.fillRect(this.bar_x, this.bar_y, width, this.bar_height);
+    }else{
+      ctx.fillStyle = this.bar_color;
+      ctx.fillRect(this.bar_x, this.bar_y, this.bar_width, this.bar_height);
+    }
+  }
+
+  update(){
+    this.bar_current = currentHP;
+    this.bar_max = MAX_HP;
+  }
+}
+
+
+
+const HP_BAR = new bar(HP_BAR_HEIGHT, HP_BAR_WIDTH, HP_BAR_X, 
+HP_BAR_Y, HP_TEXT_Y, HP_TEXT_X, MAX_HP, currentHP, 'darkred', 'green');
+
+
+
 const layer1 = new Layer(backgroundLayer1, 0.2);
 const layer2 = new Layer(backgroundLayer2, 0.4);
 const layer3 = new Layer(backgroundLayer3, 0.6);
@@ -232,13 +288,12 @@ function drawPlayerHPBar(){
     const hpRatio = player_currentHP / player_MAX_HP;
     const hpBarWidth = PLAYER_HP_BAR_WIDTH * hpRatio;
     ctx.fillStyle = 'darkgreen';
-    ctx.fillRect(PLAYER_HP_BAR_X, PLAYER_HP_BAR_Y, hpBarWidth, PLAYER_HP_BAR_HEIGHT);
-  } else {
-    // If currentHP is 0, make the HP bar completely red
-    ctx.fillStyle ='red';
-    ctx.fillRect(PLAYER_HP_BAR_X, PLAYER_HP_BAR_Y, PLAYER_HP_BAR_WIDTH, PLAYER_HP_BAR_HEIGHT);
-
-  }
+    ctx.fillRect(PLAYER_HP_BAR_X, PLAYER_HP_BAR_Y, hpBarWidth, PLAYER_HP_BAR_HEIGHT);}
+  // } else {
+  //   // If currentHP is 0, make the HP bar completely red
+  //   ctx.fillStyle ='red';
+  //   ctx.fillRect(PLAYER_HP_BAR_X, PLAYER_HP_BAR_Y, PLAYER_HP_BAR_WIDTH, PLAYER_HP_BAR_HEIGHT);
+  // }
 }
 
 function drawPlayerXpBar(){
@@ -252,12 +307,6 @@ function drawPlayerXpBar(){
   }
 
 }
-
-
-
-
-
-
 
 
 function drawHPBar() {
@@ -328,7 +377,8 @@ function animate1() {
 
   check_upgrades();
   update_inventory();
-  drawHPBar();
+  HP_BAR.drawHPBar();
+  HP_BAR.update();
   drawPlayerHPBar();
   drawPlayerXpBar();
   drawBossTimer();
@@ -485,7 +535,7 @@ function handle_click() {
 
     if (!isHurt) {
       if (isAttacking) {
-        currentHP -= playerDmg;
+        currentHP -= playerDmg * (1 + strength_stat_multi);
         localStorage.setItem('currentHP', currentHP);
         if (currentHP <= 0) {
           bossTimer = 0
@@ -499,7 +549,7 @@ function handle_click() {
   } else {
     isHurt = true;
     framex = 0;
-    currentHP -= playerDmg;
+    currentHP -= playerDmg * (1 + strength_stat_multi);
     localStorage.setItem('currentHP', currentHP);
     if (currentHP <= 0) {
       bossTimer = 0;
@@ -512,7 +562,7 @@ function handle_click() {
   }
         
       // Create a new HP particle with updated text
-    const HP_PARTICLE_TEXT = "-" + playerDmg.toFixed(2) + "HP";
+    const HP_PARTICLE_TEXT = "-" + formatNumber(playerDmg * (1 + strength_stat_multi)) + "HP";
     hpParticles.push({
       x: canvas.width - 100,
       y: canvas.height - 190,
@@ -531,7 +581,7 @@ function handle_click() {
 
 animate1();
 drawLoop();
-canvas.addEventListener('click', handle_click)
+canvas.addEventListener('click', handle_click);
 
 
 
@@ -675,8 +725,8 @@ function update_inventory() {
   gold_status.innerHTML = "Gold: " + formatNumber(gold);
   player_damage_status = document.getElementById('player_damage');
   boss_damage_status = document.getElementById('boss_damage');
-  player_damage_status.innerHTML = "Player Damage: " + formatNumber(playerDmg) + " |";
-  boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " |";
+  player_damage_status.innerHTML = "Player Damage: " + formatNumber(playerDmg * (1 + strength_stat_multi)) + " ";
+  boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " ";
   player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level) + ' | ';
   skill_points_button.innerHTML = 'Skill Points: ' + formatNumber(skill_points) + ' | ';
   str_stat_button.innerHTML = 'Strength: (' + strength_stat_multi_added +
@@ -700,6 +750,8 @@ function update_inventory() {
     lock_button.style.color = "white";
     lock_button.innerHTML = "Lock Stage";
   }
+
+  
 }
 
 function formatNumber(num) {
@@ -756,7 +808,6 @@ function purchase_upgrade(id) {
   update_inventory();
 }
 
-
 function buy_clicker_upgrade(new_requiredCost, id){
   const Upgrades = {
     clicker_upgrade: {
@@ -773,7 +824,7 @@ function buy_clicker_upgrade(new_requiredCost, id){
     upgrade.clicker_upgrade_purchased += amount_able;
     gold -= new_requiredCost;
     upgrade.click_multiplier += 0.1
-    const add_playerDmg = Math.round(amount_able + amount_able * upgrade.click_multiplier);
+    const add_playerDmg = Math.round((1 + strength_stat_multi) * (amount_able + amount_able * upgrade.click_multiplier));
     playerDmg += add_playerDmg;
     // playerDmg = playerDmg * (1 + (strength_stat_multi / 20));
     localStorage.setItem('click_multiplier', upgrade.click_multiplier)
@@ -781,7 +832,6 @@ function buy_clicker_upgrade(new_requiredCost, id){
   }
 
 }
-
 
 function buy_hp_upgrade(new_requiredCost, id){
   Upgrades = {hp_upgrade: {
@@ -797,7 +847,7 @@ function buy_hp_upgrade(new_requiredCost, id){
     upgrade.hp_upgrade_purchased += amount_able;
     gold -= new_requiredCost;
     upgrade.hp_multiplier += 0.1;
-    const add_hp = Math.round(amount_able + amount_able * (amount_able ** upgrade.hp_multiplier));
+    const add_hp = Math.round((1 + stamina_stat_multi) * (amount_able + amount_able * (amount_able ** upgrade.hp_multiplier)));
     player_MAX_HP += add_hp;
     // player_MAX_HP = player_MAX_HP * (1 + (stamina_stat_multi / 20));
     if (enemy_level % 5 !== 0){
@@ -808,8 +858,6 @@ function buy_hp_upgrade(new_requiredCost, id){
   }
 
 }
-
-
 
 function check_upgrades() {
   const Upgrades = {
@@ -863,6 +911,7 @@ function upgrade_check(data, requiredCost, button, amount_purchased, upgrade, na
       ' Purchase Amount: ' + amount_able;    }
   }
 }
+
 function check_cost(requiredCost) {
   if (buy_upgrade === 'Max') {
     maxPurchases = Math.floor(gold / requiredCost);
@@ -879,11 +928,6 @@ function check_cost(requiredCost) {
     return new_requiredCost;
   }
 }
-
-
-
-
-
 
 function previous_level() {
   if (islock_stage === 2){
@@ -1125,11 +1169,9 @@ function add_stat(stat){
       skill_points -= 1;
       strength_stat_multi += 0.1
       strength_stat_multi_added += 1;
-      playerDmg = playerDmg * (1 + (strength_stat_multi / 50));
       localStorage.setItem('strength_stat_multi', strength_stat_multi);
       localStorage.setItem('strength_stat_multi_added', strength_stat_multi_added);
       localStorage.setItem('skill_points', skill_points);
-      localStorage.setItem('playerDMG', playerDmg);
     }
   }
   else if (stat === 'Stamina'){
@@ -1137,14 +1179,14 @@ function add_stat(stat){
       skill_points -= 1;
       stamina_stat_multi += 0.1;
       stamina_stat_multi_added += 1;
-      player_MAX_HP = player_MAX_HP * (1 + (stamina_stat_multi / 50));
       localStorage.setItem('stamina_stat_multi', stamina_stat_multi);
       localStorage.setItem('stamina_stat_multi_added', stamina_stat_multi_added);
       localStorage.setItem('skill_points', skill_points);
-      localStorage.setItem('player_MAX_HP', player_MAX_HP);
     }
   }
 }
+
+
 
 ////music playing
 const audioElementTwo = document.getElementById('BGM-2');

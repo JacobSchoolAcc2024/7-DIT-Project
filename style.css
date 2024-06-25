@@ -372,18 +372,15 @@ img {
   font-size: 2rem;
 }
 
-<<<<<<< Updated upstream
 .status{
   border: #000 4px solid;
   width: fit-content;
   height: auto;
   background-color: white;
-  font-size: 2vw;
+  font-size: 2vw;}
 
   
-}#market_canvas {
-=======
-.stage_setting {
+.stage_setting{
   position: absolute;
   bottom: 10%;
   left: 6%;

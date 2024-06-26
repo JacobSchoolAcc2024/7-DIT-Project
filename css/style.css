@@ -24,6 +24,7 @@
 }
 
 .sidenav {
+    position: relative;
     height: 100%;
     width: 0;
     position: fixed;
@@ -37,6 +38,7 @@
     left: 0;
     border-right: 0.1px solid black;
     text-align: center;
+    z-index: 1;
 }
 
 body {
@@ -102,18 +104,6 @@ body {
     margin-left: 50px;
   }
 
-  .upgrades .closebtn:hover {
-    color: #f1f1f1;
-    transform: rotate(0deg);
-  }
-
-  .upgrades .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-  }
   
   .upgrades a {
     text-decoration: none;
@@ -122,11 +112,6 @@ body {
     transition: 0.3s;
     display: block;
     padding-right: 0;
-  }
-
-  .main_Page {
-    background-color:rgb(247, 241, 233);
- 
   }
 
   .bar1, .bar2, .bar3 {
@@ -176,7 +161,7 @@ body {
     display: flex;
     margin: 0;
     padding: 0;
-    background-image: url(brown-paper.jpeg);
+    background-image: url(../images/brown-paper.jpeg);
     width: 100%;
     height: 4rem; 
   }
@@ -202,9 +187,10 @@ body {
     margin-bottom: 4rem;
   }
 
-  #purchase_pull_up {
-    margin-top: 4rem;
-  }
+ #purchase{
+  width: 15rem;
+  margin-bottom: 2rem;
+ }
 
   #status_button {
     margin-top: 4.9rem;
@@ -331,7 +317,7 @@ body {
   left: 0;
   width: 100%;
   height: 15rem;
-  background-image: url(vintage-paper.avif);
+  background-image: url(../images/vintage-paper.avif);
 
 }
 
@@ -339,7 +325,7 @@ body {
   position: fixed;
   right: 0;
   top: 4rem;
-  background-image: url(quest-paper.jpg);
+  background-image: url(../images/quest-paper.jpg);
   height: 100%;
   width: 20%;
   text-align: center;
@@ -347,6 +333,9 @@ body {
   border-radius: 0.2rem;
 }
 
+.upgrades_div button{
+  width: 20rem;
+}
 
 #gold {
   font-size: 2rem;
@@ -362,7 +351,7 @@ img {
 .gold_plate_background {
   font-family: "Lugrasimo", cursive;
   width: 100%;
-  background-image: url(gold-plate.jpg);
+  background-image: url(../images/gold-plate.jpg);
   border: 0.1rem rgb(48, 48, 48) solid;
   border-radius: 0.2rem;
   padding-bottom: 3rem;
@@ -370,17 +359,22 @@ img {
 
 .upgrades_div p{
   font-size: 2rem;
+  align-items: center;
 }
 
-.status{
-  border: #000 4px solid;
-  width: fit-content;
-  height: auto;
-  background-color: white;
-  font-size: 2vw;}
 
-  
-.stage_setting{
+.status{
+  width: 20rem;
+  background-color: white;
+  font-size: 1.5rem;
+  box-shadow:
+      inset -2px 2px 1px 1px grey,
+      inset -2px -2px 1px 1px lightgray,
+      inset 2px 0px 1px 1px lightgray;
+  margin-left: 8%;
+}
+
+.stage_setting {
   position: absolute;
   bottom: 10%;
   left: 6%;
@@ -414,7 +408,7 @@ img {
   position: fixed;
   width: 20%;
   top: 4rem;
-  background-image: url(quest-paper.jpg);
+  background-image: url(../images/quest-paper.jpg);
   height: 100%;
   text-align: center;
   border-right: 0.2rem black double;
@@ -428,7 +422,7 @@ p {
 .wood_plate_background {
   font-family: "Lugrasimo", cursive;
   width: 100%;
-  background-image: url(wood_plate.avif);
+  background-image: url(../images/wood_plate.avif);
   border: 0.2rem black double;
   border-radius: 0.2rem;
   padding-bottom: 3rem;

@@ -52,9 +52,9 @@ const playerImage = new Image();
 const playerHurtImage = new Image();
 const playerDeadImage = new Image();
 const playerAttackImage = new Image();
-playerHurtImage.src = 'HURT.png';
-playerDeadImage.src = 'DEATH.png';
-playerAttackImage.src = 'New_ATTACK.png';
+playerHurtImage.src = 'images/HURT.png';
+playerDeadImage.src = 'images/DEATH.png';
+playerAttackImage.src = 'images/New_ATTACK.png';
 const hurt_width = 79;
 const hurt_height = 69;
 const deathFrameWidth = 77; // 553 / 6 = 92.16666... (rounded down)
@@ -133,16 +133,16 @@ const hpParticles = [];
 let hpParticle = null;
 
 
-playerImage.src = 'IDLE.png';
+playerImage.src = 'images/IDLE.png';
 
 const backgroundLayer1 = new Image();
-backgroundLayer1.src = "layer-1.png";
+backgroundLayer1.src = "images/layer-1.png";
 const backgroundLayer2 = new Image();
-backgroundLayer2.src = "layer-2.png";
+backgroundLayer2.src = "images/layer-2.png";
 const backgroundLayer3 = new Image();
-backgroundLayer3.src = "layer-3.png"
+backgroundLayer3.src = "images/layer-3.png"
 const backgroundLayer4 = new Image();
-backgroundLayer4.src = "layer-4.png";
+backgroundLayer4.src = "images/layer-4.png";
 
 // Boss timer variables
 const BOSS_TIMER_X = 10;

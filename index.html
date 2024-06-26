@@ -4,15 +4,15 @@
     <audio id="BGM-2" loop>
         <source src="BGM-2.m4a" type="audio/mpeg" >
     </audio>
-    <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
+    
 <head>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
         body {
-            background-image: url(dark-brown-bg.avif);
+            background-image: url(../images/dark-brown-bg.avif);
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -43,8 +43,9 @@
     </button>
     <div class="player_stats">
         <div class="wood_plate_background">
-            <img class="wood_img" src="noun-stats-6801159.png">
+            <img class="wood_img" src="images/noun-stats-6801159.png">
             <span class="wood">Stats</span>
+            
         </div>
         <button class = "tooltip" onclick="reset()">Reset
             <span class="tooltiptext1">Resets the game.</span>
@@ -55,6 +56,8 @@
         <p id="skill_points" class="status">Skill Points: 0 </p>
         <button id="Strength" onclick="add_stat('Strength')">Strength (0) || + ||</button>
         <button id="Stamina" onclick="add_stat('Stamina')">Stamina (0) || + ||</button>
+        <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
+        <button id="skill_menu">Skills</button>
     </div>
     <div>
 
@@ -62,11 +65,11 @@
     </div>
     <div class="upgrades_div">
         <div class="gold_plate_background">
-            <img src="noun-coin-6929625.png">
+            <img src="images/noun-coin-6929625.png">
             <span id="gold">Gold: 0</span>
         </div>
-        <button id="purchase" onclick="purchase_amount()">1x</button>
         <p>Upgrades</p>
+        <button id="purchase" onclick="purchase_amount()">1x</button>
         <button class ="tooltip" id="clicker_upgrade"  onclick="purchase_upgrade('clicker_upgrade')">
             Train Fist:
             <span id="clicker_upgrade_cost">2 Gold (0)</span>
@@ -87,9 +90,9 @@
             <button  class="tooltip" id="lock_stage" onclick="lock_stage()">Lock stage
                 <span class="tooltiptext">Locks the stage. To unlock stage click again.</span>
             </button>
-        </div>  
+        </div>
     </div>
 
-    <script src="clicker.js"></script>
+    <script src="scripts/clicker.js"></script>
 </body>
 </html>

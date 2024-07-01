@@ -203,10 +203,11 @@ body {
   }
   
   .tooltip .tooltiptext {
-    top: -5px;
-    right: 105%;
+    top: calc(100% + 10px); /* Position the tooltip below the element */
+    left: 50%; /* Center the tooltip horizontally */
+    transform: translateX(-50%); /* Adjust the horizontal position */
     visibility: hidden;
-    width: 12vw;
+    width: 20vw;
     height: auto;
     background-color: black;
     color: white;
@@ -218,6 +219,8 @@ body {
     position: absolute;
     z-index: 1;
   }
+  
+  
 
   .tooltip .tooltiptext1 {
     top: -5px;
@@ -434,3 +437,6 @@ p {
   margin-bottom: 3rem;
 }
  
+.upgrade_how_much{
+  display: flex;
+}

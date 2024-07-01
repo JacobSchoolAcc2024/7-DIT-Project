@@ -17,6 +17,7 @@ let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
 var gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
+let enemy_level_increase = parseInt(localStorage.getItem('enemy_level_increase')) || 1;
 let islock_stage = parseInt(localStorage.getItem('islock_stage')) || 2;
 let click_delay  = parseInt(localStorage.getItem('click_delay')) || 100;
 
@@ -35,7 +36,7 @@ let regen_multiplier = parseInt(localStorage.getItem('regen_multiplier')) || 1;
 
 ///Purchase
 let buy_upgrade = parseInt(localStorage.getItem('buy_upgrade')) || 1;
-let amount_able = parseInt(localStorage.getItem('amount_able')) || 1;
+clickedButton = parseInt(localStorage.getItem('clickedButton')) || 0;
 
 
 
@@ -213,6 +214,11 @@ class bar {
     this.bar_color_2 = color2
     // this.bar_symbol = symbol;
   }
+
+  updateBoss(){
+    this.bar_current = currentHP;
+    this.bar_max = MAX_HP;
+  }
   drawHPBar(){
     ctx.fillStyle = this.bar_color;
     ctx.fillRect(this.bar_x, this.bar_y, this.bar_width, this.bar_height);
@@ -227,16 +233,14 @@ class bar {
     }
   }
 
-  update(){
-    this.bar_current = currentHP;
-    this.bar_max = MAX_HP;
-  }
+  
 }
 
 
 
 const HP_BAR = new bar(HP_BAR_HEIGHT, HP_BAR_WIDTH, HP_BAR_X, 
 HP_BAR_Y, HP_TEXT_Y, HP_TEXT_X, MAX_HP, currentHP, 'darkred', 'green');
+
 
 
 
@@ -309,25 +313,6 @@ function drawPlayerXpBar(){
 }
 
 
-function drawHPBar() {
-
-  // Draw HP bar background
-  ctx.fillStyle = 'darkred';
-  ctx.fillRect(HP_BAR_X, HP_BAR_Y, HP_BAR_WIDTH, HP_BAR_HEIGHT);
-
-  // Draw HP bar
-  if (currentHP > 0) {
-    const hpRatio = currentHP / MAX_HP;
-    const hpBarWidth = HP_BAR_WIDTH * hpRatio;
-    ctx.fillStyle = 'green';
-    ctx.fillRect(HP_BAR_X, HP_BAR_Y, hpBarWidth, HP_BAR_HEIGHT);
-  } else {
-    // If currentHP is 0, make the HP bar completely red
-    ctx.fillStyle = 'red';
-    ctx.fillRect(HP_BAR_X, HP_BAR_Y, HP_BAR_WIDTH, HP_BAR_HEIGHT);
-  }
-}
-
 function drawHPText() {
   ctx.font = '1rem Arial';
   ctx.fillStyle = 'white';
@@ -378,7 +363,7 @@ function animate1() {
   check_upgrades();
   update_inventory();
   HP_BAR.drawHPBar();
-  HP_BAR.update();
+  HP_BAR.updateBoss();
   drawPlayerHPBar();
   drawPlayerXpBar();
   drawBossTimer();
@@ -588,6 +573,9 @@ canvas.addEventListener('click', handle_click);
 
 window.onload = function () {
   restore_BossAttack();
+  default_purchased();
+  highlightSelectedButton();
+
  
 };
 
@@ -635,7 +623,7 @@ handleBossAttack();
 }
   
 function not_locked_stage(){
-  enemy_level += 1;
+  enemy_level += enemy_level_increase;
   localStorage.setItem('enemy_level', enemy_level);
   if ((enemy_level) % 5 === 0) {
     isAttacking = true
@@ -655,8 +643,25 @@ function not_locked_stage(){
     calculate_gold_gain();
     gain_xp_unlocked();
     }
-
 }
+
+
+function update_hp(){
+  if (enemy_level % 5 === 0){
+    MAX_HP = Math.round(10 + enemy_level * (20 * (enemy_level / 10)));
+    localStorage.setItem('MAX_HP', MAX_HP);
+    currentHP = MAX_HP;
+    localStorage.setItem('currentHP', currentHP);
+  }
+  else {
+    MAX_HP = Math.round(5 + enemy_level * (10 * (enemy_level / 20)));
+    localStorage.setItem('MAX_HP', MAX_HP);
+    currentHP = MAX_HP;
+    localStorage.setItem('currentHP', currentHP);
+  }
+}
+
+
 
 function locked_stage(){
   enemy_level += 0;
@@ -787,17 +792,18 @@ function purchase_upgrade(id) {
   }
 
   const upgrade = Upgrades[id];
-  const baseCost = upgrade.cost;
 
   if (id == "clicker_upgrade") {
+    const baseCost = upgrade.cost;
     const requiredCost = baseCost + (1.5 * upgrade.clicker_upgrade_purchased);
-    const new_requiredCost = check_cost(requiredCost);
+    const new_requiredCost = check_cost(requiredCost, upgrade.clicker_upgrade_purchased, upgrade.cost, 1.5);
     buy_clicker_upgrade(new_requiredCost, 'clicker_upgrade');
   }
 
   else if (id == "hp_upgrade"){
+    const baseCost = upgrade.cost;
     const requiredCost = baseCost + (1.5 * upgrade.hp_upgrade_purchased);
-    const new_requiredCost = check_cost(requiredCost);
+    const new_requiredCost = check_cost(requiredCost, upgrade.hp_upgrade_purchased, upgrade.cost, 1.5);
     buy_hp_upgrade(new_requiredCost, 'hp_upgrade');
   }
 
@@ -821,14 +827,17 @@ function buy_clicker_upgrade(new_requiredCost, id){
   const upgrade = Upgrades[id];
   baseCost = upgrade.cost
   if (gold >= new_requiredCost) {
-    upgrade.clicker_upgrade_purchased += amount_able;
+    upgrade.clicker_upgrade_purchased += buy_upgrade;
     gold -= new_requiredCost;
     upgrade.click_multiplier += 0.1
-    const add_playerDmg = Math.round((1 + strength_stat_multi) * (amount_able + amount_able * upgrade.click_multiplier));
+    const add_playerDmg = Math.round((1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * upgrade.click_multiplier));
     playerDmg += add_playerDmg;
     // playerDmg = playerDmg * (1 + (strength_stat_multi / 20));
     localStorage.setItem('click_multiplier', upgrade.click_multiplier)
     localStorage.setItem('clicker_upgrade_purchased', upgrade.clicker_upgrade_purchased);
+  }
+  else{
+    console.log("Not enough gold", new_requiredCost);
   }
 
 }
@@ -844,12 +853,11 @@ function buy_hp_upgrade(new_requiredCost, id){
 
   upgrade = Upgrades[id]
   if (gold >= new_requiredCost){
-    upgrade.hp_upgrade_purchased += amount_able;
+    upgrade.hp_upgrade_purchased += buy_upgrade;
     gold -= new_requiredCost;
     upgrade.hp_multiplier += 0.1;
-    const add_hp = Math.round((1 + stamina_stat_multi) * (amount_able + amount_able * (amount_able ** upgrade.hp_multiplier)));
+    const add_hp = Math.round((1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** upgrade.hp_multiplier)));
     player_MAX_HP += add_hp;
-    // player_MAX_HP = player_MAX_HP * (1 + (stamina_stat_multi / 20));
     if (enemy_level % 5 !== 0){
       player_currentHP = player_MAX_HP;
     }
@@ -866,6 +874,7 @@ function check_upgrades() {
       cost_id: "clicker_upgrade_cost",
       cost: 2,
       clicker_upgrade_purchased: parseInt(localStorage.getItem('clicker_upgrade_purchased')) || 0,
+      click_multiplier: parseInt(localStorage.getItem('click_multiplier')) || 1,
     },
     hp_upgrade: {
       button_id: "hp_upgrade",
@@ -880,54 +889,59 @@ function check_upgrades() {
     if (upgrade == "clicker_upgrade") {
       data = Upgrades[upgrade];
       const requiredCost = data.cost + (1.5 * data.clicker_upgrade_purchased);
-      const new_requiredCost = check_cost(requiredCost);
+      const new_requiredCost = check_cost(requiredCost, data.clicker_upgrade_purchased, data.cost, 1.5);
       button = document.getElementById(data.button_id);
-      upgrade_check(data, new_requiredCost, button, data.clicker_upgrade_purchased, upgrade, 'clicker_upgrade')
+      const add_playerDmg = Math.round(2 * (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * data.click_multiplier));
+      upgrade_check(data.cost_id, new_requiredCost, button, data.clicker_upgrade_purchased, upgrade, 'clicker_upgrade', 
+        add_playerDmg, 'Player Damage', 'Train Strength')
     }
     else if (upgrade == 'hp_upgrade'){
       data = Upgrades[upgrade];
       const requiredCost = data.cost + (1.5 * data.hp_upgrade_purchased);
-      const new_requiredCost = check_cost(requiredCost);
+      const new_requiredCost = check_cost(requiredCost, data.hp_upgrade_purchased, data.cost, 1.5);
       button = document.getElementById(data.button_id);
-      upgrade_check(data, new_requiredCost, button, data.hp_upgrade_purchased, upgrade, 'hp_upgrade')
+      const add_hp = Math.round((1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** data.hp_multiplier)));
+      upgrade_check(data.cost_id, new_requiredCost, button, data.hp_upgrade_purchased, upgrade, 'hp_upgrade',
+        add_hp, 'HP', 'Train Stamina')
     }
   }
 }
 
-function upgrade_check(data, requiredCost, button, amount_purchased, upgrade, name){
-  if (upgrade == name) {
+function upgrade_check(cost_id, requiredCost, button, amount_purchased, upgrade, name, increase_by, increase_by_name, upgrade_name) {
+  const amountAble = buy_upgrade || 0; // Provide a default value for buy_upgrade
+  const costElement = document.getElementById(cost_id); // Get the cost element
+
+  if (upgrade === name && costElement) { // Check if the element exists
     if (gold >= requiredCost) {
       button.disabled = false;
       button.style.background = "green";
       button.style.color = "white";
-      document.getElementById(data.cost_id).innerHTML = requiredCost + " Gold" + " (" + amount_purchased + ")" + 
-      ' Purchase Amount: ' + amount_able;
-    }
-    else {
+      costElement.innerHTML = `Cost: ${requiredCost} Gold <br> Trained: (${amount_purchased}) <br> Purchase Amount: ${amountAble}<br>
+      Increase ${increase_by_name} : ${increase_by}`
+} else {
       button.style.background = "darkred";
       button.style.color = "white";
       button.disabled = true;
-      document.getElementById(data.cost_id).innerHTML = requiredCost + " Gold" + " (" + amount_purchased + ")" + 
-      ' Purchase Amount: ' + amount_able;    }
+      costElement.innerHTML = `Cost: ${requiredCost} Gold <br> Trained: (${amount_purchased}) <br> Purchase Amount: ${amountAble}<br>
+      Increase ${increase_by_name} : ${increase_by}`};
+
   }
 }
 
-function check_cost(requiredCost) {
-  if (buy_upgrade === 'Max') {
-    maxPurchases = Math.floor(gold / requiredCost);
-    if (maxPurchases === 0){
-      maxPurchases = 1
-    }
-    amount_able = maxPurchases;
-    localStorage.setItem('amount_able', amount_able);
-    const new_requiredCost = requiredCost * maxPurchases;
-    return new_requiredCost;
-  }
-  else{
-    const new_requiredCost = requiredCost * buy_upgrade;
-    return new_requiredCost;
-  }
+function check_cost(requiredCost, purchased, baseCost, cost_multi) {
+  const new_requiredCost = baseCost + (cost_multi * (purchased + buy_upgrade)) * buy_upgrade;
+  return new_requiredCost;
 }
+
+
+
+
+
+
+
+
+
+
 
 function previous_level() {
   if (islock_stage === 2){
@@ -938,7 +952,7 @@ function previous_level() {
   }
   localStorage.setItem('enemy_level', enemy_level);
   if (enemy_level < 1) {
-    enemy_level += 1;
+    enemy_level += enemy_level_increase;
   }
   bossTimer = 0
   localStorage.setItem('bossTimer', bossTimer);
@@ -964,7 +978,7 @@ function previous_level() {
 
 function next_level() {
   if (islock_stage === 2){
-    enemy_level += 1
+    enemy_level += enemy_level_increase
   }
   else{
     enemy_level += 0
@@ -1003,10 +1017,14 @@ function lock_stage(){
     if (islock_stage === 2){
       islock_stage = 1;
       localStorage.setItem('islock_stage', islock_stage);
+      enemy_level_increase = 0;
+      localStorage.setItem('enemy_level_increase', enemy_level_increase);
     }
     else if (islock_stage === 1){
       islock_stage = 2;
       localStorage.setItem('islock_stage', islock_stage);
+      enemy_level_increase = 1;
+      localStorage.setItem('enemy_level_increase', enemy_level_increase);
     }
   }
 }
@@ -1052,6 +1070,7 @@ function check_player_hp(){
     localStorage.setItem('enemy_level', enemy_level);
     player_currentHP = player_MAX_HP;
     localStorage.setItem('player_currentHP', player_currentHP);
+    update_hp();
     handleBossAttack();
   }
 }
@@ -1070,35 +1089,60 @@ function resetPlayerHP(){
   localStorage.setItem('player_currentHP', player_currentHP);
 }
 
-function purchase_amount(){
-  button = document.getElementById('purchase')
-  if (buy_upgrade === 1){
-    button.innerHTML = '10x';
-    buy_upgrade = 10;
-    amount_able = 10;
-    localStorage.setItem('buy_upgrade', buy_upgrade);
-    localStorage.setItem('amount_able', amount_able);
-  }
-  else if (buy_upgrade === 10){
-    button.innerHTML = '100x';
-    buy_upgrade = 100;
-    amount_able = 100;
-    localStorage.setItem('buy_upgrade', buy_upgrade);
-    localStorage.setItem('amount_able', amount_able);
-  }
-  else if (buy_upgrade === 100){
-    button.innerHTML = 'Max';
-    buy_upgrade = 'Max';
-    localStorage.setItem('buy_upgrade', buy_upgrade);
-  }
-  else if (buy_upgrade === 'Max'){
+
+function purchase_amount(number, id){
+  button = document.getElementById(id)
+  button.style.backgroundColor = 'white'
+  button.style.color = 'black'
+  if (number === 1){
     button.innerHTML = '1x';
     buy_upgrade = 1;
-    amount_able = 1;
-    localStorage.setItem('amount_able', amount_able);
     localStorage.setItem('buy_upgrade', buy_upgrade);
+    localStorage.setItem('selectedButtonId', id); 
   }
+  else if (number === 10){
+    button.style.backgroundColor = 'white'
+    button.style.color = 'black'
+    button.innerHTML = '10x';
+    buy_upgrade = 10;
+    localStorage.setItem('buy_upgrade', buy_upgrade);
+    localStorage.setItem('selectedButtonId', id); 
+
+  }
+  else if (number === 100){
+    button.style.backgroundColor = 'white'
+    button.style.color = 'black'
+    button.innerHTML = '100x';
+    buy_upgrade = 100;
+    localStorage.setItem('buy_upgrade', buy_upgrade);
+    localStorage.setItem('selectedButtonId', id); 
+
+
+  }
+
+  clickedButton += 1;
+  localStorage.setItem('clickedButton', clickedButton);
+  check_purchase(id)
+
 } 
+
+function check_purchase(id) {
+  // Get all buttons with the class 'purchase-button'
+  const buttons = document.querySelectorAll('.purchase-button');
+
+  // Reset the styles of all buttons
+  buttons.forEach(button => {
+    button.style.backgroundColor = '';
+    button.style.color = '';
+  });
+
+  // Set the styles for the clicked button
+  const clickedButton = document.getElementById(id);
+  clickedButton.style.backgroundColor = 'green';
+  clickedButton.style.color = 'white';
+  highlightSelectedButton();
+}
+
 
 function gain_xp_locked(){
   let xp_add;
@@ -1122,7 +1166,7 @@ function gain_xp_locked(){
     level_add = Math.floor(player_MAX_XP/current_xp);
     player_level += level_add;
     current_xp = 0;
-    skill_points += level_add * 3;
+    skill_points += level_add * 2;
     localStorage.setItem('skill_points', skill_points);
   }
   localStorage.setItem('player_level', player_level);
@@ -1131,7 +1175,6 @@ function gain_xp_locked(){
   localStorage.setItem('xp_multiply', xp_multiply);
 
 }
-
 
 function gain_xp_unlocked(){
   let xp_add;
@@ -1155,7 +1198,7 @@ function gain_xp_unlocked(){
     player_level += level_add;
     current_xp = 0;
     localStorage.setItem('player_level', player_level);
-    skill_points += level_add * 3;
+    skill_points += level_add * 2;
     localStorage.setItem('skill_points', skill_points);
   }
   localStorage.setItem('current_xp', current_xp);
@@ -1185,6 +1228,27 @@ function add_stat(stat){
     }
   }
 }
+
+function highlightSelectedButton() {
+  const selectedButtonId = localStorage.getItem('selectedButtonId');
+  if (selectedButtonId) {
+    const selectedButton = document.getElementById(selectedButtonId);
+    if (selectedButton) {
+      selectedButton.style.backgroundColor = 'green';
+      selectedButton.style.color = 'white';
+    }
+  }
+}
+
+
+function default_purchased(){
+  if (clickedButton === 0){
+    document.getElementById('button1').style.backgroundColor = 'green';
+    document.getElementById('button1').style.color = 'white';
+  }
+}
+
+
 
 
 

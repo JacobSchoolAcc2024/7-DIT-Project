@@ -322,6 +322,7 @@ body {
 }
 
 .upgrades_div {
+  z-index: -1;
   position: fixed;
   right: 0;
   top: 4rem;
@@ -434,3 +435,39 @@ p {
   margin-bottom: 3rem;
 }
  
+.strength_add{
+  display: flex;
+}
+
+.add_str_button {
+  margin-top: 6%;
+  height: 45%;
+  font-size: 0.73rem;
+}
+
+.stamina_add{
+  display: flex;
+}
+
+.add_stam_button {
+  margin-top: 6%;
+  height: 45%;
+  font-size: 0.73rem;
+}
+
+.skill_point_menu {
+  position: relative;
+  height: 0;
+  width: 100%;
+  position: fixed;
+  background-color: black;
+  overflow-y: hidden;
+  transition: 0.9s;
+  margin: auto;
+  font-family: "Pixelify Sans", sans-serif;
+  bottom: 0;
+  left: 0;
+  border-right: 0.1px solid black;
+  text-align: center;
+  z-index: 1;
+}

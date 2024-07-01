@@ -27,7 +27,7 @@ function closeSkills() {
 
 
 
-let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
+var playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
 var gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;

@@ -51,19 +51,19 @@
         <p  id="boss_damage" class="status">Boss Damage: ? </p>
         <P id="player_level" class="status">Player Level: 1 </P>
         <p id="skill_points" class="status">Skill Points: 0 </p>
-        <div class="skill_point_menu" id="skill_p_menu">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
-            <div class="strength_add">
-                <p id="Strength" class="status">Strength: 0</p>
-                <button id="Strength" class="add_str_button" onclick="add_stat('Strength')">+</button>
-            </div>
-            <div class="stamina_add">
-                <p id="Stamina" class="status">Stamina: 0</p>
-                <button id="Stamina" class="add_stam_button" onclick="add_stat('Stamina')">+</button>
-            </div>
+    <div class="skill_point_menu" id="skill_p_menu">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
+        <div class="strength_add">
+            <p id="Strength" class="status">Strength: 0</p>
+            <button id="Strength" class="add_str_button" onclick="add_stat('Strength')">+</button>
         </div>
+        <div class="stamina_add">
+            <p id="Stamina" class="status">Stamina: 0</p>
+            <button id="Stamina" class="add_stam_button" onclick="add_stat('Stamina')">+</button>
+        </div>
+    </div>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
-        <button id="skill_menu" onclick="openSkills()">Skills</button>
+        <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
     </div>
     <div>
 

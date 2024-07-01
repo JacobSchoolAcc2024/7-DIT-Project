@@ -24,7 +24,6 @@
 }
 
 .sidenav {
-    position: relative;
     height: 100%;
     width: 0;
     position: fixed;
@@ -38,7 +37,7 @@
     left: 0;
     border-right: 0.1px solid black;
     text-align: center;
-    z-index: 1;
+    z-index: 2;
 }
 
 body {
@@ -413,6 +412,7 @@ img {
   height: 100%;
   text-align: center;
   border-right: 0.2rem black double;
+  z-index: ;
 }
 
 p {
@@ -456,11 +456,10 @@ p {
 }
 
 .skill_point_menu {
-  position: relative;
   height: 0;
   width: 100%;
   position: fixed;
-  background-color: black;
+  background-image: url(../images/quest-paper.jpg);
   overflow-y: hidden;
   transition: 0.9s;
   margin: auto;
@@ -469,5 +468,23 @@ p {
   left: 0;
   border-right: 0.1px solid black;
   text-align: center;
-  z-index: 1;
+  z-index: 3;
+}
+
+.skill_point_menu .closebtn:hover {
+  color: darkgreen;
+  transform: rotate(0deg);
+}
+
+.skill_point_menu .closebtn {
+  display: block;
+  position: absolute;
+  text-decoration: none;
+  top: 0;
+  right: 25px;
+  font-size: 4rem;
+  margin-left: 50px;
+  transition: 0.3s;
+  padding: 0;
+  margin: 0;
 }

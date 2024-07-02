@@ -4,19 +4,19 @@ const CANVASHEIGHT = market_canva.height = 300;
 const CANVASWIDTH = market_canva.width = 300;
 
 const epicSword = new Image();
-epicSword.src = 'epic_Sword.png';
+epicSword.src = '../images/epic_Sword.png';
 const dirtyIceCream = new Image();
-dirtyIceCream.src ='dirtyIceCream.png';
+dirtyIceCream.src ='../images/dirtyIceCream.png';
 const w_Sword = new Image();
-w_Sword.src = 'w_Sword.png';
+w_Sword.src = '../images/w_Sword.png';
 const d_Sword = new Image();
-d_Sword.src = 'd_Sword.png';
+d_Sword.src = '../images/d_Sword.png';
 const e_pickaxe = new Image();
-e_pickaxe.src = 'e_pickaxe.png';
+e_pickaxe.src = '../images/e_pickaxe.png';
 const i_pickaxe = new Image();
-i_pickaxe.src = 'i_pickaxe.png';
+i_pickaxe.src = '../images/i_pickaxe.png';
 const w_pickaxe = new Image();
-w_pickaxe.src = 'w_pickaxe.png';
+w_pickaxe.src = '../images/w_pickaxe.png';
 
 const spriteWidth = 256;
 const spriteHeight = 256;
@@ -43,6 +43,38 @@ const priceDict = {
     'Iron Pickaxe': 1.5,
     'Emerald Pickaxe': 1.2,
   };
+
+const skillDict = {
+  "Epic Sword": {
+    damage: 100,
+    skills: [
+      {
+        name: "Epic Strike",
+        description: "Deal an additional 200 damage on your next attack.",
+        effect: (target) => {
+          console.log(`Empowered Strike deals 200 additional damage to.`);
+          playerDmg+=200;
+          localStorage.setItem('playerDmg',playerDmg)
+        }
+      }
+    ]
+  },
+  "Wood Sword": {
+    damage: 100,
+    skills: [
+      {
+        name: "Epic Strike",
+        description: "Deal an additional 2 damage on your next attack.",
+        effect: (target) => {
+          console.log(`Empowered Strike deals 2 additional damage to.`);
+          playerDmg+=2;
+          localStorage.setItem('playerDmg',playerDmg)
+        }
+      }
+    ]
+  },
+
+}
 
   function drawAnimation(weaponPic, weaponName) {
     ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);

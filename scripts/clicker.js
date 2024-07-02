@@ -12,8 +12,24 @@ function closeNav() {
 }
 
 
+function openSkills() {
+  document.getElementById("skill_p_menu").style.height = "100%";
+  document.getElementById("main_Page").style.transition = "0.9s";
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main_Page").style.marginLeft = "1.5rem";
 
-let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
+}
+
+function closeSkills() {
+  document.getElementById("skill_p_menu").style.height = "0";
+  
+}
+
+
+
+
+
+var playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
 var gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
@@ -734,10 +750,8 @@ function update_inventory() {
   boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " ";
   player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level) + ' | ';
   skill_points_button.innerHTML = 'Skill Points: ' + formatNumber(skill_points) + ' | ';
-  str_stat_button.innerHTML = 'Strength: (' + strength_stat_multi_added +
-  ')' + ' ||' + '+' + '||';
-  stamina_stat_button.innerHTML = 'Stamina: (' + stamina_stat_multi_added +
-  ')' + ' ||' + '+' + '||';
+  str_stat_button.innerHTML = 'Strength: ' + strength_stat_multi_added;
+  stamina_stat_button.innerHTML = 'Stamina: ' + stamina_stat_multi_added
 
   if (enemy_level > max_enemy_level) {
     max_enemy_level = enemy_level;

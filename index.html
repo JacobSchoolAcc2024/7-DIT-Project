@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <title>Idle_gym</title>
-    <!-- <audio id="BGM-2" loop>
-        <source src="BGM-2.m4a" type="audio/mpeg" >
-    </audio> -->
+    <audio id="BGM-2" loop>
+        <source src="../music/BGM-2.m4a" type="audio/mpeg" >
+    </audio>
     
 <head>
     <link rel="stylesheet" href="css/style.css">
@@ -24,12 +24,9 @@
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="index.html" class="menu_Item">HOME</a>
-        <a href="market.html" class="menu_Item">MARKET</a>
-        <a href="train.html" class="menu_Item">TRAIN</a>
-        <a href="boss.html" class="menu_Item">BOSS</a>
-        <a href="help.html" class="menu_Item">HELP</a>
-        <a href="contact.html" class="menu_Item">CONTACT</a>
-        <a href="about.html" class="menu_Item">ABOUT</a>
+        <a href="pages/market.html" class="menu_Item">MARKET</a>
+        <a href="pages/contact.html" class="menu_Item">CONTACT</a>
+        <a href="pages/about.html" class="menu_Item">ABOUT</a>
     </div>
     <div class="top_bar">
         <div class="menu_container" onclick="openNav()">
@@ -54,10 +51,19 @@
         <p  id="boss_damage" class="status">Boss Damage: ? </p>
         <P id="player_level" class="status">Player Level: 1 </P>
         <p id="skill_points" class="status">Skill Points: 0 </p>
-        <button id="Strength" onclick="add_stat('Strength')">Strength (0) || + ||</button>
-        <button id="Stamina" onclick="add_stat('Stamina')">Stamina (0) || + ||</button>
+    <div class="skill_point_menu" id="skill_p_menu">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
+        <div class="strength_add">
+            <p id="Strength" class="status">Strength: 0</p>
+            <button id="Strength" class="add_str_button" onclick="add_stat('Strength')">+</button>
+        </div>
+        <div class="stamina_add">
+            <p id="Stamina" class="status">Stamina: 0</p>
+            <button id="Stamina" class="add_stam_button" onclick="add_stat('Stamina')">+</button>
+        </div>
+    </div>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
-        <button id="skill_menu">Skills</button>
+        <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
     </div>
     <div>
 

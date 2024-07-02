@@ -306,11 +306,6 @@ function drawPlayerHPBar(){
     const hpBarWidth = PLAYER_HP_BAR_WIDTH * hpRatio;
     ctx.fillStyle = 'darkgreen';
     ctx.fillRect(PLAYER_HP_BAR_X, PLAYER_HP_BAR_Y, hpBarWidth, PLAYER_HP_BAR_HEIGHT);}
-  // } else {
-  //   // If currentHP is 0, make the HP bar completely red
-  //   ctx.fillStyle ='red';
-  //   ctx.fillRect(PLAYER_HP_BAR_X, PLAYER_HP_BAR_Y, PLAYER_HP_BAR_WIDTH, PLAYER_HP_BAR_HEIGHT);
-  // }
 }
 
 function drawPlayerXpBar(){
@@ -560,7 +555,7 @@ function handle_click() {
   }
         
       // Create a new HP particle with updated text
-    const HP_PARTICLE_TEXT = "-" + formatNumber(playerDmg * (1 + strength_stat_multi)) + "HP";
+    const HP_PARTICLE_TEXT = "-" + formatNumber(playerDmg * (1 + strength_stat_multi)) + " HP";
     hpParticles.push({
       x: canvas.width - 100,
       y: canvas.height - 190,
@@ -673,8 +668,6 @@ function update_hp(){
     localStorage.setItem('currentHP', currentHP);
   }
 }
-
-
 
 function locked_stage(){
   enemy_level += 0;
@@ -841,7 +834,7 @@ function buy_clicker_upgrade(new_requiredCost, id){
     upgrade.clicker_upgrade_purchased += buy_upgrade;
     gold -= new_requiredCost;
     upgrade.click_multiplier += 0.1
-    const add_playerDmg = Math.round((1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * upgrade.click_multiplier));
+    const add_playerDmg = Math.round(strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * upgrade.click_multiplier));
     playerDmg += add_playerDmg;
     // playerDmg = playerDmg * (1 + (strength_stat_multi / 20));
     localStorage.setItem('click_multiplier', upgrade.click_multiplier)
@@ -867,7 +860,7 @@ function buy_hp_upgrade(new_requiredCost, id){
     upgrade.hp_upgrade_purchased += buy_upgrade;
     gold -= new_requiredCost;
     upgrade.hp_multiplier += 0.1;
-    const add_hp = Math.round((1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** upgrade.hp_multiplier)));
+    const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** upgrade.hp_multiplier)));
     player_MAX_HP += add_hp;
     if (enemy_level % 5 !== 0){
       player_currentHP = player_MAX_HP;
@@ -902,7 +895,7 @@ function check_upgrades() {
       const requiredCost = data.cost + (1.5 * data.clicker_upgrade_purchased);
       const new_requiredCost = check_cost(requiredCost, data.clicker_upgrade_purchased, data.cost, 1.5);
       button = document.getElementById(data.button_id);
-      const add_playerDmg = Math.round(0.9 * (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * data.click_multiplier));
+      const add_playerDmg = Math.round(strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * data.click_multiplier));
       upgrade_check(data.cost_id, new_requiredCost, button, data.clicker_upgrade_purchased, upgrade, 'clicker_upgrade', 
         add_playerDmg, 'Player Damage', 'Train Strength')
     }
@@ -911,7 +904,7 @@ function check_upgrades() {
       const requiredCost = data.cost + (1.5 * data.hp_upgrade_purchased);
       const new_requiredCost = check_cost(requiredCost, data.hp_upgrade_purchased, data.cost, 1.5);
       button = document.getElementById(data.button_id);
-      const add_hp = Math.round((1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** data.hp_multiplier)));
+      const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** data.hp_multiplier)));
       upgrade_check(data.cost_id, new_requiredCost, button, data.hp_upgrade_purchased, upgrade, 'hp_upgrade',
         add_hp, 'HP', 'Train Stamina')
     }
@@ -943,15 +936,6 @@ function check_cost(requiredCost, purchased, baseCost, cost_multi) {
   const new_requiredCost = baseCost + (cost_multi * (purchased + buy_upgrade)) * buy_upgrade;
   return new_requiredCost;
 }
-
-
-
-
-
-
-
-
-
 
 
 function previous_level() {
@@ -1221,7 +1205,7 @@ function add_stat(stat){
   if (stat === 'Strength'){
     if (skill_points >= 1){
       skill_points -= 1;
-      strength_stat_multi += 0.1
+      strength_stat_multi += 0.1;
       strength_stat_multi_added += 1;
       localStorage.setItem('strength_stat_multi', strength_stat_multi);
       localStorage.setItem('strength_stat_multi_added', strength_stat_multi_added);

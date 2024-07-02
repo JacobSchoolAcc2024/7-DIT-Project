@@ -905,7 +905,7 @@ function check_upgrades() {
       const requiredCost = data.cost + (1.5 * data.clicker_upgrade_purchased);
       const new_requiredCost = check_cost(requiredCost, data.clicker_upgrade_purchased, data.cost, 1.5);
       button = document.getElementById(data.button_id);
-      const add_playerDmg = Math.round(2 * (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * data.click_multiplier));
+      const add_playerDmg = Math.round(0.9 * (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * data.click_multiplier));
       upgrade_check(data.cost_id, new_requiredCost, button, data.clicker_upgrade_purchased, upgrade, 'clicker_upgrade', 
         add_playerDmg, 'Player Damage', 'Train Strength')
     }

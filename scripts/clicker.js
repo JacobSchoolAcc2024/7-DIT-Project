@@ -15,6 +15,8 @@ function closeNav() {
 function openSkills() {
   document.getElementById("skill_p_menu").style.height = "100%";
   document.getElementById("main_Page").style.transition = "0.9s";
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main_Page").style.marginLeft = "1.5rem";
 
 }
 

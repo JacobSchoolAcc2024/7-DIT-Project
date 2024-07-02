@@ -13,11 +13,8 @@ function closeNav() {
 
 
 function openSkills() {
-  document.getElementById("skill_p_menu").style.height = "100%";
+  document.getElementById("skill_p_menu").style.height = "calc(100% - 4rem)";
   document.getElementById("main_Page").style.transition = "0.9s";
-  document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("main_Page").style.marginLeft = "1.5rem";
-
 }
 
 function closeSkills() {
@@ -748,8 +745,8 @@ function update_inventory() {
   boss_damage_status = document.getElementById('boss_damage');
   player_damage_status.innerHTML = "Player Damage: " + formatNumber(playerDmg * (1 + strength_stat_multi)) + " ";
   boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " ";
-  player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level) + ' | ';
-  skill_points_button.innerHTML = 'Skill Points: ' + formatNumber(skill_points) + ' | ';
+  player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level);
+  skill_points_button.innerHTML = 'Skill Points: ' + formatNumber(skill_points);
   str_stat_button.innerHTML = 'Strength: ' + strength_stat_multi_added;
   stamina_stat_button.innerHTML = 'Stamina: ' + stamina_stat_multi_added
 
@@ -759,7 +756,7 @@ function update_inventory() {
   }
   if (islock_stage === 1) {
     lock_button = document.getElementById('lock_stage');
-    lock_button.style.backgroundColor = "red";
+    lock_button.style.backgroundColor = "darkred";
     lock_button.style.color = "white";
     lock_button.innerHTML = 'Unlock Stage';
   }
@@ -1248,7 +1245,7 @@ function highlightSelectedButton() {
   if (selectedButtonId) {
     const selectedButton = document.getElementById(selectedButtonId);
     if (selectedButton) {
-      selectedButton.style.backgroundColor = 'green';
+      selectedButton.style.backgroundColor = 'darkgrey';
       selectedButton.style.color = 'white';
     }
   }
@@ -1257,7 +1254,7 @@ function highlightSelectedButton() {
 
 function default_purchased(){
   if (clickedButton === 0){
-    document.getElementById('button1').style.backgroundColor = 'green';
+    document.getElementById('button1').style.backgroundColor = 'darkgrey';
     document.getElementById('button1').style.color = 'white';
   }
 }
@@ -1281,3 +1278,6 @@ function togglePlayPauseTwo() {
   }
   isPlayingTwo = !isPlayingTwo;
 }
+
+var canvass = document.getElementById('can');
+canvass.onselectstart = function () { return false; }

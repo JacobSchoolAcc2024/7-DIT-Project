@@ -650,5 +650,6 @@ function addOne(id) {
         boss_str = parseInt(localStorage.getItem("boss_str"));
         boss_level = parseInt(localStorage.getItem("boss_level"));
         
+        
 
 

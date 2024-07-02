@@ -37,7 +37,7 @@
     left: 0;
     border-right: 0.1px solid black;
     text-align: center;
-    z-index: 2;
+    z-index: 6;
 }
 
 body {
@@ -130,18 +130,6 @@ body {
 
   }
 
-  .container {
-    display: flexbox;
-    height: 8rem;
-    width: 10rem;
-    margin: auto;
-    justify-content: center;
-  }
-
-  .flex_container {
-    display: flex;
-    margin-top: 5rem;
-  }
   .upgrades {
     display: flexbox;
     margin-left: auto;
@@ -197,16 +185,15 @@ body {
 
   .tooltip {
     position: relative;
-    display: inline-block;
     border-bottom: 1px dotted black;
   }
   
   .tooltip .tooltiptext {
-    top: calc(100% + 10px); /* Position the tooltip below the element */
+    top: calc(100% + 0.8rem); /* Position the tooltip below the element */
     left: 50%; /* Center the tooltip horizontally */
     transform: translateX(-50%); /* Adjust the horizontal position */
     visibility: hidden;
-    width: 20vw;
+    width: 15vw;
     height: auto;
     background-color: black;
     color: white;
@@ -243,6 +230,8 @@ body {
   .tooltip:hover .tooltiptext1{
     visibility: visible;
   }
+
+
 
 
 .starting_buttons {
@@ -311,6 +300,7 @@ body {
   border: #521400 10px solid;
   background-color: wheat;
   border-radius: 2rem;
+  height: 75%;
 }
 
 .footer {
@@ -324,7 +314,7 @@ body {
 }
 
 .upgrades_div {
-  z-index: -1;
+  z-index: 0;
   position: fixed;
   right: 0;
   top: 4rem;
@@ -337,7 +327,7 @@ body {
 }
 
 .upgrades_div button{
-  width: 20rem;
+  width: 16rem;
 }
 
 #gold {
@@ -367,14 +357,14 @@ img {
 
 
 .status{
-  width: 20rem;
+  width: 17rem;
   background-color: white;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   box-shadow:
       inset -2px 2px 1px 1px grey,
       inset -2px -2px 1px 1px lightgray,
       inset 2px 0px 1px 1px lightgray;
-  margin-left: 8%;
+  margin-left: 5%;
 }
 
 .stage_setting {
@@ -415,7 +405,7 @@ img {
   height: 100%;
   text-align: center;
   border-right: 0.2rem black double;
-  z-index: 3;
+  z-index: 1;
 }
 
 p {
@@ -440,22 +430,37 @@ p {
  
 .strength_add{
   display: flex;
+  width: 40%;
+  padding: 0;
+  height: 5%;
 }
 
-.add_str_button {
-  margin-top: 6%;
-  height: 45%;
-  font-size: 0.73rem;
+.add_button {
+  margin-top: 3.9%;
+  font-size: 0.8rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .stamina_add{
   display: flex;
+  width: 40%;
+  padding: 0;
+  height: 5%;
 }
 
-.add_stam_button {
-  margin-top: 6%;
-  height: 45%;
-  font-size: 0.73rem;
+.stats_add{
+  position: relative;
+  top: 20%;
+  left: 40%;
+  
+}
+
+.amount_skillp{
+  position: relative;
+  left: 2%;
+  top: 10%;
+  font-size: 2rem;
 }
 
 .skill_point_menu {
@@ -463,6 +468,7 @@ p {
   width: 100%;
   position: fixed;
   background-image: url(../images/quest-paper.jpg);
+  overflow-x: hidden;
   overflow-y: hidden;
   transition: 0.9s;
   margin: auto;
@@ -471,11 +477,11 @@ p {
   left: 0;
   border-right: 0.1px solid black;
   text-align: center;
-  z-index: 3;
+  z-index: 5;
 }
 
 .skill_point_menu .closebtn:hover {
-  color: darkgreen;
+  color: rgb(255, 255, 255);
   transform: rotate(0deg);
 }
 
@@ -485,11 +491,12 @@ p {
   text-decoration: none;
   top: 0;
   right: 25px;
-  font-size: 4rem;
+  font-size: 3rem;
   margin-left: 50px;
   transition: 0.3s;
   padding: 0;
   margin: 0;
+  color: black;
 }
 
 .upgrade_how_much{

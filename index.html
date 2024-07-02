@@ -35,9 +35,9 @@
             <div class="bar3"></div>
         </div>
     </div>
-    <button>
+    <div id="can">
         <canvas id="canvas1"></canvas>
-    </button>
+    </div>
     <div class="player_stats">
         <div class="wood_plate_background">
             <img class="wood_img" src="images/noun-stats-6801159.png">
@@ -50,25 +50,25 @@
         <p id="player_damage" class="status">Player Damage: 1 </p>
         <p  id="boss_damage" class="status">Boss Damage: ? </p>
         <P id="player_level" class="status">Player Level: 1 </P>
-        <p id="skill_points" class="status">Skill Points: 0 </p>
-    <div class="skill_point_menu" id="skill_p_menu">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
-        <div class="strength_add">
-            <p id="Strength" class="status">Strength: 0</p>
-            <button id="Strength" class="add_str_button" onclick="add_stat('Strength')">+</button>
-        </div>
-        <div class="stamina_add">
-            <p id="Stamina" class="status">Stamina: 0</p>
-            <button id="Stamina" class="add_stam_button" onclick="add_stat('Stamina')">+</button>
-        </div>
-    </div>
+        <p id="skill_points"class="status">Skill Points: 0 </p>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
         <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
     </div>
-    <div>
-
-
+    <div class="skill_point_menu" id="skill_p_menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
+            <p id="skill_points" class="amount_skillp">Skill Points: 0 </p>
+        <div class="stats_add">
+            <div class="strength_add">
+                <p id="Strength" class="status">Strength: 0</p>
+                <button id="Strength" class="add_button" onclick="add_stat('Strength')">+</button>
+            </div>
+            <div class="stamina_add">
+                <p id="Stamina" class="status">Stamina: 0</p>
+                <button id="Stamina" class="add_button" onclick="add_stat('Stamina')">+</button>
+            </div>
+        </div>
     </div>
+
     <div class="upgrades_div">
         <div class="gold_plate_background">
             <img src="images/noun-coin-6929625.png">
@@ -91,7 +91,7 @@
         </button>
         
         <div class="stage_setting">
-            <button class="tooltip"   onclick="previous_level()">Previous Level
+            <button class="tooltip"  onclick="previous_level()">Previous Level
                 <span class="tooltiptext">Goes back 1 stage</span>
             </button>
             <button class="tooltip"  onclick="next_level()">Next Level

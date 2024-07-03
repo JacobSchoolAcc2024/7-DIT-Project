@@ -35,85 +35,91 @@ function formatNumber(num) {
 }
 
 const priceDict = {
-    "Wood Sword": 1,
-    "Epic Sword": 10,
-    "Diamond Sword": 100,
+    "Epic Sword": 900,
+    "Wood Sword": 5,
+    "Diamond Sword": 70,
     "Dirty Icecream": 2000,
-    'Wood Pickaxe': 1000,
-    'Iron Pickaxe': 10000,
-    'Emerald Pickaxe': 12000,
+    'Wood Pickaxe': 10,
+    'Iron Pickaxe': 150,
+    'Emerald Pickaxe': 12,
   };
 
 const skillDict = {
   "Epic Sword": {
-    damage: 100,
+    damage: 400,
+    enemyhp : 100,
+    skillpoint : 1,
   },
   "Wood Sword": {
     damage: 10,
+    enemyhp : 1,
+    skillpoint : 1,
   },
   "Diamond Sword": {
-    damage : 1500,
+    damage : 150,
+    enemyhp : 10,
+    skillpoint : 1,
   },
   "Dirty Icecream": {
-    damage: 4000,
+    damage: 400,
+    enemyhp : 10000,
+    skillpoint : 1,
   },
   'Wood Pickaxe': {
-    damage: 1000,
+    damage: 1,
+    enemyhp : 1,
+    skillpoint : 10,
   },
   'Iron Pickaxe': {
-    damage: 2000,
+    damage: 2,
+    enemyhp : 2,
+    skillpoint : 100,
   },
   'Emerald Pickaxe': {
-    damage: 4000,
+    damage: 4,
+    enemyhp : 4,
+    skillpoint : 1000,
   },
 
 };
 
-function drawAnimation(weaponPic, weaponName) {
-  ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
-  switch (weaponName) {
-    case "Epic Sword":
-      ctx2.drawImage(epicSword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-      marketPrice = priceDict["Epic Sword"];
-      document.getElementById("damage").innerHTML =`${weaponName} Damage: ${skillDict["Epic Sword"].damage}`;
-      break;
-    case "Wood Sword":
-      ctx2.drawImage(w_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-      marketPrice = priceDict["Wood Sword"];
-      document.getElementById("damage").innerHTML =`${weaponName} Damage: ${skillDict["Wood Sword"].damage}`;
-      break;
-    case "Diamond Sword":
-      ctx2.drawImage(d_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-      marketPrice = priceDict["Diamond Sword"];
-      document.getElementById("damage").innerHTML =`${weaponName} Damage: ${skillDict["Diamond Sword"].damage}`;
-      break;
-    case "Dirty Icecream":
-      ctx2.drawImage(dirtyIceCream, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-      marketPrice = priceDict["Dirty Icecream"];
-      document.getElementById("damage").innerHTML =`${weaponName} Damage: ${skillDict["Dirty Icecream"].damage}`;
-      break;
-    case 'Wood Pickaxe':
-      ctx2.drawImage(w_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-      marketPrice = priceDict['Wood Pickaxe'];
-      document.getElementById("damage").innerHTML =`${weaponName} Damage: ${skillDict['Wood Pickaxe'].damage}`;
-      break;
-    case 'Iron Pickaxe':
-      ctx2.drawImage(i_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-      marketPrice = priceDict['Iron Pickaxe'];
-      document.getElementById("damage").innerHTML =`${weaponName} Damage: ${skillDict['Iron Pickaxe'].damage}`;
-      break;
-    case 'Emerald Pickaxe':
-      ctx2.drawImage(e_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-      marketPrice = priceDict['Emerald Pickaxe'];
-      document.getElementById("damage").innerHTML =`${weaponName} Damage: ${skillDict['Emerald Pickaxe'].damage}`;
-      break;
-    default:
-      ctx2.drawImage(weaponPic, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-      marketPrice = priceDict[weaponName];
-      document.getElementById("damage").innerHTML =`${weaponName} Damage: ${skillDict[weaponName].damage}`;
-      break;
+  function drawAnimation(weaponPic, weaponName) {
+    ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
+    switch (weaponName) {
+      case "Epic Sword":
+        ctx2.drawImage(epicSword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict["Epic Sword"];
+        break;
+      case "Wood Sword":
+        ctx2.drawImage(w_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict["Wood Sword"];
+        break;
+      case "Diamond Sword":
+        ctx2.drawImage(d_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict["Diamond Sword"];
+        break;
+      case "Dirty Icecream":
+        ctx2.drawImage(dirtyIceCream, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict["Dirty Icecream"];
+        break;
+      case 'Wood Pickaxe':
+        ctx2.drawImage(w_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict['Wood Pickaxe'];
+        break;
+      case 'Iron Pickaxe':
+        ctx2.drawImage(i_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict['Iron Pickaxe'];
+        break;
+      case 'Emerald Pickaxe':
+          ctx2.drawImage(e_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+          marketPrice = priceDict['Emerald Pickaxe'];
+          break;
+      default:
+        ctx2.drawImage(weaponPic, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict[weaponName];
+        break;
+    }
   }
-}
 
 function getWeaponNameByPrice(price) {
     for (const [weaponName, weaponPrice] of Object.entries(priceDict)) {
@@ -125,14 +131,13 @@ function getWeaponNameByPrice(price) {
   }
 
 
-
 function purchaseItem() {
     NameOfWeapon = getWeaponNameByPrice(marketPrice);
     if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
         gold -= marketPrice;
         purchasedItems.push(NameOfWeapon);
+        purchasedItems.push(skillDict[NameOfWeapon].damage);
         playerDmg+=skillDict[NameOfWeapon].damage/2;
-        skill_points+=skillDict[NameOfWeapon].
         localStorage.setItem('playerDmg', playerDmg);
         localStorage.setItem("gold", gold);
         localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));

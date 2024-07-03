@@ -35,46 +35,53 @@ function formatNumber(num) {
 }
 
 const priceDict = {
-    "Epic Sword": 9,
+    "Epic Sword": 900,
     "Wood Sword": 5,
-    "Diamond Sword": 7,
-    "Dirty Icecream": 2,
-    'Wood Pickaxe': 1,
-    'Iron Pickaxe': 1.5,
-    'Emerald Pickaxe': 1.2,
+    "Diamond Sword": 70,
+    "Dirty Icecream": 2000,
+    'Wood Pickaxe': 10,
+    'Iron Pickaxe': 150,
+    'Emerald Pickaxe': 12,
   };
 
 const skillDict = {
   "Epic Sword": {
-    damage: 100,
-    skills: [
-      {
-        name: "Epic Strike",
-        description: "Deal an additional 200 damage on your next attack.",
-        effect: (target) => {
-          console.log(`Empowered Strike deals 200 additional damage to.`);
-          playerDmg+=200;
-          localStorage.setItem('playerDmg',playerDmg)
-        }
-      }
-    ]
+    damage: 400,
+    enemyhp : 100,
+    skillpoint : 1,
   },
   "Wood Sword": {
-    damage: 100,
-    skills: [
-      {
-        name: "Epic Strike",
-        description: "Deal an additional 2 damage on your next attack.",
-        effect: (target) => {
-          console.log(`Empowered Strike deals 2 additional damage to.`);
-          playerDmg+=2;
-          localStorage.setItem('playerDmg',playerDmg)
-        }
-      }
-    ]
+    damage: 10,
+    enemyhp : 1,
+    skillpoint : 1,
+  },
+  "Diamond Sword": {
+    damage : 150,
+    enemyhp : 10,
+    skillpoint : 1,
+  },
+  "Dirty Icecream": {
+    damage: 400,
+    enemyhp : 10000,
+    skillpoint : 1,
+  },
+  'Wood Pickaxe': {
+    damage: 1,
+    enemyhp : 1,
+    skillpoint : 10,
+  },
+  'Iron Pickaxe': {
+    damage: 2,
+    enemyhp : 2,
+    skillpoint : 100,
+  },
+  'Emerald Pickaxe': {
+    damage: 4,
+    enemyhp : 4,
+    skillpoint : 1000,
   },
 
-}
+};
 
   function drawAnimation(weaponPic, weaponName) {
     ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
@@ -129,6 +136,9 @@ function purchaseItem() {
     if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
         gold -= marketPrice;
         purchasedItems.push(NameOfWeapon);
+        purchasedItems.push(skillDict[NameOfWeapon].damage);
+        playerDmg+=skillDict[NameOfWeapon].damage/2;
+        localStorage.setItem('playerDmg', playerDmg);
         localStorage.setItem("gold", gold);
         localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
     }

@@ -528,7 +528,7 @@ function handle_click() {
 
     if (!isHurt) {
       if (isAttacking) {
-        currentHP -= playerDmg * (1 + strength_stat_multi);
+        currentHP -= playerDmg;
         localStorage.setItem('currentHP', currentHP);
         if (currentHP <= 0) {
           bossTimer = 0
@@ -542,7 +542,7 @@ function handle_click() {
   } else {
     isHurt = true;
     framex = 0;
-    currentHP -= playerDmg * (1 + strength_stat_multi);
+    currentHP -= playerDmg;
     localStorage.setItem('currentHP', currentHP);
     if (currentHP <= 0) {
       bossTimer = 0;
@@ -555,7 +555,7 @@ function handle_click() {
   }
         
       // Create a new HP particle with updated text
-    const HP_PARTICLE_TEXT = "-" + formatNumber(playerDmg * (1 + strength_stat_multi)) + " HP";
+    const HP_PARTICLE_TEXT = "-" + formatNumber(playerDmg) + " HP";
     hpParticles.push({
       x: canvas.width - 100,
       y: canvas.height - 190,
@@ -736,7 +736,7 @@ function update_inventory() {
   gold_status.innerHTML = "Gold: " + formatNumber(gold);
   player_damage_status = document.getElementById('player_damage');
   boss_damage_status = document.getElementById('boss_damage');
-  player_damage_status.innerHTML = "Player Damage: " + formatNumber(playerDmg * (1 + strength_stat_multi)) + " ";
+  player_damage_status.innerHTML = "Player Damage: " + formatNumber(playerDmg) + " ";
   boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " ";
   player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level);
   skill_points_button.innerHTML = 'Skill Points: ' + formatNumber(skill_points);
@@ -799,15 +799,13 @@ function purchase_upgrade(id) {
 
   if (id == "clicker_upgrade") {
     const baseCost = upgrade.cost;
-    const requiredCost = baseCost + (1.5 * upgrade.clicker_upgrade_purchased);
-    const new_requiredCost = check_cost(requiredCost, upgrade.clicker_upgrade_purchased, upgrade.cost, 1.5);
+    const new_requiredCost = check_cost(upgrade.clicker_upgrade_purchased, upgrade.cost, 1.5);
     buy_clicker_upgrade(new_requiredCost, 'clicker_upgrade');
   }
 
   else if (id == "hp_upgrade"){
     const baseCost = upgrade.cost;
-    const requiredCost = baseCost + (1.5 * upgrade.hp_upgrade_purchased);
-    const new_requiredCost = check_cost(requiredCost, upgrade.hp_upgrade_purchased, upgrade.cost, 1.5);
+    const new_requiredCost = check_cost(upgrade.hp_upgrade_purchased, upgrade.cost, 1.5);
     buy_hp_upgrade(new_requiredCost, 'hp_upgrade');
   }
 
@@ -836,7 +834,6 @@ function buy_clicker_upgrade(new_requiredCost, id){
     upgrade.click_multiplier += 0.1
     const add_playerDmg = Math.round(strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * upgrade.click_multiplier));
     playerDmg += add_playerDmg;
-    // playerDmg = playerDmg * (1 + (strength_stat_multi / 20));
     localStorage.setItem('click_multiplier', upgrade.click_multiplier)
     localStorage.setItem('clicker_upgrade_purchased', upgrade.clicker_upgrade_purchased);
   }
@@ -892,8 +889,7 @@ function check_upgrades() {
   for (const upgrade in Upgrades) {
     if (upgrade == "clicker_upgrade") {
       data = Upgrades[upgrade];
-      const requiredCost = data.cost + (1.5 * data.clicker_upgrade_purchased);
-      const new_requiredCost = check_cost(requiredCost, data.clicker_upgrade_purchased, data.cost, 1.5);
+      const new_requiredCost = check_cost(data.clicker_upgrade_purchased, data.cost, 1.5);
       button = document.getElementById(data.button_id);
       const add_playerDmg = Math.round(strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * data.click_multiplier));
       upgrade_check(data.cost_id, new_requiredCost, button, data.clicker_upgrade_purchased, upgrade, 'clicker_upgrade', 
@@ -901,8 +897,7 @@ function check_upgrades() {
     }
     else if (upgrade == 'hp_upgrade'){
       data = Upgrades[upgrade];
-      const requiredCost = data.cost + (1.5 * data.hp_upgrade_purchased);
-      const new_requiredCost = check_cost(requiredCost, data.hp_upgrade_purchased, data.cost, 1.5);
+      const new_requiredCost = check_cost(data.hp_upgrade_purchased, data.cost, 1.5);
       button = document.getElementById(data.button_id);
       const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** data.hp_multiplier)));
       upgrade_check(data.cost_id, new_requiredCost, button, data.hp_upgrade_purchased, upgrade, 'hp_upgrade',
@@ -932,7 +927,7 @@ function upgrade_check(cost_id, requiredCost, button, amount_purchased, upgrade,
   }
 }
 
-function check_cost(requiredCost, purchased, baseCost, cost_multi) {
+function check_cost(purchased, baseCost, cost_multi) {
   const new_requiredCost = baseCost + (cost_multi * (purchased + buy_upgrade)) * buy_upgrade;
   return new_requiredCost;
 }
@@ -1059,6 +1054,8 @@ function restore_BossAttack() {
 function check_player_hp(){
   if (player_currentHP <= 0){
     stop_bossAttack();
+    bossTimer = 0;
+    localStorage.setItem('bossTimer', bossTimer);
     if (islock_stage === 2){
       enemy_level -= 2;
     }
@@ -1186,12 +1183,13 @@ function gain_xp_unlocked(){
   }
   if (player_currentHP >= 1){
     current_xp += xp_add;
-  }  if (current_xp >= player_MAX_XP){
+  }  
+  if (current_xp >= player_MAX_XP){
+    current_xp = 0;
     xp_multiply += 1;
     player_MAX_XP = 1000 + 2 * (1000 * xp_multiply + 100 * xp_multiply);
     level_add = Math.floor(player_MAX_XP/current_xp);
     player_level += level_add;
-    current_xp = 0;
     localStorage.setItem('player_level', player_level);
     skill_points += level_add * 2;
     localStorage.setItem('skill_points', skill_points);

@@ -1,31 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
-    <title>Idle_gym</title>
+<html>
 <head>
-    <link rel="stylesheet" href="style.css">
+  <title>Purchase Upgrade</title>
 </head>
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="index.html" class="menu_Item">HOME</a>
-        <a href="market.html" class="menu_Item">MARKET</a>
-        <a href="train.html" class="menu_Item">TRAIN</a>
-        <a href="boss.html" class="menu_Item">BOSS</a>
-        <a href="help.html" class="menu_Item">HELP</a>
-        <a href="contact.html" class="menu_Item">CONTACT</a>
-        <a href="about.html" class="menu_Item">ABOUT</a>
- </div>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="idle_gym.js"></script>
-    <div class="top_bar">
-        <div class="menu_container" onclick="openNav()">
-            <div class="bar1"></div>
-            <div class="bar2"></div>
-            <div class="bar3"></div>
-        </div>
-    </div>
-</head>
-<body id="main_Page">
-    
+<body>  
+  <script>
+    // Ensure the variables are initialized
+    let buy_upgrade = parseInt(localStorage.getItem('buy_upgrade')) || 1;
+    let amount_able = parseInt(localStorage.getItem('amount_able')) || 1;
+
+    function purchase_amount() {
+      const button = document.getElementById('purchase');
+      if (buy_upgrade === 1) {
+        button.innerHTML = '10x';
+        buy_upgrade = 10;
+        amount_able = 10;
+      } else if (buy_upgrade === 10) {
+        button.innerHTML = '100x';
+        buy_upgrade = 100;
+        amount_able = 100;
+      } else if (buy_upgrade === 100) {
+        button.innerHTML = 'Max';
+        buy_upgrade = 'Max';
+        amount_able = null; // Setting to null as we don't have a specific amount for 'Max'
+      } else if (buy_upgrade === 'Max') {
+        button.innerHTML = '1x';
+        buy_upgrade = 1;
+        amount_able = 1;
+      }
+
+      localStorage.setItem('buy_upgrade', buy_upgrade);
+      localStorage.setItem('amount_able', amount_able);
+      console.log('Buy upgrade: ', buy_upgrade, 'Amount able: ', amount_able);
+    }
+
+    // Initialize button text based on stored value
+    window.onload = function() {
+      const button = document.getElementById('purchase');
+      if (buy_upgrade === 1) {
+        button.innerHTML = '1x';
+      } else if (buy_upgrade === 10) {
+        button.innerHTML = '10x';
+      } else if (buy_upgrade === 100) {
+        button.innerHTML = '100x';
+      } else if (buy_upgrade === 'Max') {
+        button.innerHTML = 'Max';
+      }
+    }
+  </script>
+    <button id="purchase" onclick="purchase_amount()">1x</button>
 </body>
+</html>

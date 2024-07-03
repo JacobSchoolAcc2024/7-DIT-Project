@@ -35,9 +35,9 @@
             <div class="bar3"></div>
         </div>
     </div>
-    <button>
+    <div id="can">
         <canvas id="canvas1"></canvas>
-    </button>
+    </div>
     <div class="player_stats">
         <div class="wood_plate_background">
             <img class="wood_img" src="images/noun-stats-6801159.png">
@@ -47,47 +47,51 @@
         <button class = "tooltip" onclick="reset()">Reset
             <span class="tooltiptext1">Resets the game.</span>
         </button>
-        <p id="player_damage"   class="status">Player Damage: 1 </p>
+        <p id="player_damage" class="status">Player Damage: 1 </p>
         <p  id="boss_damage" class="status">Boss Damage: ? </p>
         <P id="player_level" class="status">Player Level: 1 </P>
-        <p id="skill_points" class="status">Skill Points: 0 </p>
-    <div class="skill_point_menu" id="skill_p_menu">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
-        <div class="strength_add">
-            <p id="Strength" class="status">Strength: 0</p>
-            <button id="Strength" class="add_str_button" onclick="add_stat('Strength')">+</button>
-        </div>
-        <div class="stamina_add">
-            <p id="Stamina" class="status">Stamina: 0</p>
-            <button id="Stamina" class="add_stam_button" onclick="add_stat('Stamina')">+</button>
-        </div>
-    </div>
+        <p id="skill_points"class="status">Skill Points: 0 </p>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
         <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
     </div>
-    <div>
-
-
+    <div class="skill_point_menu" id="skill_p_menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
+            <p id="skill_points" class="amount_skillp">Skill Points: 0 </p>
+        <div class="stats_add">
+            <div class="strength_add">
+                <p id="Strength" class="status">Strength: 0</p>
+                <button id="Strength" class="add_button" onclick="add_stat('Strength')">+</button>
+            </div>
+            <div class="stamina_add">
+                <p id="Stamina" class="status">Stamina: 0</p>
+                <button id="Stamina" class="add_button" onclick="add_stat('Stamina')">+</button>
+            </div>
+        </div>
     </div>
+
     <div class="upgrades_div">
         <div class="gold_plate_background">
             <img src="images/noun-coin-6929625.png">
             <span id="gold">Gold: 0</span>
         </div>
         <p>Upgrades</p>
-        <button id="purchase" onclick="purchase_amount()">1x</button>
-        <button class ="tooltip" id="clicker_upgrade"  onclick="purchase_upgrade('clicker_upgrade')">
-            Train Fist:
-            <span id="clicker_upgrade_cost">2 Gold (0)</span>
-            <span class="tooltiptext">Increases damage</span>
+        <div class="upgrade_how_much">
+            <button id="button1" class="purchase-button" onclick="purchase_amount(1, 'button1')">1x</button>
+            <button id="button10" class="purchase-button" onclick="purchase_amount(10, 'button10')">10x</button>
+            <button id="button100" class="purchase-button" onclick="purchase_amount(100, 'button100')">100x</button>
+        </div>
+        <button class ="tooltip" id="clicker_upgrade"onclick="purchase_upgrade('clicker_upgrade')">
+            Train Fist
+            <span class="tooltiptext" id="clicker_upgrade_cost">Increases damage</span>
         </button>
+
         <button class="tooltip" id="hp_upgrade" onclick="purchase_upgrade('hp_upgrade')">
-            Train Stamina:
-            <span id="hp_upgrade_cost">10 gold (0)</span>
-            <span class="tooltiptext">Increases Hp</span>
+            Train Stamina
+            <span class="tooltiptext" id="hp_upgrade_cost">Increases Hp</span>
         </button>
+        
         <div class="stage_setting">
-            <button class="tooltip"   onclick="previous_level()">Previous Level
+            <button class="tooltip"  onclick="previous_level()">Previous Level
                 <span class="tooltiptext">Goes back 1 stage</span>
             </button>
             <button class="tooltip"  onclick="next_level()">Next Level
@@ -98,7 +102,6 @@
             </button>
         </div>
     </div>
-
     <script src="scripts/clicker.js"></script>
 </body>
 </html>

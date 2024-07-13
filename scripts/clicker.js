@@ -1248,17 +1248,17 @@ function default_purchased(){
 
 
 ////music playing
-const audioElementTwo = document.getElementById('BGM-2');
-const playPauseBtnTwo = document.getElementById('play_audio_2');
+const backGroundMusicTwo = document.getElementById('BGM-2');
+const playPauseTwo = document.getElementById('play_audio_2');
 let isPlayingTwo = false;
 
 function togglePlayPauseTwo() {
   if (isPlayingTwo) {
-    audioElementTwo.pause();
-    playPauseBtnTwo.textContent = 'Play';
+    backGroundMusicTwo.pause();
+    playPauseTwo.textContent = 'Play';
   } else {
-    audioElementTwo.play();
-    playPauseBtnTwo.textContent = 'Pause';
+    backGroundMusicTwo.play();
+    playPauseTwo.textContent = 'Pause';
   }
   isPlayingTwo = !isPlayingTwo;
 }

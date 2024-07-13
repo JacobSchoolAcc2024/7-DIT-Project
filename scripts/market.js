@@ -150,17 +150,17 @@ function update_window() {
     document.getElementById("purchaseItem").innerHTML = "purchase Item: " + purchasedItems;
 }
 
-const audioElement = document.getElementById('BGM-1');
-const playPauseBtn = document.getElementById('play_audio_1');
+const backGroundMusic = document.getElementById('BGM-1');
+const playPause = document.getElementById('play_audio_1');
 let isPlaying = false;
 
 function togglePlayPause() {
   if (isPlaying) {
-    audioElement.pause();
-    playPauseBtn.textContent = 'Play';
+    backGroundMusic.pause();
+    playPause.textContent = 'Play';
   } else {
-    audioElement.play();
-    playPauseBtn.textContent = 'Pause';
+    backGroundMusic.play();
+    playPause.textContent = 'Pause';
   }
   isPlaying = !isPlaying;
 }

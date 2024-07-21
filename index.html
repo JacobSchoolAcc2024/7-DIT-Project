@@ -42,7 +42,6 @@
         <div class="wood_plate_background">
             <img class="wood_img" src="images/noun-stats-6801159.png">
             <span class="wood">Stats</span>
-            
         </div>
         <button class = "tooltip" onclick="reset()">Reset
             <span class="tooltiptext1">Resets the game.</span>
@@ -53,10 +52,11 @@
         <p id="skill_points"class="status">Skill Points: 0 </p>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
         <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
+        <button onclick="spawn_boss('Amotheus')">Challenge For Glory</button>
     </div>
     <div class="skill_point_menu" id="skill_p_menu">
             <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
-            <p id="skill_points" class="amount_skillp">Skill Points: 0 </p>
+            <p id="skill_point" class="amount_skillp">Skill Points: 0 </p>
         <div class="stats_add">
             <div class="strength_add">
                 <p id="Strength" class="status">Strength: 0</p>

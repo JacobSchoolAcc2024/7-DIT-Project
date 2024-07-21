@@ -357,14 +357,14 @@ img {
 
 
 .status{
-  width: 80%;
+  width: 15rem;
   background-color: white;
-  font-size: 1.2rem;
+  font-size: 1rem;
   box-shadow:
       inset -2px 2px 1px 1px grey,
       inset -2px -2px 1px 1px lightgray,
       inset 2px 0px 1px 1px lightgray;
-  margin-left: 10%;
+  margin-left: 5%;
 }
 
 .stage_setting {

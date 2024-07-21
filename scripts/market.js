@@ -47,38 +47,25 @@ const priceDict = {
 const skillDict = {
   "Epic Sword": {
     damage: 400,
-    enemyhp : 100,
-    skillpoint : 1,
   },
   "Wood Sword": {
     damage: 10,
-    enemyhp : 1,
-    skillpoint : 1,
   },
   "Diamond Sword": {
     damage : 150,
-    enemyhp : 10,
-    skillpoint : 1,
+
   },
   "Dirty Icecream": {
     damage: 400,
-    enemyhp : 10000,
-    skillpoint : 1,
   },
   'Wood Pickaxe': {
     damage: 1,
-    enemyhp : 1,
-    skillpoint : 10,
   },
   'Iron Pickaxe': {
     damage: 2,
-    enemyhp : 2,
-    skillpoint : 100,
   },
   'Emerald Pickaxe': {
     damage: 4,
-    enemyhp : 4,
-    skillpoint : 1000,
   },
 
 };
@@ -136,7 +123,6 @@ function purchaseItem() {
     if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
         gold -= marketPrice;
         purchasedItems.push(NameOfWeapon);
-        purchasedItems.push(skillDict[NameOfWeapon].damage);
         playerDmg+=skillDict[NameOfWeapon].damage/2;
         localStorage.setItem('playerDmg', playerDmg);
         localStorage.setItem("gold", gold);
@@ -144,23 +130,30 @@ function purchaseItem() {
     }
   }
 
+function getWeaponDamageByPrice(price) {
+  NameOfWeapon = getWeaponNameByPrice(price);
+  return skillDict[NameOfWeapon].damage;
+}
+
 function update_window() {
     document.getElementById('market_price').innerHTML = "Price: " + formatNumber(marketPrice);
     document.getElementById('market_gold').innerHTML = "Gold: " + formatNumber(gold);
     document.getElementById("purchaseItem").innerHTML = "purchase Item: " + purchasedItems;
+    document.getElementById('market').innerHTML = "Damage: "+ getWeaponDamageByPrice(marketPrice);
 }
 
-const audioElement = document.getElementById('BGM-1');
-const playPauseBtn = document.getElementById('play_audio_1');
+
+const backGroundMusic = document.getElementById('BGM-1');
+const playPause = document.getElementById('play_audio_1');
 let isPlaying = false;
 
 function togglePlayPause() {
   if (isPlaying) {
-    audioElement.pause();
-    playPauseBtn.textContent = 'Play';
+    backGroundMusic.pause();
+    playPause.textContent = 'Play';
   } else {
-    audioElement.play();
-    playPauseBtn.textContent = 'Pause';
+    backGroundMusic.play();
+    playPause.textContent = 'Pause';
   }
   isPlaying = !isPlaying;
 }

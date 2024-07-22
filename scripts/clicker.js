@@ -742,6 +742,7 @@ function update_inventory() {
   skill_points_button.innerHTML = 'Skill Points: ' + formatNumber(skill_points);
   str_stat_button.innerHTML = 'Strength: ' + strength_stat_multi_added;
   stamina_stat_button.innerHTML = 'Stamina: ' + stamina_stat_multi_added
+  document.getElementById('skill_points').innerHTML = 'Skill points: '  + skill_points
 
   if (enemy_level > max_enemy_level) {
     max_enemy_level = enemy_level;
@@ -1163,6 +1164,8 @@ function gain_xp_locked(){
     current_xp = 0;
     skill_points += level_add * 2;
     localStorage.setItem('skill_points', skill_points);
+    document.getElementById('skill_points').innerHTML = 'Skill points: '  + skill_points
+
   }
   localStorage.setItem('player_level', player_level);
   localStorage.setItem('current_xp', current_xp);
@@ -1195,6 +1198,8 @@ function gain_xp_unlocked(){
     localStorage.setItem('player_level', player_level);
     skill_points += level_add * 2;
     localStorage.setItem('skill_points', skill_points);
+    document.getElementById('skill_points').innerHTML = 'Skill points: '  + skill_points
+
   }
   localStorage.setItem('current_xp', current_xp);
   localStorage.setItem('player_MAX_XP', player_MAX_XP);

@@ -14,7 +14,6 @@ function closeNav() {
 
 function openSkills() {
   document.getElementById("skill_p_menu").style.height = "calc(100% - 4rem)";
-  document.getElementById("main_Page").style.transition = "0.9s";
 }
 
 function closeSkills() {
@@ -174,11 +173,11 @@ strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_multi_a
 stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
 stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
 
-
-
+///Spawn Boss Var
 
 //Animation var//
 ///////////////////////////////////////////////////////////////////////////////////////////
+let enemy_name = localStorage.getItem('enemy_name') || 'Demon Fly: ';
 
 ///Animation Functions//
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -504,11 +503,12 @@ function drawEnemyLevel() {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, CANVAS_HEIGHT - 30, CANVAS_WIDTH, 30); // Draw white background
     ctx.fillStyle = 'green'; // Set text color to green
-    ctx.fillText('Newbie Demon Fly Level: ' + enemy_level, 1, CANVAS_HEIGHT - 5);
+    ctx.fillText(enemy_name + enemy_level, 1, CANVAS_HEIGHT - 5);
     ctx.fillText('Max Level: ' + max_enemy_level, CANVAS_WIDTH - 150, CANVAS_HEIGHT - 5);
 
   }
 }
+
 
 
 function drawLoop() {
@@ -727,6 +727,7 @@ function reset() {
 }
 
 function update_inventory() {
+  const skill_point_button = document.getElementById('skill_point');
   const player_level_button = document.getElementById('player_level');
   const skill_points_button = document.getElementById('skill_points');
   const str_stat_button = document.getElementById('Strength');
@@ -741,8 +742,9 @@ function update_inventory() {
   player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level);
   skill_points_button.innerHTML = 'Skill Points: ' + formatNumber(skill_points);
   str_stat_button.innerHTML = 'Strength: ' + strength_stat_multi_added;
-  stamina_stat_button.innerHTML = 'Stamina: ' + stamina_stat_multi_added
-  document.getElementById('skill_points').innerHTML = 'Skill points: '  + skill_points
+  stamina_stat_button.innerHTML = 'Stamina: ' + stamina_stat_multi_added;
+  skill_point_button.innerHTML = 'Skill Points: '+ skill_points;
+
 
   if (enemy_level > max_enemy_level) {
     max_enemy_level = enemy_level;
@@ -1141,6 +1143,7 @@ function check_purchase(id) {
 
 
 function gain_xp_locked(){
+  const skill_point_button = document.getElementById('skill_point');
   let xp_add;
   let level_add;
   if (enemy_level % 5 === 0){
@@ -1161,10 +1164,10 @@ function gain_xp_locked(){
     player_MAX_XP = 1000 + 2 * (1000 * xp_multiply + 100 * xp_multiply);
     level_add = Math.floor(player_MAX_XP/current_xp);
     player_level += level_add;
-    current_xp = 0;
     skill_points += level_add * 2;
+    current_xp = 0;
     localStorage.setItem('skill_points', skill_points);
-    document.getElementById('skill_points').innerHTML = 'Skill points: '  + skill_points
+    skill_point_button.innerHTML = 'Skill Points: '+ skill_points;
 
   }
   localStorage.setItem('player_level', player_level);
@@ -1175,12 +1178,12 @@ function gain_xp_locked(){
 }
 
 function gain_xp_unlocked(){
+  const skill_point_button = document.getElementById('skill_point');
   let xp_add;
   let level_add;
   if ((enemy_level - 1) % 5 === 0){
     xp_add = 100 + 2 * (((200 * enemy_level)/100) * 1.5)
     console.log('Boss XP GAINED: ' , xp_add)
-
   }
   else{
     xp_add = 100 + (((100 * enemy_level)/100) * 1.5)
@@ -1197,9 +1200,9 @@ function gain_xp_unlocked(){
     current_xp = 0;
     localStorage.setItem('player_level', player_level);
     skill_points += level_add * 2;
+    current_xp = 0;
     localStorage.setItem('skill_points', skill_points);
-    document.getElementById('skill_points').innerHTML = 'Skill points: '  + skill_points
-
+    skill_point_button.innerHTML = 'Skill Points: '+ skill_points;
   }
   localStorage.setItem('current_xp', current_xp);
   localStorage.setItem('player_MAX_XP', player_MAX_XP);
@@ -1253,19 +1256,35 @@ function default_purchased(){
 
 
 ////music playing
-const audioElementTwo = document.getElementById('BGM-2');
-const playPauseBtnTwo = document.getElementById('play_audio_2');
+const backGroundMusicTwo = document.getElementById('BGM-2');
+const playPauseTwo = document.getElementById('play_audio_2');
 let isPlayingTwo = false;
 
 function togglePlayPauseTwo() {
   if (isPlayingTwo) {
-    audioElementTwo.pause();
-    playPauseBtnTwo.textContent = 'Play';
+    backGroundMusicTwo.pause();
+    playPauseTwo.textContent = 'Play';
   } else {
-    audioElementTwo.play();
-    playPauseBtnTwo.textContent = 'Pause';
+    backGroundMusicTwo.play();
+    playPauseTwo.textContent = 'Pause';
   }
   isPlayingTwo = !isPlayingTwo;
+}
+
+function spawn_boss(boss_name){
+  if (boss_name === 'Amotheus'){
+    alert('Amotheus Duke of Hell has appeared!')
+    MAX_HP = 100000;
+    currentHP = MAX_HP;}
+    boss_damage = 1000;
+    enemy_level = 500;
+    boss_fight = 'true';
+  }
+  localStorage.setItem('boss_fight', boss_fight);
+  localStorage.setItem('boss_damage', boss_damage);
+
+function check_boss(){
+
 }
 
 var canvass = document.getElementById('can');

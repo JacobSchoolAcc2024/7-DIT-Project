@@ -175,8 +175,10 @@ body {
   }
 
  #purchase{
+  position: absolute;
   width: 15rem;
-  margin-bottom: 2rem;
+  top: 68%;
+  left: 44%;
  }
 
   #status_button {
@@ -357,14 +359,14 @@ img {
 
 
 .status{
-  width: 15rem;
+  width: 80%;
   background-color: white;
-  font-size: 1rem;
+  font-size: 1.5rem;
   box-shadow:
       inset -2px 2px 1px 1px grey,
       inset -2px -2px 1px 1px lightgray,
       inset 2px 0px 1px 1px lightgray;
-  margin-left: 5%;
+  margin-left: 8%;
 }
 
 .stage_setting {
@@ -373,17 +375,6 @@ img {
   left: 6%;
 }
 
-#market_canvas {
-  border: 4px solid black;
-  display: block;
-  position: absolute;
-  transform: translate(-50%,-50%);
-  top:50%;
-  left:50%;
-  width: 18.75rem;
-  height: 18.75rem;
-  background-color: aqua;
-}
 
 #market_canvas {
   border: 4px solid black;
@@ -394,7 +385,7 @@ img {
   left:50%;
   width: 300px;
   height: 300px;
-  background-color: aqua;
+  background-color: rgb(255, 255, 255);
 }
 
 .player_stats {
@@ -501,4 +492,8 @@ p {
 
 .upgrade_how_much{
   display: flex;
+}
+
+#dmg_display {
+
 }

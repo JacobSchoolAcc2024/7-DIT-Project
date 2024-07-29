@@ -59,11 +59,49 @@
         </div>
     </div>
 </head>
+<style>
+    #market_store {
+        display: block;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top:70%;
+        left:12%;
+        width: 30rem;
+        height: 30rem;
+    }
+    #market_text {
+        display: block;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top:70%;
+        left:32%;
+        width: 30rem;
+        height: 30rem;
+    }
+    #random_text {
+      display: block;
+      position: absolute;
+      transform: translate(-50%,-50%);
+      top: 98%;
+      left: 31%;
+      width: 30rem;
+      height: 30rem;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      padding-top: 50px;
+    }
+  </style>
 <body>
-    <canvas id = "market_canvas"> </canvas>
-    <button id ='purchase' onclick="purchaseItem()">PURCHASE</button>
+    <div class="canvas_list">
+        <canvas id = "market_canvas"> </canvas>
+        <button id ='purchase' onclick="purchaseItem()">PURCHASE</button>
+    </div>
     <script src="../scripts/market.js"></script>
     <script src="../scripts/clicker.js"></script>
+    <img src="../images/market_store.png" id ="market_store">
+    <img src="../images/text.png" id ="market_text">
+    <div id="random_text">I'm BJ</div>
 </body>
 </html>
 

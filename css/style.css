@@ -378,11 +378,6 @@ img {
 
 #market_canvas {
   border: 4px solid black;
-  display: block;
-  position: absolute;
-  transform: translate(-50%,-50%);
-  top:50%;
-  left:50%;
   width: 300px;
   height: 300px;
   background-color: rgb(255, 255, 255);
@@ -494,6 +489,12 @@ p {
   display: flex;
 }
 
-#dmg_display {
+.canvas_list {
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  width: 90%;
+  height: 50%;
+
 
 }

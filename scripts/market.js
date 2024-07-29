@@ -25,6 +25,7 @@ const frameY=0;
 let marketPrice = 0;
 let purchasedItems = JSON.parse(localStorage.getItem("purchasedItems")) || [];
 
+
 function formatNumber(num) {
     const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion"
         , " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
@@ -69,6 +70,29 @@ const skillDict = {
   },
 
 };
+
+const sentences = {
+  1: "Yeah babe",
+  2: "Buy some.",
+  3: "Plz......",
+  4: "Let's popping.",
+  5: "The best way is creating.",
+  6: "Success is not final.",
+  7: "Glory!!!",
+  8: "Believe you.",
+  9: "Wahttuup noys.",
+  10: "Happiness is a journey.",
+  11: "Death is not destination.",
+  12: "I'm BJ"
+};
+
+function randomSentenceGenearte(){
+  randomKey = Math.floor(Math.random() * Object.keys(sentences).length) + 1;
+  randomSentence = sentences[randomKey];
+  conversation = document.getElementById('random_text');
+  conversation.textContent = randomSentence;
+}
+
 
   function drawAnimation(weaponPic, weaponName) {
     ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
@@ -160,3 +184,4 @@ function togglePlayPause() {
 
 
 setInterval(update_window, 100);
+setInterval(randomSentenceGenearte,5000);

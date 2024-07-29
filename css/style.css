@@ -175,8 +175,10 @@ body {
   }
 
  #purchase{
+  position: absolute;
   width: 15rem;
-  margin-bottom: 2rem;
+  top: 68%;
+  left: 44%;
  }
 
   #status_button {
@@ -373,6 +375,7 @@ img {
   left: 6%;
 }
 
+
 #market_canvas {
   border: 4px solid black;
   display: block;
@@ -380,9 +383,9 @@ img {
   transform: translate(-50%,-50%);
   top:50%;
   left:50%;
-  width: 18.75rem;
-  height: 18.75rem;
-  background-color: aqua;
+  width: 300px;
+  height: 300px;
+  background-color: rgb(255, 255, 255);
 }
 
 .player_stats {
@@ -489,4 +492,8 @@ p {
 
 .upgrade_how_much{
   display: flex;
+}
+
+#dmg_display {
+
 }

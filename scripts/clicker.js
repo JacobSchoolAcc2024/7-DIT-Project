@@ -6,6 +6,10 @@ function openNav() {
 
 }
 
+const clickerTest = () => {
+  console.log("Successfully called func from clicker.js");
+}
+
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
   document.getElementById("main_Page").style.marginLeft = "1.5rem";
@@ -22,7 +26,7 @@ function closeSkills() {
 }
 
 let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
-let gold = parseInt(localStorage.getItem('gold')) || 0;
+var gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
 let enemy_level_increase = parseInt(localStorage.getItem('enemy_level_increase')) || 1;
@@ -52,7 +56,6 @@ let strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_mul
 let stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
 let stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
 
-export {playerDmg, strength_stat_multi}
 
 
 ///Game Var////

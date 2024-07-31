@@ -1,3 +1,4 @@
+
 const market_canva = document.getElementById("market_canvas");
 const ctx2 = market_canva.getContext('2d');
 const CANVASHEIGHT = market_canva.height = 300;
@@ -24,6 +25,9 @@ const frameX=0;
 const frameY=0;
 let marketPrice = 0;
 let purchasedItems = JSON.parse(localStorage.getItem("purchasedItems")) || [];
+ 
+// clicker.clickerTest();
+// console.log(clicker);
 
 
 function formatNumber(num) {
@@ -83,54 +87,59 @@ const sentences = {
   9: "Wahttuup noys.",
   10: "Happiness is a journey.",
   11: "Death is not destination.",
-  12: "I'm BJ"
+  12: "I'm J_J"
 };
 
+
+
+
 function randomSentenceGenearte(){
-  randomKey = Math.floor(Math.random() * Object.keys(sentences).length) + 1;
-  randomSentence = sentences[randomKey];
-  conversation = document.getElementById('random_text');
+  let randomKey = Math.floor(Math.random() * Object.keys(sentences).length) + 1;
+  let randomSentence = sentences[randomKey];
+  let conversation = document.getElementById('random_text');
   conversation.textContent = randomSentence;
 }
 
-
-  function drawAnimation(weaponPic, weaponName) {
-    ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
-    switch (weaponName) {
-      case "Epic Sword":
-        ctx2.drawImage(epicSword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-        marketPrice = priceDict["Epic Sword"];
+function drawAnimation(weaponPic, weaponName) {
+  ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
+  switch (weaponName) {
+    case "Epic Sword":
+      ctx2.drawImage(epicSword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      marketPrice = priceDict["Epic Sword"];
+      break;
+    case "Wood Sword":
+      ctx2.drawImage(w_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      marketPrice = priceDict["Wood Sword"];
+      break;
+    case "Diamond Sword":
+      ctx2.drawImage(d_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      marketPrice = priceDict["Diamond Sword"];
+      break;
+    case "Dirty Icecream":
+      ctx2.drawImage(dirtyIceCream, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      marketPrice = priceDict["Dirty Icecream"];
+      break;
+    case 'Wood Pickaxe':
+      ctx2.drawImage(w_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      marketPrice = priceDict['Wood Pickaxe'];
+      break;
+    case 'Iron Pickaxe':
+      ctx2.drawImage(i_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      marketPrice = priceDict['Iron Pickaxe'];
+      break;
+    case 'Emerald Pickaxe':
+        ctx2.drawImage(e_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict['Emerald Pickaxe'];
         break;
-      case "Wood Sword":
-        ctx2.drawImage(w_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-        marketPrice = priceDict["Wood Sword"];
-        break;
-      case "Diamond Sword":
-        ctx2.drawImage(d_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-        marketPrice = priceDict["Diamond Sword"];
-        break;
-      case "Dirty Icecream":
-        ctx2.drawImage(dirtyIceCream, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-        marketPrice = priceDict["Dirty Icecream"];
-        break;
-      case 'Wood Pickaxe':
-        ctx2.drawImage(w_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-        marketPrice = priceDict['Wood Pickaxe'];
-        break;
-      case 'Iron Pickaxe':
-        ctx2.drawImage(i_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-        marketPrice = priceDict['Iron Pickaxe'];
-        break;
-      case 'Emerald Pickaxe':
-          ctx2.drawImage(e_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-          marketPrice = priceDict['Emerald Pickaxe'];
-          break;
-      default:
-        ctx2.drawImage(weaponPic, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-        marketPrice = priceDict[weaponName];
-        break;
-    }
+    default:
+      ctx2.drawImage(weaponPic, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      marketPrice = priceDict[weaponName];
+      break;
   }
+}
+
+// console.log("Loaded past drawAnimation")
+// console.log(drawAnimation.toString())
 
 function getWeaponNameByPrice(price) {
     for (const [weaponName, weaponPrice] of Object.entries(priceDict)) {
@@ -143,7 +152,7 @@ function getWeaponNameByPrice(price) {
 
 
 function purchaseItem() {
-    NameOfWeapon = getWeaponNameByPrice(marketPrice);
+    let NameOfWeapon = getWeaponNameByPrice(marketPrice);
     if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
         gold -= marketPrice;
         purchasedItems.push(NameOfWeapon);
@@ -155,7 +164,7 @@ function purchaseItem() {
   }
 
 function getWeaponDamageByPrice(price) {
-  NameOfWeapon = getWeaponNameByPrice(price);
+  let NameOfWeapon = getWeaponNameByPrice(price);
   return skillDict[NameOfWeapon].damage;
 }
 
@@ -163,7 +172,7 @@ function update_window() {
     document.getElementById('market_price').innerHTML = "Price: " + formatNumber(marketPrice);
     document.getElementById('market_gold').innerHTML = "Gold: " + formatNumber(gold);
     document.getElementById("purchaseItem").innerHTML = "purchase Item: " + purchasedItems;
-    document.getElementById('market').innerHTML = "Damage: "+ getWeaponDamageByPrice(marketPrice);
+    document.getElementById('dmg_display').innerHTML = "Damage: "+ getWeaponDamageByPrice(marketPrice);
 }
 
 

@@ -25,7 +25,15 @@ function closeSkills() {
   
 }
 
+<<<<<<< HEAD
 let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
+=======
+
+
+
+
+var playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
+>>>>>>> 61c2fedeb4e3b082d08176f4f93349383e352cce
 var gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
@@ -48,24 +56,25 @@ let regen_multiplier = parseInt(localStorage.getItem('regen_multiplier')) || 1;
 
 ///Purchase
 let buy_upgrade = parseInt(localStorage.getItem('buy_upgrade')) || 1;
-let clickedButton = parseInt(localStorage.getItem('clickedButton')) || 0;
+clickedButton = parseInt(localStorage.getItem('clickedButton')) || 0;
 
+<<<<<<< HEAD
 /// Stat Variables
 let strength_stat_multi = parseInt(localStorage.getItem('strength_stat_multi')) || 1;
 let strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_multi_added')) || 0;
 let stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
 let stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
 
+=======
+>>>>>>> 61c2fedeb4e3b082d08176f4f93349383e352cce
 
 
 ///Game Var////
 /////////////////////////////////////////////////////////////////////////////////////
 const canvas = document.getElementById('canvas1');
-if (canvas) {
-    const ctx = canvas.getContext('2d');
-    
-const CANVAS_WIDTH = canvas1.width = 600;
-const CANVAS_HEIGHT = canvas1.height = 650;
+const ctx = canvas.getContext('2d');
+const CANVAS_WIDTH = canvas.width = 600;
+const CANVAS_HEIGHT = canvas.height = 650;
 const player_width = 79;
 const player_height = 70;
 const deadPlayerWidth = 92; // 553 / 6 = 92.16666... (rounded down)
@@ -175,7 +184,13 @@ let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 15;
 let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
 
 
+/// Stat Variables
+strength_stat_multi = parseInt(localStorage.getItem('strength_stat_multi')) || 1;
+strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_multi_added')) || 0;
+stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
+stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
 
+///Spawn Boss Var
 
 //Animation var//
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -378,6 +393,8 @@ function animate1() {
   drawBossTimer();
   drawHPParticle();
 
+
+
   if (isDead) {
     drawDeadAnimation();
   } else if (isHurt) {
@@ -404,8 +421,8 @@ function drawDeadAnimation() {
     deathFrameHeight,
     0,
     0,
-    canvas1.width,
-    canvas1.height
+    canvas.width,
+    canvas.height
   );
 
   if (gameframe % staggerframes_dead === 0) {
@@ -427,8 +444,8 @@ function drawHurtAnimation() {
     hurt_height,
     0,
     0,
-    canvas1.width,
-    canvas1.height
+    canvas.width,
+    canvas.height
   );
 
   if (gameframe % staggerframes_hurt === 0) {
@@ -451,8 +468,8 @@ function drawAttackAnimation() {
     player_height,
     0,
     0,
-    canvas1.width,
-    canvas1.height
+    canvas.width,
+    canvas.height
   );
 
   if (enemy_level % 5 === 0) {
@@ -479,8 +496,8 @@ function drawIdleAnimation() {
     player_height,
     0,
     0,
-    canvas1.width,
-    canvas1.height
+    canvas.width,
+    canvas.height
   );
 
   if (gameframe % staggerframes === 0) {
@@ -557,8 +574,8 @@ function handle_click() {
       // Create a new HP particle with updated text
     const HP_PARTICLE_TEXT = "-" + formatNumber(playerDmg * (1 + strength_stat_multi)) + " HP";
     hpParticles.push({
-      x: canvas1.width - 100,
-      y: canvas1.height - 190,
+      x: canvas.width - 100,
+      y: canvas.height - 190,
       duration: HP_PARTICLE_DURATION,
       text: HP_PARTICLE_TEXT, // Add the text property
     });
@@ -574,10 +591,7 @@ function handle_click() {
 
 animate1();
 drawLoop();
-
-let canva_id = document.getElementById('canvas1');
-
-canva_id.addEventListener('click', handle_click);
+canvas.addEventListener('click', handle_click);
 
 
 
@@ -735,11 +749,11 @@ function update_inventory() {
   const skill_points_button = document.getElementById('skill_points');
   const str_stat_button = document.getElementById('Strength');
   const stamina_stat_button = document.getElementById('Stamina');
-  let gold_status = document.getElementById('gold');
-  let boss_dps = 2 * boss_damage
+  gold_status = document.getElementById('gold');
+  boss_dps = 2 * boss_damage
   gold_status.innerHTML = "Gold: " + formatNumber(gold);
-  let player_damage_status = document.getElementById('player_damage');
-  let boss_damage_status = document.getElementById('boss_damage');
+  player_damage_status = document.getElementById('player_damage');
+  boss_damage_status = document.getElementById('boss_damage');
   player_damage_status.innerHTML = "Player Damage: " + formatNumber(playerDmg * (1 + strength_stat_multi)) + " ";
   boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " ";
   player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level);
@@ -754,13 +768,13 @@ function update_inventory() {
     localStorage.setItem('max_enemy_level', max_enemy_level);
   }
   if (islock_stage === 1) {
-    let lock_button = document.getElementById('lock_stage');
+    lock_button = document.getElementById('lock_stage');
     lock_button.style.backgroundColor = "darkred";
     lock_button.style.color = "white";
     lock_button.innerHTML = 'Unlock Stage';
   }
   else{
-    let lock_button = document.getElementById('lock_stage');
+    lock_button = document.getElementById('lock_stage');
     lock_button.style.backgroundColor = "green";
     lock_button.style.color = "white";
     lock_button.innerHTML = "Lock Stage";
@@ -897,19 +911,19 @@ function check_upgrades() {
 
   for (const upgrade in Upgrades) {
     if (upgrade == "clicker_upgrade") {
-      let data = Upgrades[upgrade];
+      data = Upgrades[upgrade];
       const requiredCost = data.cost + (1.5 * data.clicker_upgrade_purchased);
       const new_requiredCost = check_cost(requiredCost, data.clicker_upgrade_purchased, data.cost, 1.5);
-      let button = document.getElementById(data.button_id);
+      button = document.getElementById(data.button_id);
       const add_playerDmg = Math.round(strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * data.click_multiplier));
       upgrade_check(data.cost_id, new_requiredCost, button, data.clicker_upgrade_purchased, upgrade, 'clicker_upgrade', 
         add_playerDmg, 'Player Damage', 'Train Strength')
     }
     else if (upgrade == 'hp_upgrade'){
-      let data = Upgrades[upgrade];
+      data = Upgrades[upgrade];
       const requiredCost = data.cost + (1.5 * data.hp_upgrade_purchased);
       const new_requiredCost = check_cost(requiredCost, data.hp_upgrade_purchased, data.cost, 1.5);
-      let button = document.getElementById(data.button_id);
+      button = document.getElementById(data.button_id);
       const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** data.hp_multiplier)));
       upgrade_check(data.cost_id, new_requiredCost, button, data.hp_upgrade_purchased, upgrade, 'hp_upgrade',
         add_hp, 'HP', 'Train Stamina')
@@ -1277,16 +1291,18 @@ function togglePlayPauseTwo() {
 function spawn_boss(boss_name){
   if (boss_name === 'Amotheus'){
     alert('Amotheus Duke of Hell has appeared!')
-
-  
+    MAX_HP = 100000;
+    currentHP = MAX_HP;}
+    boss_damage = 1000;
+    enemy_level = 500;
+    boss_fight = 'true';
   }
+  localStorage.setItem('boss_fight', boss_fight);
+  localStorage.setItem('boss_damage', boss_damage);
+
+function check_boss(){
+
 }
 
-
-
-
-// Rest of your canvas-related code
-} else {
-    console.log('Canvas not found on this page');
-}
-
+var canvass = document.getElementById('can');
+canvass.onselectstart = function () { return false; }

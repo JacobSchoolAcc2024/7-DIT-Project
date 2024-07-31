@@ -2,24 +2,25 @@
 <html lang="en">
     <head>
     <title>Market</title>
-
-    <audio id="BGM-1" loop>
-        <source src="../music/BGM-1.m4a" type="audio/mpeg">
-    </audio>
-    
-    <link rel="stylesheet" href="../css/style.css">
-    <style>
-        body {
-            background-image: url(../images/old-pap.webp);
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-    </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+        <audio id="BGM-1" loop>
+            <source src="../music/BGM-1.m4a" type="audio/mpeg">
+        </audio>
+        <audio id="coin">
+            <source src="../music/coin_flip.mp3" type="audio/mpeg">
+        </audio>
+        
+        <link rel="stylesheet" href="../css/style.css">
+        <style>
+            body {
+                background-image: url(../images/old-pap.webp);
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            }
+        </style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
     <div id="mySidenav" class="sidenav">
@@ -54,10 +55,10 @@
             <button id="play_audio_1" onclick="togglePlayPause()">Play</button>
             <div class="market gold" id="market_gold">Gold: </div>
             <div id="dmg_display">Damage: </div>
-            <div class="purchaseItem" id="purchaseItem">purchase Item: </div>
+            <div class="purchaseItem" id="purchaseItem" onclick="purchaseItem()">purchase Item: </div>
         </div>
     </div>
-</head>
+    </body>
 <style>
     #market_store {
         display: block;
@@ -92,7 +93,6 @@
     }
   </style>
 <body>
-
     <div class="canvas_list">
         <canvas id = "market_canvas"> </canvas>
         <button id ='purchase' onclick="purchaseItem()">PURCHASE</button>
@@ -108,7 +108,6 @@
     <img src="../images/text.png" id ="market_text">
     <div id="random_text">I'm J_J</div>
     </body>
-    
 </body>
 </html>
 

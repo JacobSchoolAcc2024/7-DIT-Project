@@ -25,15 +25,11 @@ function closeSkills() {
   
 }
 
-<<<<<<< HEAD
-let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
-=======
 
 
 
 
 var playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
->>>>>>> 61c2fedeb4e3b082d08176f4f93349383e352cce
 var gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
@@ -58,15 +54,6 @@ let regen_multiplier = parseInt(localStorage.getItem('regen_multiplier')) || 1;
 let buy_upgrade = parseInt(localStorage.getItem('buy_upgrade')) || 1;
 clickedButton = parseInt(localStorage.getItem('clickedButton')) || 0;
 
-<<<<<<< HEAD
-/// Stat Variables
-let strength_stat_multi = parseInt(localStorage.getItem('strength_stat_multi')) || 1;
-let strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_multi_added')) || 0;
-let stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
-let stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
-
-=======
->>>>>>> 61c2fedeb4e3b082d08176f4f93349383e352cce
 
 
 ///Game Var////

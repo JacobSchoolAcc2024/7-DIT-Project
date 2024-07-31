@@ -21,17 +21,13 @@
     margin: 0;
     padding: 0;
     --paper: #f7da88;
-    
 }
-
-
 
 .sidenav {
     height: 100%;
     width: 0;
     position: fixed;
-    background-image: url(../images/quest-paper.jpg);
-    background-color: #d3a970;
+    background-color: black;
     overflow-x: hidden;
     padding-top: 60px;
     transition: 0.9s;
@@ -49,10 +45,24 @@ body {
 }
 
 
+
+#upgrades{
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 20%;
+  width: 11%;
+}
+
+.status_text{
+    position: relative;
+    margin-top: 1rem;
+    overflow-y: hidden;
+}
 .sidenav a {
     text-decoration: none;
     font-size: 1rem;
-    color:rgb(0, 0, 0);
+    color:white;
     transition: 0.3s;
     display: block;
     padding-right: 0;
@@ -77,10 +87,11 @@ body {
 .sidenav .menu_Item:hover{
     color: #f1f1f1;
     padding: 8px 0px 8px 0px;
-    background-color: #d4be9e;
+    background-color: darkgreen;
 }
 
   .sidenav .closebtn:hover {
+    color: darkgreen;
     transform: rotate(0deg);
   }
 
@@ -100,14 +111,6 @@ body {
     transition: 0.3s;
     display: block;
     padding-right: 0;
-  }
-
-  .menu_container {
-    display: inline-block;
-    margin-bottom: 2rem;
-    margin-top: 1.5rem;
-    margin-left: 1.2rem;
-    justify-content: end;
   }
 
   .bar1, .bar2, .bar3 {
@@ -133,6 +136,13 @@ body {
     width: 10rem;
   }
 
+  .menu_container {
+    display: inline-block;
+    margin-bottom: 2rem;
+    margin-top: 1.5rem;
+    margin-left: 1.2rem;
+    justify-content: end;
+  }
 
   .top_bar {
     display: flex;
@@ -160,6 +170,20 @@ body {
       inset 2px 0px 1px 1px gray;
   }
   
+  .status_text {
+    margin-bottom: 4rem;
+  }
+
+ #purchase{
+  position: absolute;
+  width: 15rem;
+  top: 68%;
+  left: 44%;
+ }
+
+  #status_button {
+    margin-top: 4.9rem;
+  }
 
   .tooltip {
     position: relative;
@@ -471,20 +495,6 @@ p {
   justify-content: center;
   width: 90%;
   height: 50%;
-}
 
-.start_buttons{
-  display: flex;
-  margin-top: 20%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
 
-.start_button{
-  text-decoration: none;
-  width: 50rem;
-  padding: 1rem 20rem 1rem 20rem;
-  border: solid 2px black;
-  color: black;
 }

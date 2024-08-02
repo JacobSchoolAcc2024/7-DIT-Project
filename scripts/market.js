@@ -160,7 +160,7 @@ function purchaseItem() {
         localStorage.setItem('playerDmg', playerDmg);
         localStorage.setItem("gold", gold);
         localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
-        coin_flip.textContent = 'Play';
+        coin_flip.play();
     }
   }
 

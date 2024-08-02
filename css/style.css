@@ -4,8 +4,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&family=VT323&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Graduate&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lugrasimo&family=Playwrite+ES&display=swap');
-
-
+@import url('https://fonts.googleapis.com/css2?family=Lugrasimo&family=Playwrite+ES&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lugrasimo&family=Playwrite+ES&display=swap');
 
 
 
@@ -519,4 +519,63 @@ font-size: 16px;
 font-weight: bold;
 text-align: center;
 padding-top: 50px;
+}
+
+#status_button{
+display: flex;
+margin: auto;
+justify-content: center;
+width: 40%;
+padding: 5rem 0 5rem 0;
+margin-top: 10%;
+border: red solid 2px;
+}
+
+#market_store {
+position: absolute;
+left: 75%;
+top: 30%;
+}
+
+#market_text {
+position: absolute;
+left: 90%;
+top: 30%;
+}
+
+#random_text{
+position: absolute;
+left: 89%;
+top: 53%;
+}
+
+.item_list {
+position: fixed;
+border: black solid 2px;
+height: 100%;
+width: 15rem;
+overflow-x: hidden;
+justify-content: center;
+text-align: center;
+}
+
+.market_item {
+width: 85%;
+height: 5%;
+}
+
+.canvas_stats {
+margin-right: 2rem;
+border: 2px red solid;
+width: 10rem;
+margin: auto;
+text-align: center;
+}
+
+#market_price {
+font-family: "Bebas Neue", sans-serif;
+font-size: 2rem;
+color: gold;
+text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
+  1px 1px 0 black;
 }

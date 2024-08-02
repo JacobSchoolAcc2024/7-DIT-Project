@@ -52,7 +52,9 @@
         <p id="skill_points"class="status">Skill Points: 0 </p>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
         <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
-        <button onclick="spawn_boss('Amotheus')">Challenge For Glory</button>
+        <a href="/pages/titan.html"><button>
+            Battle For Glory
+        </button></a>
     </div>
     <div class="skill_point_menu" id="skill_p_menu">
             <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
@@ -68,7 +70,6 @@
             </div>
         </div>
     </div>
-
     <div class="upgrades_div">
         <div class="gold_plate_background">
             <img src="images/noun-coin-6929625.png">
@@ -102,6 +103,6 @@
             </button>
         </div>
     </div>
-    <script src="scripts/clicker.js"></script>
+    <script src="scripts/clicker.js" type="module"></script>
 </body>
 </html>

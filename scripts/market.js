@@ -160,6 +160,7 @@ function purchaseItem() {
         localStorage.setItem('playerDmg', playerDmg);
         localStorage.setItem("gold", gold);
         localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
+        coin_flip.textContent = 'Play';
     }
   }
 
@@ -178,6 +179,7 @@ function update_window() {
 
 const backGroundMusic = document.getElementById('BGM-1');
 const playPause = document.getElementById('play_audio_1');
+const coin_flip = document.getElementById('coin');
 let isPlaying = false;
 
 function togglePlayPause() {

@@ -52,7 +52,9 @@
         <p id="skill_points"class="status">Skill Points: 0 </p>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
         <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
-        <button onclick="spawn_boss('Amotheus')">Challenge For Glory</button>
+        <a href="pages/titan.html">
+            <button>Challenge For Glory</button>
+        </a>
     </div>
     <div class="skill_point_menu" id="skill_p_menu">
             <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
@@ -80,7 +82,7 @@
             <button id="button10" class="purchase-button" onclick="purchase_amount(10, 'button10')">10x</button>
             <button id="button100" class="purchase-button" onclick="purchase_amount(100, 'button100')">100x</button>
         </div>
-        <button class ="tooltip" id="clicker_upgrade"onclick="purchase_upgrade('clicker_upgrade')">
+        <button class ="tooltip" id="clicker_upgrade" onclick="purchase_upgrade('clicker_upgrade')">
             Train Fist
             <span class="tooltiptext" id="clicker_upgrade_cost">Increases damage</span>
         </button>

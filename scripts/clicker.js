@@ -174,6 +174,8 @@ const TIMER_DECREASE_RATE = 1 / 60; // Decrease 1 second per frame (assuming 60 
 let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 15;
 let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
 
+//sound effect variables
+
 
 
 

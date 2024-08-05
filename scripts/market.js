@@ -54,23 +54,23 @@ const skillDict = {
     damage: 400,
   },
   "Wood Sword": {
-    damage: 10,
+    damage: 20,
   },
   "Diamond Sword": {
-    damage : 150,
+    damage : 1000,
 
   },
   "Dirty Icecream": {
-    damage: 400,
+    damage: 5,
   },
   'Wood Pickaxe': {
-    damage: 1,
+    damage: 50,
   },
   'Iron Pickaxe': {
-    damage: 2,
+    damage: 100,
   },
   'Emerald Pickaxe': {
-    damage: 4,
+    damage: 200,
   },
 
 };
@@ -172,7 +172,6 @@ function getWeaponDamageByPrice(price) {
 function update_window() {
     document.getElementById('market_price').innerHTML = "Price: " + formatNumber(marketPrice);
     document.getElementById('market_gold').innerHTML = "Gold: " + formatNumber(gold);
-    document.getElementById("purchaseItem").innerHTML = "purchase Item: " + purchasedItems;
     document.getElementById('dmg_display').innerHTML = "Damage: "+ getWeaponDamageByPrice(marketPrice);
 }
 

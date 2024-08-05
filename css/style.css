@@ -314,7 +314,7 @@ body {
   margin-bottom: 3rem;
 }
 
-img {
+.stats_icon {
   display: inline-block;
   height: 2rem;
   margin-top: 3rem;
@@ -554,7 +554,7 @@ top: 53%;
 position: fixed;
 border: black solid 2px;
 height: 100%;
-width: 15rem;
+width: 20rem;
 overflow-x: hidden;
 justify-content: center;
 text-align: center;
@@ -567,8 +567,7 @@ height: 5%;
 
 .canvas_stats {
 margin-right: 2rem;
-border: 2px red solid;
-width: 10rem;
+width: 12rem;
 margin: auto;
 text-align: center;
 }
@@ -587,4 +586,25 @@ text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
   color: rgb(201, 0, 0);
   text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
   1px 1px 0 black;
+}
+
+.market_icons {
+    display: inline-block;
+    height: 3rem;
+  
+}
+
+#purchaseItem {
+  justify-content: center;
+  display: flex;
+  margin: auto;
+  width: 300px;
+}
+
+#market_gold {
+  font-size: 1.5rem
+}
+
+#play_audio_1 {
+  width: 5rem;
 }

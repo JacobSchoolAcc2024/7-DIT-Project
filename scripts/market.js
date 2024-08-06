@@ -43,7 +43,7 @@ const priceDict = {
     "Epic Sword": 10000,
     "Wood Sword": 500,
     "Diamond Sword": 50000,
-    "Dirty Icecream": 5,
+    "Dirty Icecream": 100000,
     'Wood Pickaxe': 1000,
     'Iron Pickaxe': 5000,
     'Emerald Pickaxe': 7500,
@@ -61,16 +61,16 @@ const skillDict = {
 
   },
   "Dirty Icecream": {
-    damage: 500,
+    damage: 5000,
   },
   'Wood Pickaxe': {
-    damage: 15,
+    damage: 50,
   },
   'Iron Pickaxe': {
-    damage: 20,
+    damage: 100,
   },
   'Emerald Pickaxe': {
-    damage: 40,
+    damage: 140,
   },
 
 };

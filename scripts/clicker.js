@@ -153,7 +153,7 @@ let stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi
 
 function openNav() {
   document.getElementById("mySidenav").style.width = "10rem";
-  document.getElementById("main_Page").style.marginLeft = "11.5rem";
+  document.getElementById("main_Page").style.margin-left == "11.5rem";
   document.getElementById("main_Page").style.transition = "0.9s";
 
 }

@@ -6,7 +6,7 @@ let gameframetitan = 0;
 let framexTitan = 0;
 let currentState = 'idle';
 const stateChangeInterval = 300; // Change state every 300 frames
-
+let titanLevel = parseInt(localStorage.getItem('titanLevel')) || 1;
 /////////////////////////////////
 //Player Attributes
 
@@ -212,14 +212,18 @@ function drawEnemyLevel() {
 }
 
 function getValidState() {
-    if (TitanCurrentHP <= (TitanMaxHP * 0.25)) {
+    if (titanLevel == 1) {
+        if (TitanCurrentHP <= (TitanMaxHP * 0.5)) {
+            return 'attack'}
+        else{
+            return 'idle';
+        }
+    } 
+    else if (titanLevel == 2) {
         return 'necromancerAttack';
-    } else if (TitanCurrentHP <= (TitanMaxHP * 0.5)) {
-        return 'attack';
-    } else {
-        return 'idle';
     }
 }
+
 
 
 function animationTitan() {
@@ -241,6 +245,7 @@ function animationTitan() {
 
     Worm_HP_BAR.drawHPBar();
     Worm_HP_BAR.updateBoss();
+    drawBossTimer();
     drawHPText();
 
     gameframetitan++;
@@ -283,7 +288,14 @@ function drawHPParticle() {
 canvasTitan.addEventListener('click', () => {
     TitanCurrentHP -= finalDamage;
     document.getElementById('wormHP').innerHTML = TitanCurrentHP;
-
+    if (TitanCurrentHP <= 0){
+        
+        titanLevel += 1
+        if (titanLevel <= 5){
+            TitanMaxHP = 1 * Math.pow(10,(titanLevel + 3))
+            TitanCurrentHP = TitanMaxHP;
+        }
+    }
 
     const HP_PARTICLE_TEXT = "-" + formatNumber(finalDamage) + " HP";
     hpParticles.push({
@@ -292,10 +304,36 @@ canvasTitan.addEventListener('click', () => {
       duration: HP_PARTICLE_DURATION,
       text: HP_PARTICLE_TEXT, // Add the text property
     })
+    save();
 });
 
 animationTitan();
 
+function save(){
+    localStorage.setItem('TitanMaxHP', TitanMaxHP);
+    localStorage.setItem('TitanCurrentHP', TitanCurrentHP);
+    localStorage.setItem('titanLevel', titanLevel);
+    localStorage.setItem('bossTimer', bossTimer);
+    localStorage.setItem('multipliers', JSON.stringify(multipliers));
+    localStorage.setItem('prestige_multi', multipliers.prestige_multi);
+    localStorage.setItem('boss_attack_multi', multipliers.boss_attack_multi);
+    localStorage.setItem('base_prestige_points', multipliers.base_prestige_points);
+}
+
+function load(){
+    TitanMaxHP = parseInt(localStorage.getItem('TitanMaxHP')) || 1 * Math.pow(10,1);
+    TitanCurrentHP = parseInt(localStorage.getItem('TitanCurrentHP')) || TitanMaxHP;
+    titanLevel = parseInt(localStorage.getItem('titanLevel')) || 1;
+    bossTimer = parseInt(localStorage.getItem('bossTimer')) || 0;
+    multipliers = JSON.parse(localStorage.getItem('multipliers')) || {
+        boss_attack_multi: 1,
+        prestige_multi: 1,
+        base_prestige_points: 10,
+    };
+    multipliers.prestige_multi = parseInt(localStorage.getItem('prestige_multi')) || 1;
+    multipliers.boss_attack_multi = parseInt(localStorage.getItem('boss_attack_multi')) || 1;
+    multipliers.base_prestige_points = parseInt(localStorage.getItem('base_prestige_points')) || 10;
+}
 
 
 
@@ -305,3 +343,8 @@ function reset(){
     localStorage.clear();
     location.reload();
 }
+
+
+window.onload = function() {
+    load();
+};

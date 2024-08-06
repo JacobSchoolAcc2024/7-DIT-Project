@@ -57,20 +57,20 @@ const skillDict = {
     damage: 20,
   },
   "Diamond Sword": {
-    damage : 1000,
+    damage : 1500,
 
   },
   "Dirty Icecream": {
-    damage: 5,
+    damage: 500,
   },
   'Wood Pickaxe': {
-    damage: 50,
+    damage: 15,
   },
   'Iron Pickaxe': {
-    damage: 100,
+    damage: 20,
   },
   'Emerald Pickaxe': {
-    damage: 200,
+    damage: 40,
   },
 
 };
@@ -87,7 +87,17 @@ const sentences = {
   9: "Wahttuup noys.",
   10: "Happiness is a journey.",
   11: "Death is not destination.",
-  12: "I'm J_J"
+  12: "I'm J_J",
+  13:"Put my food on the placemat.",
+  14:"This should help you remember.",
+  15:"I can’t get this lift to work.",
+  16:"This is when it starts getting serious.",
+  17:"Keep your hands to yourself!",
+  18:"Not a big room but beautiful.",
+  19:"Naps are good for you.",
+  20:"This is too hefty to easily carry.",
+  21:"He was married to a friend of mine.",
+  22:"Sit down and cross your legs, please!"
 };
 
 
@@ -106,34 +116,42 @@ function drawAnimation(weaponPic, weaponName) {
     case "Epic Sword":
       ctx2.drawImage(epicSword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Epic Sword"];
+      preview.play();
       break;
     case "Wood Sword":
       ctx2.drawImage(w_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Wood Sword"];
+      preview.play();
       break;
     case "Diamond Sword":
       ctx2.drawImage(d_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Diamond Sword"];
+      preview.play();
       break;
     case "Dirty Icecream":
       ctx2.drawImage(dirtyIceCream, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Dirty Icecream"];
+      preview.play();
       break;
     case 'Wood Pickaxe':
       ctx2.drawImage(w_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Wood Pickaxe'];
+      preview.play();
       break;
     case 'Iron Pickaxe':
       ctx2.drawImage(i_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Iron Pickaxe'];
+      preview.play();
       break;
     case 'Emerald Pickaxe':
-        ctx2.drawImage(e_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-        marketPrice = priceDict['Emerald Pickaxe'];
-        break;
+      ctx2.drawImage(e_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      marketPrice = priceDict['Emerald Pickaxe'];
+      preview.play();
+      break;
     default:
       ctx2.drawImage(weaponPic, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict[weaponName];
+      preview.play();
       break;
   }
 }
@@ -179,6 +197,7 @@ function update_window() {
 const backGroundMusic = document.getElementById('BGM-1');
 const playPause = document.getElementById('play_audio_1');
 const coin_flip = document.getElementById('coin');
+const preview = document.getElementById('preview');
 let isPlaying = false;
 
 function togglePlayPause() {

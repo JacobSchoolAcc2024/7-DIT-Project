@@ -4,6 +4,9 @@
     <audio id="BGM-2" loop>
         <source src="../music/BGM-2.m4a" type="audio/mpeg" >
     </audio>
+    <audio id="default_fx">
+        <source src="../music/normalSound.wav" type="audio/mpeg">
+    </audio>
     
 <head>
     <link rel="stylesheet" href="css/style.css">
@@ -81,7 +84,7 @@
             <button id="button10" class="purchase-button" onclick="purchase_amount(10, 'button10')">10x</button>
             <button id="button100" class="purchase-button" onclick="purchase_amount(100, 'button100')">100x</button>
         </div>
-        <button class ="tooltip" id="clicker_upgrade"onclick="purchase_upgrade('clicker_upgrade')">
+        <button class ="tooltip" id="clicker_upgrade" onclick="purchase_upgrade('clicker_upgrade')">
             Train Fist
             <span class="tooltiptext" id="clicker_upgrade_cost">Increases damage</span>
         </button>

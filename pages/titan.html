@@ -5,8 +5,8 @@
         <source src="../music/BGM-2.m4a" type="audio/mpeg" >
     </audio>
 <head>
-    <link rel="stylesheet" href="/css/titan.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="../css/titan.css">
+    <link rel="stylesheet" href="../css/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -26,12 +26,13 @@
             <div class="bar3"></div>
         </div>
     </div>
+    <H1 id="wormHP">Boss HP: 1</H1>
     <canvas id="titanCanvas"></canvas>
     <a href="../index.html">
         <button>Home</button>
     </a>
-    <H1 id="wormHP">Boss HP: 1</H1>
-    <script src="/scripts/titan.js" type="module"></script>
-    <script src="/scripts/clicker.js" type="module"></script>
+    <button onclick="reset()">Reset</button>
+    <script src="../scripts/clicker.js"></script>
+    <script src="../scripts/titan.js" defer></script>
 </body>
 </html>

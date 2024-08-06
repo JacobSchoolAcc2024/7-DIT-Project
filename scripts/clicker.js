@@ -1,35 +1,10 @@
 
-function openNav() {
-  document.getElementById("mySidenav").style.width = "10rem";
-  document.getElementById("main_Page").style.margin-left == "11.5rem";
-  document.getElementById("main_Page").style.transition = "0.9s";
-
-}
-
-const clickerTest = () => {
-  console.log("Successfully called func from clicker.js");
-}
-
-function closeNav() {
-  document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("main_Page").style.margin-left == "1.5rem";
-}
-
-
-function openSkills() {
-  document.getElementById("skill_p_menu").style.height = "calc(100% - 4rem)";
-}
-
-function closeSkills() {
-  document.getElementById("skill_p_menu").style.height = "0";
-  
-}
-
-let playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
-var gold = parseInt(localStorage.getItem('gold')) || 0;
+var playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
+let gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
 let enemy_level_increase = parseInt(localStorage.getItem('enemy_level_increase')) || 1;
+let enemy_name = localStorage.getItem('enemy_name') || 'Demon Fly: ';
 let islock_stage = parseInt(localStorage.getItem('islock_stage')) || 2;
 let click_delay  = parseInt(localStorage.getItem('click_delay')) || 100;
 
@@ -50,22 +25,15 @@ let regen_multiplier = parseInt(localStorage.getItem('regen_multiplier')) || 1;
 let buy_upgrade = parseInt(localStorage.getItem('buy_upgrade')) || 1;
 let clickedButton = parseInt(localStorage.getItem('clickedButton')) || 0;
 
-/// Stat Variables
-let strength_stat_multi = parseInt(localStorage.getItem('strength_stat_multi')) || 1;
-let strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_multi_added')) || 0;
-let stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
-let stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
-
 
 
 ///Game Var////
 /////////////////////////////////////////////////////////////////////////////////////
 const canvas = document.getElementById('canvas1');
 if (canvas) {
-    const ctx = canvas.getContext('2d');
-    
-const CANVAS_WIDTH = canvas1.width = 600;
-const CANVAS_HEIGHT = canvas1.height = 650;
+const ctx = canvas.getContext('2d');
+const CANVAS_WIDTH = canvas.width = 600;
+const CANVAS_HEIGHT = canvas.height = 650;
 const player_width = 79;
 const player_height = 70;
 const deadPlayerWidth = 92; // 553 / 6 = 92.16666... (rounded down)
@@ -142,10 +110,6 @@ const PLAYER_ENERGY_BAR_Y = CANVAS_HEIGHT - 100;
 const PLAYER_ENERGY_TEXT_X = PLAYER_XP_BAR_X + 5;
 const PLAYER_ENERGY_TEXT_Y = PLAYER_XP_BAR_Y + 15;
 
-
-
-
-
 // HP particle variables
 const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
 const HP_PARTICLE_SIZE = 20;
@@ -174,15 +138,41 @@ const TIMER_DECREASE_RATE = 1 / 60; // Decrease 1 second per frame (assuming 60 
 let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 15;
 let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
 
+//sound effect variables
 
 
+/// Stat Variables
+var strength_stat_multi = parseInt(localStorage.getItem('strength_stat_multi')) || 1;
+let strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_multi_added')) || 0;
+let stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
+let stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
 
-//Animation var//
-///////////////////////////////////////////////////////////////////////////////////////////
-let enemy_name = localStorage.getItem('enemy_name') || 'Demon Fly: ';
 
 ///Animation Functions//
 /////////////////////////////////////////////////////////////////////////////////////////
+
+function openNav() {
+  document.getElementById("mySidenav").style.width = "10rem";
+  document.getElementById("main_Page").style.margin-left == "11.5rem";
+  document.getElementById("main_Page").style.transition = "0.9s";
+
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main_Page").style.marginLeft = "1.5rem";
+}
+
+
+function openSkills() {
+  document.getElementById("skill_p_menu").style.height = "calc(100% - 4rem)";
+}
+
+function closeSkills() {
+  document.getElementById("skill_p_menu").style.height = "0";
+  
+}
+
 
 class Layer {
   constructor(image, speedModifier) {
@@ -226,7 +216,6 @@ class bar {
     this.bar_current = current;
     this.bar_color = color;
     this.bar_color_2 = color2
-    // this.bar_symbol = symbol;
   }
 
   updateBoss(){
@@ -1246,17 +1235,12 @@ function highlightSelectedButton() {
   }
 }
 
-
 function default_purchased(){
   if (clickedButton === 0){
     document.getElementById('button1').style.backgroundColor = 'darkgrey';
     document.getElementById('button1').style.color = 'white';
   }
 }
-
-
-
-
 
 ////music playing
 const backGroundMusicTwo = document.getElementById('BGM-2');
@@ -1274,19 +1258,11 @@ function togglePlayPauseTwo() {
   isPlayingTwo = !isPlayingTwo;
 }
 
-function spawn_boss(boss_name){
-  if (boss_name === 'Amotheus'){
-    alert('Amotheus Duke of Hell has appeared!')
-
-  
-  }
-}
 
 
-
-
-// Rest of your canvas-related code
 } else {
-    console.log('Canvas not found on this page');
+    console.log('Canvas1 not found on this page');
 }
+
+
 

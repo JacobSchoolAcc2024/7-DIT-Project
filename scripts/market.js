@@ -40,13 +40,13 @@ function formatNumber(num) {
 }
 
 const priceDict = {
-    "Epic Sword": 1500,
-    "Wood Sword": 200,
-    "Diamond Sword": 5000,
+    "Epic Sword": 10000,
+    "Wood Sword": 500,
+    "Diamond Sword": 50000,
     "Dirty Icecream": 5,
-    'Wood Pickaxe': 300,
-    'Iron Pickaxe': 550,
-    'Emerald Pickaxe': 800,
+    'Wood Pickaxe': 1000,
+    'Iron Pickaxe': 5000,
+    'Emerald Pickaxe': 7500,
   };
 
 const skillDict = {

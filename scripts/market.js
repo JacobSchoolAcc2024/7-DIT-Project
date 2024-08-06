@@ -211,6 +211,17 @@ function togglePlayPause() {
   isPlaying = !isPlaying;
 }
 
+function openNav() {
+  document.getElementById("mySidenav").style.width = "10rem";
+  document.getElementById("main_Page").style.margin-left == "11.5rem";
+  document.getElementById("main_Page").style.transition = "0.9s";
+
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main_Page").style.marginLeft = "1.5rem";
+}
 
 setInterval(update_window, 100);
 setInterval(randomSentenceGenearte,5000);

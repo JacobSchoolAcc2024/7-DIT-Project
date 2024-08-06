@@ -22,6 +22,7 @@
     margin: 0;
     padding: 0;
     --paper: #f7da88;
+    user-select: none;
     
 }
 
@@ -109,6 +110,8 @@ body {
     margin-top: 1.5rem;
     margin-left: 1.2rem;
     justify-content: end;
+    padding: 0 0.5rem 1.3rem 0.5rem;
+    
   }
 
   .bar1, .bar2, .bar3 {
@@ -373,6 +376,7 @@ body {
 
 p {
   font-family: "Lugrasimo", cursive;
+  user-select: none;
 }
 
 
@@ -559,6 +563,11 @@ width: 20rem;
 overflow-x: hidden;
 justify-content: center;
 text-align: center;
+background-image: url(../images/quest-paper.jpg);
+background-repeat: no-repeat;
+background-size: cover;
+background-position: center;
+background-attachment: fixed;
 }
 
 .market_item {
@@ -592,7 +601,11 @@ text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
 .market_icons {
     display: inline-block;
     height: 3rem;
-  
+    user-select: none;
+}
+
+span {
+  user-select: none;
 }
 
 #purchaseItem {
@@ -609,3 +622,4 @@ text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
 #play_audio_1 {
   width: 5rem;
 }
+

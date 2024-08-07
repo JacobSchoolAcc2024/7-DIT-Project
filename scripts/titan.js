@@ -171,6 +171,17 @@ const necromancerAttackAnimation = new AnimateTitan(necromancerAttackHeight,necr
 const Worm_HP_BAR = new bar(HP_BAR_HEIGHT, HP_BAR_WIDTH, HP_BAR_X, 
 HP_BAR_Y, HP_TEXT_Y, HP_TEXT_X,TitanMaxHP, TitanCurrentHP, 'black', 'white');
 
+function openNav() {
+  document.getElementById("mySidenav").style.width = "10rem";
+  document.getElementById("main_Page").style.marginleft == "11.5rem";
+  document.getElementById("main_Page").style.transition = "0.9s";
+
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main_Page").style.margin-left == "1.5rem";
+}
 
 function drawHPText() {
     ctxTitan.font = '1rem Arial';

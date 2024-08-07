@@ -2,7 +2,7 @@
 var playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
 let gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
-let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
+let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 100;
 let enemy_level_increase = parseInt(localStorage.getItem('enemy_level_increase')) || 1;
 let enemy_name = localStorage.getItem('enemy_name') || 'Demon Fly: ';
 let islock_stage = parseInt(localStorage.getItem('islock_stage')) || 2;
@@ -153,7 +153,7 @@ let stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi
 
 function openNav() {
   document.getElementById("mySidenav").style.width = "10rem";
-  document.getElementById("main_Page").style.margin-left == "11.5rem";
+  document.getElementById("main_Page").style.marginLeft == "11.5rem";
   document.getElementById("main_Page").style.transition = "0.9s";
 
 }
@@ -754,6 +754,15 @@ function update_inventory() {
     lock_button.style.color = "white";
     lock_button.innerHTML = "Lock Stage";
   }
+
+  if (max_enemy_level < 100){
+    document.getElementById('glory').style.display = "none";
+  }
+
+  else{
+    document.getElementById('glory').style.display = "inline"
+  }
+
 
   
 }

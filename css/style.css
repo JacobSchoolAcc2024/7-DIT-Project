@@ -43,7 +43,7 @@
     left: 0;
     border-right: 0.1px solid black;
     text-align: center;
-    z-index: 6;
+    z-index: 1000;
 }
 
 body {
@@ -285,15 +285,6 @@ body {
   height: 75%;
 }
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 15rem;
-  background-image: url(../images/vintage-paper.avif);
-
-}
 
 .upgrades_div {
   z-index: 0;

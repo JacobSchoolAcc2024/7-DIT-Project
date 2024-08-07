@@ -82,14 +82,18 @@ body::after {
 
 button {
     position: relative;
-    z-index: 1000;
+    z-index: 900;
     cursor: pointer;
 }
 
 h1 {
     position: relative;
-    z-index: 1000;
+    z-index: 900;
     cursor: pointer;
     color: white;
 
+}
+
+.menu_container {
+    z-index: 999;
 }

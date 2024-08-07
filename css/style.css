@@ -397,7 +397,7 @@ p {
  
 .strength_add{
   display: flex;
-  width: 40%;
+  width: 20%;
   padding: 0;
   height: 5%;
 }
@@ -411,9 +411,9 @@ p {
 
 .stamina_add{
   display: flex;
-  width: 40%;
+  width: 20%;
   padding: 0;
-  height: 5%;
+  height: 0%;
 }
 
 .stats_add{

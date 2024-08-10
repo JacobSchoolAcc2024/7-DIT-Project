@@ -18,6 +18,8 @@ const i_pickaxe = new Image();
 i_pickaxe.src = '../images/i_pickaxe.png';
 const w_pickaxe = new Image();
 w_pickaxe.src = '../images/w_pickaxe.png';
+const genkidama = new Image();
+genkidama.src = '../images/genki_dama.gif';
 
 const spriteWidth = 256;
 const spriteHeight = 256;
@@ -47,6 +49,7 @@ const priceDict = {
     'Wood Pickaxe': 300,
     'Iron Pickaxe': 550,
     'Emerald Pickaxe': 800,
+    'Genki Dama': 9000,
   };
 
 const skillDict = {
@@ -72,6 +75,9 @@ const skillDict = {
   'Emerald Pickaxe': {
     damage: 40,
   },
+  'Genki Dama':{
+    damage:99999,
+  }
 
 };
 
@@ -116,42 +122,65 @@ function drawAnimation(weaponPic, weaponName) {
     case "Epic Sword":
       ctx2.drawImage(epicSword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Epic Sword"];
-      preview.play();
+      if(fx_play_market){
+        preview.play();
+      }
       break;
     case "Wood Sword":
       ctx2.drawImage(w_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Wood Sword"];
-      preview.play();
+      if(fx_play_market){
+        preview.play();
+      }
       break;
     case "Diamond Sword":
       ctx2.drawImage(d_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Diamond Sword"];
-      preview.play();
+      if(fx_play_market){
+        preview.play();
+      }
       break;
     case "Dirty Icecream":
       ctx2.drawImage(dirtyIceCream, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Dirty Icecream"];
-      preview.play();
+      if(fx_play_market){
+        preview.play();
+      }
       break;
     case 'Wood Pickaxe':
       ctx2.drawImage(w_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Wood Pickaxe'];
-      preview.play();
+      if(fx_play_market){
+        preview.play();
+      }
       break;
     case 'Iron Pickaxe':
       ctx2.drawImage(i_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Iron Pickaxe'];
-      preview.play();
+      if(fx_play_market){
+        preview.play();
+      }
       break;
     case 'Emerald Pickaxe':
       ctx2.drawImage(e_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Emerald Pickaxe'];
-      preview.play();
+      if(fx_play_market){
+        preview.play();
+      }
       break;
+      case 'Genki Dama':
+        ctx2.drawImage(genkidama, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+        marketPrice = priceDict['Genki Dama'];
+        if(fx_play_market){
+          preview.play();
+        }
+        break;
     default:
       ctx2.drawImage(weaponPic, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict[weaponName];
-      preview.play();
+      if(fx_play_market){
+        preview.play();
+      }
       break;
   }
 }
@@ -178,7 +207,9 @@ function purchaseItem() {
         localStorage.setItem('playerDmg', playerDmg);
         localStorage.setItem("gold", gold);
         localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
-        coin_flip.play();
+        if(fx_play_market){
+          coin_flip.play();
+        }
     }
   }
 
@@ -199,6 +230,8 @@ const playPause = document.getElementById('play_audio_1');
 const coin_flip = document.getElementById('coin');
 const preview = document.getElementById('preview');
 let isPlaying = false;
+let playPauseFxMarket = document.getElementById('play_fx_market');
+let fx_play_market = false;
 
 function togglePlayPause() {
   if (isPlaying) {
@@ -209,6 +242,15 @@ function togglePlayPause() {
     playPause.textContent = 'Pause';
   }
   isPlaying = !isPlaying;
+}
+
+function PlayFxMarket(){
+  if (fx_play_market) {
+    playPauseFxMarket.textContent = 'Play Sound';
+  } else {
+    playPauseFxMarket.textContent = 'Pause Sound';
+  }
+  fx_play_market = !fx_play_market;
 }
 
 

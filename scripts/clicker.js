@@ -175,8 +175,10 @@ let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 15;
 let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
 
 //sound effect variables
-
-
+const default_fx = document.getElementById("default_fx");
+const slash_fx = document.getElementById("dagger_slash");
+const skill_point_fx =document.getElementById("skill_point");
+let fx_play = false;
 
 
 //Animation var//
@@ -554,6 +556,9 @@ function handle_click() {
       update_enemy();
       update_inventory();
     }
+    if (fx_play){
+      slash_fx.play();
+    }
   }
         
       // Create a new HP particle with updated text
@@ -818,7 +823,9 @@ function purchase_upgrade(id) {
     const new_requiredCost = check_cost(requiredCost, upgrade.hp_upgrade_purchased, upgrade.cost, 1.5);
     buy_hp_upgrade(new_requiredCost, 'hp_upgrade');
   }
-
+  if (fx_play){
+    default_fx.play();
+  }
   localStorage.setItem('gold', gold);
   localStorage.setItem('playerDmg', playerDmg);
   localStorage.setItem('player_MAX_HP', player_MAX_HP);
@@ -977,6 +984,9 @@ function previous_level() {
     currentHP = MAX_HP;
     localStorage.setItem('currentHP', currentHP);
   }
+  if (fx_play){
+    default_fx.play();
+  }
 }
 
 function next_level() {
@@ -1011,6 +1021,9 @@ function next_level() {
       currentHP = MAX_HP;
       localStorage.setItem('currentHP', currentHP);
     }
+  }
+  if (fx_play){
+    default_fx.play();
   }
 }
 
@@ -1125,6 +1138,9 @@ function purchase_amount(number, id){
 
   clickedButton += 1;
   localStorage.setItem('clickedButton', clickedButton);
+  if (fx_play){
+    default_fx.play();
+  }
   check_purchase(id)
 
 } 
@@ -1235,6 +1251,9 @@ function add_stat(stat){
       localStorage.setItem('skill_points', skill_points);
     }
   }
+  if (fx_play){
+    skill_point_fx.play();
+  }
 }
 
 function highlightSelectedButton() {
@@ -1263,6 +1282,7 @@ function default_purchased(){
 ////music playing
 const backGroundMusicTwo = document.getElementById('BGM-2');
 const playPauseTwo = document.getElementById('play_audio_2');
+const playPauseFx = document.getElementById('play_fx');
 let isPlayingTwo = false;
 
 function togglePlayPauseTwo() {
@@ -1274,6 +1294,15 @@ function togglePlayPauseTwo() {
     playPauseTwo.textContent = 'Pause';
   }
   isPlayingTwo = !isPlayingTwo;
+}
+
+function PlayFx(){
+  if (fx_play) {
+    playPauseFx.textContent = 'Play Sound';
+  } else {
+    playPauseFx.textContent = 'Pause Sound';
+  }
+  fx_play = !fx_play;
 }
 
 function spawn_boss(boss_name){

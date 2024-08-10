@@ -5,8 +5,8 @@
         <source src="../music/BGM-2.m4a" type="audio/mpeg" >
     </audio>
 <head>
-    <link rel="stylesheet" href="/css/titan.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="../css/titan.css">
+    <link rel="stylesheet" href="../css/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -14,7 +14,7 @@
 <body class="main_Page">
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="index.html" class="menu_Item">HOME</a>
+        <a href="../index.html" class="menu_Item">HOME</a>
         <a href="pages/market.html" class="menu_Item">MARKET</a>
         <a href="pages/contact.html" class="menu_Item">CONTACT</a>
         <a href="pages/about.html" class="menu_Item">ABOUT</a>
@@ -26,12 +26,10 @@
             <div class="bar3"></div>
         </div>
     </div>
-    <canvas id="titanCanvas"></canvas>
-    <a href="../index.html">
-        <button>Home</button>
-    </a>
     <H1 id="wormHP">Boss HP: 1</H1>
-    <script src="/scripts/titan.js" type="module"></script>
-    <script src="/scripts/clicker.js" type="module"></script>
+    <canvas id="titanCanvas"></canvas>
+    <button onclick="reset()">Reset</button>
+    <script src="../scripts/clicker.js"></script>
+    <script src="../scripts/titan.js" defer></script>
 </body>
 </html>

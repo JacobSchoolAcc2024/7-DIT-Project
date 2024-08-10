@@ -42,6 +42,7 @@ function formatNumber(num) {
 }
 
 const priceDict = {
+<<<<<<< HEAD
     "Epic Sword": 1500,
     "Wood Sword": 200,
     "Diamond Sword": 5000,
@@ -50,6 +51,15 @@ const priceDict = {
     'Iron Pickaxe': 550,
     'Emerald Pickaxe': 800,
     'Genki Dama': 9000,
+=======
+    "Epic Sword": 10000,
+    "Wood Sword": 500,
+    "Diamond Sword": 50000,
+    "Dirty Icecream": 100000,
+    'Wood Pickaxe': 1000,
+    'Iron Pickaxe': 5000,
+    'Emerald Pickaxe': 7500,
+>>>>>>> e123ffabb06d8bb69087b467364d1354c7bf0691
   };
 
 const skillDict = {
@@ -64,16 +74,16 @@ const skillDict = {
 
   },
   "Dirty Icecream": {
-    damage: 500,
+    damage: 5000,
   },
   'Wood Pickaxe': {
-    damage: 15,
+    damage: 50,
   },
   'Iron Pickaxe': {
-    damage: 20,
+    damage: 100,
   },
   'Emerald Pickaxe': {
-    damage: 40,
+    damage: 140,
   },
   'Genki Dama':{
     damage:99999,
@@ -244,6 +254,7 @@ function togglePlayPause() {
   isPlaying = !isPlaying;
 }
 
+<<<<<<< HEAD
 function PlayFxMarket(){
   if (fx_play_market) {
     playPauseFxMarket.textContent = 'Play Sound';
@@ -253,6 +264,19 @@ function PlayFxMarket(){
   fx_play_market = !fx_play_market;
 }
 
+=======
+function openNav() {
+  document.getElementById("mySidenav").style.width = "10rem";
+  document.getElementById("main_Page").style.margin-left == "11.5rem";
+  document.getElementById("main_Page").style.transition = "0.9s";
+
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main_Page").style.marginLeft = "1.5rem";
+}
+>>>>>>> e123ffabb06d8bb69087b467364d1354c7bf0691
 
 setInterval(update_window, 100);
 setInterval(randomSentenceGenearte,5000);

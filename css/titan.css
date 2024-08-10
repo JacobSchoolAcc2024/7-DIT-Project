@@ -67,18 +67,33 @@ body::after {
 }
 
 
+.fire {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: white;
+    animation: fire 2s ease-in-out infinite;
+}
 
 
 button {
     position: relative;
-    z-index: 1000;
+    z-index: 900;
     cursor: pointer;
 }
 
 h1 {
     position: relative;
-    z-index: 1000;
+    z-index: 900;
     cursor: pointer;
     color: white;
 
+}
+
+.menu_container {
+    z-index: 999;
 }

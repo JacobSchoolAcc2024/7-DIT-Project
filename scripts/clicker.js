@@ -1,5 +1,6 @@
 
 var playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
+var skill_points = parseInt(localStorage.getItem('skill_points')) || 0;
 let gold = parseInt(localStorage.getItem('gold')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
 let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 100;
@@ -89,7 +90,6 @@ let player_MAX_XP = parseInt(localStorage.getItem('player_MAX_XP')) || 1000;
 let current_xp = parseInt(localStorage.getItem('current_xp')) || 0;
 let player_level = parseInt(localStorage.getItem('player_level')) || 1;
 let xp_multiply = parseInt(localStorage.getItem('xp_multiply')) || 0;
-var skill_points = parseInt(localStorage.getItem('skill_points')) || 0;
 const PLAYER_XP_BAR_HEIGHT = 20;
 const PLAYER_XP_BAR_X = 10;
 const PLAYER_XP_BAR_Y = CANVAS_HEIGHT - 60;

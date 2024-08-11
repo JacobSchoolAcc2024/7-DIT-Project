@@ -589,6 +589,14 @@ text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
   1px 1px 0 black;
 }
 
+#hp_display{
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2rem;
+  color: rgb(201, 0, 0);
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
+  1px 1px 0 black;
+}
+
 .market_icons {
     display: inline-block;
     height: 3rem;

@@ -1,9 +1,10 @@
-
+//variables for canvas size
 const market_canva = document.getElementById("market_canvas");
 const ctx2 = market_canva.getContext('2d');
 const CANVASHEIGHT = market_canva.height = 300;
 const CANVASWIDTH = market_canva.width = 300;
 
+//variables of images of weapons
 const epicSword = new Image();
 epicSword.src = '../images/epic_Sword.png';
 const dirtyIceCream = new Image();
@@ -19,19 +20,39 @@ i_pickaxe.src = '../images/i_pickaxe.png';
 const w_pickaxe = new Image();
 w_pickaxe.src = '../images/w_pickaxe.png';
 const genkidama = new Image();
-genkidama.src = '../images/genki_dama.gif';
+genkidama.src = '../images/genki_dama.png';
+const helmet = new Image();
+helmet.src='../images/helmet.png';
+const e_armer = new Image();
+e_armer.src= '../images/epic_armer.png';
+const n_armer = new Image();
+n_armer.src= '../images/normal_armer.png';
 
+// variables for weapons on the canvas
 const spriteWidth = 256;
 const spriteHeight = 256;
-const frameX=0;
-const frameY=0;
+
+//variables for price and purchased Items
 let marketPrice = 0;
 let purchasedItems = JSON.parse(localStorage.getItem("purchasedItems")) || [];
+
+//variables for music and sound effects
+const backGroundMusic = document.getElementById('BGM-1');
+const playPause = document.getElementById('play_audio_1');
+const coin_flip = document.getElementById('coin');
+const preview = document.getElementById('preview');
+let isPlaying = false;
+let playPauseFxMarket = document.getElementById('play_fx_market');
+let fx_play_market = false;
+
+//function for opening the navigate page
+function openNav() {
+  document.getElementById("mySidenav").style.width = "10rem";
+  document.getElementById("main_Page").style.marginLeft == "11.5rem";
+  document.getElementById("main_Page").style.transition = "0.9s";
+}
  
-// clicker.clickerTest();
-// console.log(clicker);
-
-
+//function for display number in format
 function formatNumber(num) {
     const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion"
         , " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
@@ -41,8 +62,8 @@ function formatNumber(num) {
     return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");
 }
 
+// dictionary of the weapon price
 const priceDict = {
-<<<<<<< HEAD
     "Epic Sword": 1500,
     "Wood Sword": 200,
     "Diamond Sword": 5000,
@@ -50,47 +71,63 @@ const priceDict = {
     'Wood Pickaxe': 300,
     'Iron Pickaxe': 550,
     'Emerald Pickaxe': 800,
-    'Genki Dama': 9000,
-=======
-    "Epic Sword": 10000,
-    "Wood Sword": 500,
-    "Diamond Sword": 50000,
-    "Dirty Icecream": 100000,
-    'Wood Pickaxe': 1000,
-    'Iron Pickaxe': 5000,
-    'Emerald Pickaxe': 7500,
->>>>>>> e123ffabb06d8bb69087b467364d1354c7bf0691
+    'Genki Dama':9999,
+    'Helmet':999,
+    'Epic Armer':19999,
+    'Normal Armer':2999,
+
   };
 
+// dictionary of the skill points and damage of the weapon
 const skillDict = {
   "Epic Sword": {
     damage: 400,
+    point:0,
   },
   "Wood Sword": {
     damage: 20,
+    point:0,
   },
   "Diamond Sword": {
     damage : 1500,
-
+    point:0,
   },
   "Dirty Icecream": {
     damage: 5000,
+    point:0,
   },
   'Wood Pickaxe': {
     damage: 50,
+    point:2,
   },
   'Iron Pickaxe': {
     damage: 100,
+    point:8,
   },
   'Emerald Pickaxe': {
     damage: 140,
+    point:10,
   },
   'Genki Dama':{
     damage:99999,
-  }
+    point:99,
+  },
+  'Helmet':{
+    damage:50,
+    point:20,
+  },
+  'Epic Armer':{
+    damage:400,
+    point:29,
+  },
+  'Normal Armer':{
+    damage:300,
+    point:20,
+  },
 
 };
 
+// dictionary of the npc's random sentences
 const sentences = {
   1: "Yeah babe",
   2: "Buy some.",
@@ -118,86 +155,79 @@ const sentences = {
 
 
 
-
+// generate the random sentence of npc on the market page
 function randomSentenceGenearte(){
-  let randomKey = Math.floor(Math.random() * Object.keys(sentences).length) + 1;
-  let randomSentence = sentences[randomKey];
+  let randomKey = Math.floor(Math.random() * Object.keys(sentences).length) + 1;//generate random number of the senence key
+  let randomSentence = sentences[randomKey];//get the random key 
   let conversation = document.getElementById('random_text');
-  conversation.textContent = randomSentence;
+  conversation.textContent = randomSentence;// display random sentence
 }
 
+//draw the images of weapon on the canvas by clicking the button
 function drawAnimation(weaponPic, weaponName) {
-  ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
+  ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);//clean the canavs
   switch (weaponName) {
     case "Epic Sword":
-      ctx2.drawImage(epicSword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-      marketPrice = priceDict["Epic Sword"];
-      if(fx_play_market){
-        preview.play();
-      }
+      ctx2.drawImage(epicSword, - 30, - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);//draw the image
+      marketPrice = priceDict["Epic Sword"];//get the price 
+      play_sound_fx(preview);
       break;
     case "Wood Sword":
-      ctx2.drawImage(w_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      ctx2.drawImage(w_Sword,  - 30,  - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Wood Sword"];
-      if(fx_play_market){
-        preview.play();
-      }
+      play_sound_fx(preview);
       break;
     case "Diamond Sword":
-      ctx2.drawImage(d_Sword, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      ctx2.drawImage(d_Sword,  - 30,  - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Diamond Sword"];
-      if(fx_play_market){
-        preview.play();
-      }
+      play_sound_fx(preview);
       break;
     case "Dirty Icecream":
-      ctx2.drawImage(dirtyIceCream, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      ctx2.drawImage(dirtyIceCream, - 15,  - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Dirty Icecream"];
-      if(fx_play_market){
-        preview.play();
-      }
+      play_sound_fx(preview);
       break;
     case 'Wood Pickaxe':
-      ctx2.drawImage(w_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      ctx2.drawImage(w_pickaxe,  - 15, - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Wood Pickaxe'];
-      if(fx_play_market){
-        preview.play();
-      }
+      play_sound_fx(preview);
       break;
     case 'Iron Pickaxe':
-      ctx2.drawImage(i_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      ctx2.drawImage(i_pickaxe, - 15,  - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Iron Pickaxe'];
-      if(fx_play_market){
-        preview.play();
-      }
+      play_sound_fx(preview);
       break;
     case 'Emerald Pickaxe':
-      ctx2.drawImage(e_pickaxe, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      ctx2.drawImage(e_pickaxe,  - 15, - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Emerald Pickaxe'];
-      if(fx_play_market){
-        preview.play();
-      }
+      play_sound_fx(preview);
       break;
-      case 'Genki Dama':
-        ctx2.drawImage(genkidama, frameX * spriteWidth - 15, frameY * spriteHeight - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-        marketPrice = priceDict['Genki Dama'];
-        if(fx_play_market){
-          preview.play();
-        }
-        break;
+    case 'Genki Dama':
+      ctx2.drawImage(genkidama,  - 15, - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      marketPrice = priceDict['Genki Dama'];
+      requestAnimationFrame(updateSpriteFrame); 
+      updateSpriteFrame();
+      play_sound_fx(preview);
+      break;
     default:
-      ctx2.drawImage(weaponPic, frameX * spriteWidth - 30, frameY * spriteHeight - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      ctx2.drawImage(weaponPic, - 30,  - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict[weaponName];
-      if(fx_play_market){
-        preview.play();
-      }
+      play_sound_fx(preview);
       break;
   }
 }
 
-// console.log("Loaded past drawAnimation")
-// console.log(drawAnimation.toString())
+function updateSpriteFrame() {
+  // Update the frameX and frameY values
+  frameX++;
+  if (frameX >= 24) { // Assuming the sprite sheet has 4 frames horizontally
+    frameX = 0;
+  }
+}
 
+
+
+//get weapon name by its price
 function getWeaponNameByPrice(price) {
     for (const [weaponName, weaponPrice] of Object.entries(priceDict)) {
       if (weaponPrice === price) {
@@ -207,42 +237,44 @@ function getWeaponNameByPrice(price) {
     return null; 
   }
 
-
-function purchaseItem() {
-    let NameOfWeapon = getWeaponNameByPrice(marketPrice);
-    if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
-        gold -= marketPrice;
-        purchasedItems.push(NameOfWeapon);
-        playerDmg+=skillDict[NameOfWeapon].damage/2;
-        localStorage.setItem('playerDmg', playerDmg);
-        localStorage.setItem("gold", gold);
-        localStorage.setItem("purchasedItems", JSON.stringify(purchasedItems));
-        if(fx_play_market){
-          coin_flip.play();
-        }
-    }
-  }
-
+//get the weapon damage from its price
 function getWeaponDamageByPrice(price) {
   let NameOfWeapon = getWeaponNameByPrice(price);
   return skillDict[NameOfWeapon].damage;
 }
 
+//get the skill point from its price
+function getWeaponPointByPrice(price) {
+  let NameOfWeapon = getWeaponNameByPrice(price);
+  return skillDict[NameOfWeapon].point;
+}
+
+//function of purchasing items
+function purchaseItem() {
+  let NameOfWeapon = getWeaponNameByPrice(marketPrice);
+  // to check it the weapon has been purchased and owns enough money
+  if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
+      gold -= marketPrice;
+      purchasedItems.push(NameOfWeapon);
+      playerDmg+=skillDict[NameOfWeapon].damage/2;
+      skill_points+=skillDict[NameOfWeapon].point/2;
+      localStorage.setItem('skill_points', skill_points);
+      localStorage.setItem('playerDmg', playerDmg);
+      localStorage.setItem("gold", gold);
+      play_sound_fx(coin_flip);
+  }
+}
+
+//update the display on the page
 function update_window() {
     document.getElementById('market_price').innerHTML = "Price: " + formatNumber(marketPrice);
     document.getElementById('market_gold').innerHTML = "Gold: " + formatNumber(gold);
     document.getElementById('dmg_display').innerHTML = "Damage: "+ getWeaponDamageByPrice(marketPrice);
+    document.getElementById('hp_display').innerHTML = "Skill Point:" + getWeaponPointByPrice(marketPrice);
+
 }
 
-
-const backGroundMusic = document.getElementById('BGM-1');
-const playPause = document.getElementById('play_audio_1');
-const coin_flip = document.getElementById('coin');
-const preview = document.getElementById('preview');
-let isPlaying = false;
-let playPauseFxMarket = document.getElementById('play_fx_market');
-let fx_play_market = false;
-
+//control of background music playing
 function togglePlayPause() {
   if (isPlaying) {
     backGroundMusic.pause();
@@ -254,7 +286,7 @@ function togglePlayPause() {
   isPlaying = !isPlaying;
 }
 
-<<<<<<< HEAD
+//control of sound effect playing
 function PlayFxMarket(){
   if (fx_play_market) {
     playPauseFxMarket.textContent = 'Play Sound';
@@ -264,19 +296,12 @@ function PlayFxMarket(){
   fx_play_market = !fx_play_market;
 }
 
-=======
-function openNav() {
-  document.getElementById("mySidenav").style.width = "10rem";
-  document.getElementById("main_Page").style.margin-left == "11.5rem";
-  document.getElementById("main_Page").style.transition = "0.9s";
-
+//control which sound to play
+function play_sound_fx(sound){
+  if(fx_play_market){
+    sound.play();
+  }
 }
-
-function closeNav() {
-  document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("main_Page").style.marginLeft = "1.5rem";
-}
->>>>>>> e123ffabb06d8bb69087b467364d1354c7bf0691
 
 setInterval(update_window, 100);
 setInterval(randomSentenceGenearte,5000);

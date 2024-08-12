@@ -7,6 +7,7 @@ let framexTitan = 0;
 let currentState = 'idle';
 const stateChangeInterval = 300; // Change state every 300 frames
 let titanLevel = parseInt(localStorage.getItem('titanLevel')) || 1;
+let titanStart = parseInt(localStorage.getItem('titanStart')) || 5;
 /////////////////////////////////
 //Player Attributes
 
@@ -23,15 +24,26 @@ const finalDamage = playerDmg * multipliers.boss_attack_multi;
 // StatusBar Var ////////////////////
 
 // Player Hp Animation Bar //
+const PLAYER_HP_BAR_HEIGHT = 20;
+const PLAYER_HP_BAR_X = 10;
+const PLAYER_HP_BAR_Y = 10;
+const PLAYER_HP_BAR_WIDTH = CANVAS_WIDTH_TITAN - 20;
+const PLAYER_HP_TEXT_X = PLAYER_HP_BAR_X + 5;
+const PLAYER_HP_TEXT_Y = PLAYER_HP_BAR_Y + 20;
+let playerMaxHP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
+let playerHP = parseInt(localStorage.getItem('player_currentHP')) || playerMaxHP;
+
+// Titan Hp Animation Bar //
 
 const HP_BAR_HEIGHT = 30;
 const HP_BAR_X = 15;
 const HP_BAR_Y = 50;
 const HP_BAR_WIDTH = CANVAS_WIDTH_TITAN - 30;
 const HP_TEXT_X = HP_BAR_X + 5;
-const HP_TEXT_Y = HP_BAR_Y + 20;
-let TitanMaxHP = parseInt(localStorage.getItem('TitanMaxHP')) || 1 * Math.pow(10,1);
+const HP_TEXT_Y = HP_BAR_Y + 25;
+let TitanMaxHP = parseInt(localStorage.getItem('TitanMaxHP')) || 1 * Math.pow(10, (titanLevel + 5) * titanLevel - 1);
 let TitanCurrentHP = parseInt(localStorage.getItem('TitanCurrentHP')) || TitanMaxHP;
+let titanAttack = parseInt(localStorage.getItem('titanAttack')) || 10000 * titanLevel * titanLevel;
 
 // HP particle variables
 const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
@@ -86,13 +98,14 @@ const necromancerAttackWidth = 160;
 ///////////////////////////////////////
 
 // Boss timer variables
-const BOSS_TIMER_X = 15;
+let BOSS_TIMER_X = 15;
 const BOSS_TIMER_Y = 100;
 const BOSS_TIMER_WIDTH = CANVAS_WIDTH_TITAN - 30;
 const BOSS_TIMER_HEIGHT = 5
-const TIMER_DECREASE_RATE = 1 / 60; // Decrease 1 second per frame (assuming 60 FPS)
-let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 15;
+let TIMER_DECREASE_RATE = 3 / 60; // Decrease 1 second per frame (assuming 60 FPS)
+let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 5;
 let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
+let bossAttackBegin = false;
 let titanName = localStorage.getItem('titanName') || 'Hell Worm';
 
 
@@ -149,6 +162,12 @@ class bar {
       this.bar_current = TitanCurrentHP;
       this.bar_max = TitanMaxHP;
     }
+
+    updatePlayer(){
+      this.bar_current = playerHP;
+      this.bar_max = playerMaxHP;
+    }
+
     drawHPBar(){
       ctxTitan.fillStyle = this.bar_color;
       ctxTitan.fillRect(this.bar_x, this.bar_y, this.bar_width, this.bar_height);
@@ -170,6 +189,7 @@ const necromancerAttackAnimation = new AnimateTitan(necromancerAttackHeight,necr
 
 const Worm_HP_BAR = new bar(HP_BAR_HEIGHT, HP_BAR_WIDTH, HP_BAR_X, 
 HP_BAR_Y, HP_TEXT_Y, HP_TEXT_X,TitanMaxHP, TitanCurrentHP, 'black', 'white');
+const playerHpBar = new bar(HP_BAR_HEIGHT, HP_BAR_WIDTH, HP_BAR_X, PLAYER_HP_BAR_Y, PLAYER_HP_TEXT_Y, PLAYER_HP_TEXT_X, playerMaxHP, playerHP, 'darkred', 'green');
 
 function openNav() {
   document.getElementById("mySidenav").style.width = "10rem";
@@ -184,12 +204,12 @@ function closeNav() {
 }
 
 function drawHPText() {
-    ctxTitan.font = '1rem Arial';
-    ctxTitan.fillStyle = 'black'
-    ctxTitan.fillText(`HP: ${TitanCurrentHP.toFixed(2)}/${TitanMaxHP.toFixed(2)}`, HP_TEXT_X, HP_TEXT_Y);
+    ctxTitan.font = '1.9rem Roboto';
+    ctxTitan.fillStyle = 'darkred'
+    ctxTitan.fillText(`${formatNumber(TitanCurrentHP)}`, HP_TEXT_X, HP_TEXT_Y);
   }
 
-
+  
 function drawBossTimer() {
     let remainingTime = MAX_BOSS_TIME - bossTimer;
     let timerRatio = remainingTime / MAX_BOSS_TIME;
@@ -201,13 +221,18 @@ function drawBossTimer() {
     ctxTitan.fillStyle = 'white';
     ctxTitan.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH * timerRatio, BOSS_TIMER_HEIGHT);
     bossTimer += TIMER_DECREASE_RATE;
-    localStorage.setItem('bossTimer', bossTimer);
     // Check if the boss timer has reached the maximum time
-    if (bossTimer >= MAX_BOSS_TIME) {
-    bossTimer = 0;
-    localStorage.setItem('bossTimer', bossTimer);
-    }
 
+    if (bossTimer >= MAX_BOSS_TIME){
+      bossTimer = 0
+    }
+    if (bossTimer > MAX_BOSS_TIME && bossAttackBegin === true) {
+      BOSS_TIMER_X = 15;
+      playerHP -= 1;
+      document.getElementById('playerHP').innerHTML = formatNumber(playerHP);
+      console.log('Boss Damage: ', formatNumber(titanAttack));
+      bossAttackBegin = false;
+    }
 }
 
 function drawEnemyLevel() {
@@ -218,9 +243,17 @@ function drawEnemyLevel() {
     ctxTitan.fillStyle = 'white'; // Set text color to white
     ctxTitan.fillText(titanName + ' Titan', CANVAS_WIDTH_TITAN - 440, CANVAS_HEIGHT_TITAN - 560);
     // ctxTitan.fillText('Titan', CANVAS_WIDTH_TITAN - 150, CANVAS_HEIGHT_TITAN - 100);
-  
-    
 }
+
+function drawPlayerHpText() {
+  ctxTitan.font = '1rem Arial';
+  ctxTitan.fillStyle = 'white';
+  ctxTitan.fillText(`Player HP: ${playerHP.toFixed(2)}/${playerMaxHP.toFixed(2)}`, PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y);
+}
+
+
+
+
 
 function getValidState() {
     if (titanLevel == 1) {
@@ -245,9 +278,14 @@ function animationTitan() {
     switch (currentState) {
         case 'idle':
             wormIdleAnimation.drawTitan();
+            BOSS_TIMER_X = -1000;
             break;
         case 'attack':
             wormAttackAnimation.drawTitan();
+            bossAttackBegin = true
+            BOSS_TIMER_X = 15;
+            MAX_BOSS_TIME = 2;
+            TIMER_DECREASE_RATE = 2.8 / 60
             break;
         case 'necromancerAttack':
             necromancerAttackAnimation.drawTitan();
@@ -256,8 +294,11 @@ function animationTitan() {
 
     Worm_HP_BAR.drawHPBar();
     Worm_HP_BAR.updateBoss();
+    playerHpBar.drawHPBar();
+    playerHpBar.updatePlayer();
     drawBossTimer();
     drawHPText();
+    drawPlayerHpText();
 
     gameframetitan++;
     requestAnimationFrame(animationTitan);
@@ -298,7 +339,6 @@ function drawHPParticle() {
 // Update the click event listener
 canvasTitan.addEventListener('click', () => {
     TitanCurrentHP -= finalDamage;
-    document.getElementById('wormHP').innerHTML = TitanCurrentHP;
     if (TitanCurrentHP <= 0){
         
         titanLevel += 1
@@ -315,7 +355,6 @@ canvasTitan.addEventListener('click', () => {
       duration: HP_PARTICLE_DURATION,
       text: HP_PARTICLE_TEXT, // Add the text property
     })
-    save();
 });
 
 animationTitan();
@@ -329,22 +368,13 @@ function save(){
     localStorage.setItem('prestige_multi', multipliers.prestige_multi);
     localStorage.setItem('boss_attack_multi', multipliers.boss_attack_multi);
     localStorage.setItem('base_prestige_points', multipliers.base_prestige_points);
+    localStorage.setItem('player_currentHP', playerHP);
+    localStorage.setItem('player_MAX_HP', playerMaxHP);
+
+    document.getElementById('wormHP').innerHTML = TitanCurrentHP;
+    document.getElementById('playerHP').innerHTML = formatNumber(playerHP);
 }
 
-function load(){
-    TitanMaxHP = parseInt(localStorage.getItem('TitanMaxHP')) || 1 * Math.pow(10,1);
-    TitanCurrentHP = parseInt(localStorage.getItem('TitanCurrentHP')) || TitanMaxHP;
-    titanLevel = parseInt(localStorage.getItem('titanLevel')) || 1;
-    bossTimer = parseInt(localStorage.getItem('bossTimer')) || 0;
-    multipliers = JSON.parse(localStorage.getItem('multipliers')) || {
-        boss_attack_multi: 1,
-        prestige_multi: 1,
-        base_prestige_points: 10,
-    };
-    multipliers.prestige_multi = parseInt(localStorage.getItem('prestige_multi')) || 1;
-    multipliers.boss_attack_multi = parseInt(localStorage.getItem('boss_attack_multi')) || 1;
-    multipliers.base_prestige_points = parseInt(localStorage.getItem('base_prestige_points')) || 10;
-}
 
 
 
@@ -355,7 +385,6 @@ function reset(){
     location.reload();
 }
 
+setInterval(save, 1000);
 
-window.onload = function() {
-    load();
-};
+

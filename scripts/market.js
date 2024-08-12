@@ -4,6 +4,9 @@ const ctx2 = market_canva.getContext('2d');
 const CANVASHEIGHT = market_canva.height = 300;
 const CANVASWIDTH = market_canva.width = 300;
 
+let market_MAX_HP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
+let market_currentHP = parseInt(localStorage.getItem('player_currentHP')) || player_MAX_HP;
+
 //variables of images of weapons
 const epicSword = new Image();
 epicSword.src = '../images/epic_Sword.png';
@@ -50,6 +53,11 @@ function openNav() {
   document.getElementById("mySidenav").style.width = "10rem";
   document.getElementById("main_Page").style.marginLeft == "11.5rem";
   document.getElementById("main_Page").style.transition = "0.9s";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main_Page").style.marginLeft = "1.5rem";
 }
  
 //function for display number in format
@@ -98,31 +106,31 @@ const skillDict = {
   },
   'Wood Pickaxe': {
     damage: 50,
-    point:2,
+    point:20,
   },
   'Iron Pickaxe': {
     damage: 100,
-    point:8,
+    point:80,
   },
   'Emerald Pickaxe': {
     damage: 140,
-    point:10,
+    point:100,
   },
   'Genki Dama':{
     damage:99999,
-    point:99,
+    point:9999,
   },
   'Helmet':{
-    damage:50,
-    point:20,
+    damage:5,
+    point:200,
   },
   'Epic Armer':{
-    damage:400,
-    point:29,
+    damage:40,
+    point:29000,
   },
   'Normal Armer':{
-    damage:300,
-    point:20,
+    damage:30,
+    point:2000,
   },
 
 };
@@ -257,8 +265,10 @@ function purchaseItem() {
       gold -= marketPrice;
       purchasedItems.push(NameOfWeapon);
       playerDmg+=skillDict[NameOfWeapon].damage/2;
-      skill_points+=skillDict[NameOfWeapon].point/2;
-      localStorage.setItem('skill_points', skill_points);
+      market_MAX_HP+=skillDict[NameOfWeapon].point;
+      market_currentHP+=skillDict[NameOfWeapon].point;
+      localStorage.setItem('player_MAX_HP', market_MAX_HP);
+      localStorage.setItem('player_currentHP',market_currentHP);
       localStorage.setItem('playerDmg', playerDmg);
       localStorage.setItem("gold", gold);
       play_sound_fx(coin_flip);
@@ -270,7 +280,7 @@ function update_window() {
     document.getElementById('market_price').innerHTML = "Price: " + formatNumber(marketPrice);
     document.getElementById('market_gold').innerHTML = "Gold: " + formatNumber(gold);
     document.getElementById('dmg_display').innerHTML = "Damage: "+ getWeaponDamageByPrice(marketPrice);
-    document.getElementById('hp_display').innerHTML = "Skill Point:" + getWeaponPointByPrice(marketPrice);
+    document.getElementById('hp_display').innerHTML = "HP: +" + getWeaponPointByPrice(marketPrice);
 
 }
 

@@ -75,8 +75,8 @@ const HP_TEXT_Y = HP_BAR_Y + 15;
 
 
 // Player HP bar variables
-let player_MAX_HP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
-let player_currentHP = parseInt(localStorage.getItem('player_currentHP')) || player_MAX_HP;
+var player_MAX_HP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
+var player_currentHP = parseInt(localStorage.getItem('player_currentHP')) || player_MAX_HP;
 const PLAYER_HP_BAR_HEIGHT = 25;
 const PLAYER_HP_BAR_X = 10;
 const PLAYER_HP_BAR_Y = 30;

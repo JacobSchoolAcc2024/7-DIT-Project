@@ -724,9 +724,7 @@ function reset() {
 }
 
 function update_inventory() {
-  const skill_point_button = document.getElementById('skill_point');
   const player_level_button = document.getElementById('player_level');
-  const skill_points_button = document.getElementById('skill_points');
   const str_stat_button = document.getElementById('Strength');
   const stamina_stat_button = document.getElementById('Stamina');
   let gold_status = document.getElementById('gold');
@@ -737,10 +735,9 @@ function update_inventory() {
   player_damage_status.innerHTML = "Player Damage: " + formatNumber(playerDmg * (1 + strength_stat_multi)) + " ";
   boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " ";
   player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level);
-  skill_points_button.innerHTML = 'Skill Points: ' + formatNumber(skill_points);
   str_stat_button.innerHTML = 'Strength: ' + strength_stat_multi_added;
   stamina_stat_button.innerHTML = 'Stamina: ' + stamina_stat_multi_added;
-  skill_point_button.innerHTML = 'Skill Points: '+ skill_points;
+  console.log("Amount of skill points: ", skill_points)
 
 
   if (enemy_level > max_enemy_level) {
@@ -1160,7 +1157,6 @@ function check_purchase(id) {
 
 
 function gain_xp_locked(){
-  const skill_point_button = document.getElementById('skill_point');
   let xp_add;
   let level_add;
   if (enemy_level % 5 === 0){
@@ -1184,7 +1180,7 @@ function gain_xp_locked(){
     skill_points += level_add * 2;
     current_xp = 0;
     localStorage.setItem('skill_points', skill_points);
-    skill_point_button.innerHTML = 'Skill Points: '+ skill_points;
+    document.getElementById('skill_point').innerHTML = 'Skill Points: ' + skill_points;
 
   }
   localStorage.setItem('player_level', player_level);
@@ -1195,7 +1191,6 @@ function gain_xp_locked(){
 }
 
 function gain_xp_unlocked(){
-  const skill_point_button = document.getElementById('skill_point');
   let xp_add;
   let level_add;
   if ((enemy_level - 1) % 5 === 0){
@@ -1219,7 +1214,7 @@ function gain_xp_unlocked(){
     skill_points += level_add * 2;
     current_xp = 0;
     localStorage.setItem('skill_points', skill_points);
-    skill_point_button.innerHTML = 'Skill Points: '+ skill_points;
+    document.getElementById('skill_point').innerHTML = 'Skill Points: ' + skill_points;
   }
   localStorage.setItem('current_xp', current_xp);
   localStorage.setItem('player_MAX_XP', player_MAX_XP);

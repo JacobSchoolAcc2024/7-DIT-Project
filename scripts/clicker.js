@@ -1,4 +1,5 @@
 
+
 var playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
 var skill_points = parseInt(localStorage.getItem('skill_points')) || 0;
 let gold = parseInt(localStorage.getItem('gold')) || 0;
@@ -9,6 +10,14 @@ let enemy_name = localStorage.getItem('enemy_name') || 'Demon Fly: ';
 let islock_stage = parseInt(localStorage.getItem('islock_stage')) || 2;
 let click_delay  = parseInt(localStorage.getItem('click_delay')) || 100;
 
+//Game Settings
+let scientificNotation = localStorage.getItem('scientificNotation') || false;
+
+//Autoclickers
+let auraActive = false;
+let auraInterval;
+let aura_damage = parseInt(localStorage.getItem('aura_damage')) || 1;
+let aura_frequency = parseInt(localStorage.getItem('aura_frequency')) || 2000;
 
 ///Boss Attack
 let boss_damage = parseInt(localStorage.getItem('boss_attack')) || 20;
@@ -30,11 +39,11 @@ let clickedButton = parseInt(localStorage.getItem('clickedButton')) || 0;
 
 ///Game Var////
 /////////////////////////////////////////////////////////////////////////////////////
-const canvas = document.getElementById('canvas1');
-if (canvas) {
-const ctx = canvas.getContext('2d');
-const CANVAS_WIDTH = canvas.width = 600;
-const CANVAS_HEIGHT = canvas.height = 650;
+const canvas1 = document.getElementById('canvas1');
+if (canvas1) {
+const ctx = canvas1.getContext('2d');
+const CANVAS_WIDTH = canvas1.width = 600;
+const CANVAS_HEIGHT = canvas1.height = 650;
 const player_width = 79;
 const player_height = 70;
 const deadPlayerWidth = 92; // 553 / 6 = 92.16666... (rounded down)
@@ -75,7 +84,7 @@ const HP_TEXT_Y = HP_BAR_Y + 15;
 
 
 // Player HP bar variables
-var player_MAX_HP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
+let player_MAX_HP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
 var player_currentHP = parseInt(localStorage.getItem('player_currentHP')) || player_MAX_HP;
 const PLAYER_HP_BAR_HEIGHT = 25;
 const PLAYER_HP_BAR_X = 10;
@@ -113,7 +122,7 @@ const PLAYER_ENERGY_TEXT_Y = PLAYER_XP_BAR_Y + 15;
 // HP particle variables
 const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
 const HP_PARTICLE_SIZE = 20;
-const HP_PARTICLE_DURATION = 10;
+const HP_PARTICLE_DURATION = 20;
 const hpParticles = [];
 let hpParticle = null;
 
@@ -148,6 +157,8 @@ var strength_stat_multi = parseInt(localStorage.getItem('strength_stat_multi')) 
 let strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_multi_added')) || 0;
 let stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
 let stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
+let intelligence_stat_multi = parseInt(localStorage.getItem('intelligence_stat_multi')) || 1;
+let intelligence_stat_multi_added = parseInt(localStorage.getItem('intelligence_stat_multi_added')) || 0;
 
 
 ///Animation Functions//
@@ -316,19 +327,19 @@ function drawPlayerXpBar(){
 function drawHPText() {
   ctx.font = '1rem Arial';
   ctx.fillStyle = 'white';
-  ctx.fillText(`HP: ${currentHP.toFixed(2)}/${MAX_HP.toFixed(2)}`, HP_TEXT_X, HP_TEXT_Y);
+  ctx.fillText(`HP: ${formatNumber(currentHP)}/${formatNumber(MAX_HP)}`, HP_TEXT_X, HP_TEXT_Y);
 }
 
 function drawPlayerHpText() {
   ctx.font = '1rem Arial';
   ctx.fillStyle = 'white';
-  ctx.fillText(`Player HP: ${player_currentHP.toFixed(2)}/${player_MAX_HP.toFixed(2)}`, PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y);
+  ctx.fillText(`Player HP: ${formatNumber(player_currentHP)}/${formatNumber(player_MAX_HP)}`, PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y);
 }
 
 function drawPlayerXpText(){
   ctx.font = '1rem Arial';
   ctx.fillStyle = 'black';
-  ctx.fillText(`Player XP: ${current_xp.toFixed(2)}/${player_MAX_XP.toFixed(2)}`, PLAYER_XP_TEXT_X, PLAYER_XP_TEXT_Y);
+  ctx.fillText(`Player XP: ${formatNumber(current_xp)}/${formatNumber(player_MAX_XP)}`, PLAYER_XP_TEXT_X, PLAYER_XP_TEXT_Y);
 
 }
 
@@ -336,7 +347,7 @@ function drawHPParticle() {
   for (let i = hpParticles.length - 1; i >= 0; i--) {
     const particle = hpParticles[i];
     ctx.font = `${HP_PARTICLE_SIZE}px Arial`;
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = particle.color || 'white';
     ctx.fillText(particle.text, particle.x, particle.y);
     particle.y -= 3;
     particle.duration -= 0.12;
@@ -547,11 +558,10 @@ function handle_click() {
       slash_fx.play();
     }
   }
-        
       // Create a new HP particle with updated text
     const HP_PARTICLE_TEXT = "-" + formatNumber(playerDmg * (1 + strength_stat_multi)) + " HP";
     hpParticles.push({
-      x: canvas1.width - 100,
+      x: canvas1.width - 150,
       y: canvas1.height - 190,
       duration: HP_PARTICLE_DURATION,
       text: HP_PARTICLE_TEXT, // Add the text property
@@ -571,10 +581,17 @@ drawLoop();
 
 let canva_id = document.getElementById('canvas1');
 
+//Event Listeners
 canva_id.addEventListener('click', handle_click);
 
 
+const checkbox = document.getElementById('scientific-notation-checkbox');
 
+// Load saved state and set up change listener
+checkbox.checked = localStorage.getItem('scientificNotation') === 'true';
+checkbox.addEventListener('change', () => {
+    localStorage.setItem('scientificNotation', checkbox.checked);
+});
 
 window.onload = function () {
   restore_BossAttack();
@@ -584,8 +601,81 @@ window.onload = function () {
  
 };
 
+// Hotkeys
+let skillsOpen = parseInt(localStorage.getItem('skillsOpen')) || 1;
+let openedNav = 1;
+
+
+document.addEventListener('keydown', handleKeyPress);
+function handleKeyPress(event) {
+  switch(event.key) {
+      case 'ArrowLeft':
+        previous_level();
+        break
+      case 'ArrowRight':
+        next_level();
+        break
+      case 'a':
+        previous_level();
+        break
+      case 'd':
+        next_level();
+        break
+      case 'b':
+        if (skillsOpen === 1) {
+          skillsOpen = 2;
+          localStorage.setItem('skillsOpen', skillsOpen);
+          openSkills();
+          closeNav();
+        } 
+        else if (skillsOpen === 2) {
+          skillsOpen = 1;
+          localStorage.setItem('skillsOpen', skillsOpen);
+          closeSkills();
+          closeNav();
+        }
+        break;
+      case 'm':
+        if (openedNav === 1){
+          openedNav = 2;
+          openNav();
+          closeSkills();
+        }
+        else if(openedNav === 2){
+          openedNav = 1;
+          closeNav();
+          closeSkills();
+        }
+      case ' ':
+        setTimeout(() => {
+          handle_click();
+        }, 1000);
+        break
+      case 'l':
+        lock_stage();
+        break
+      case '1':
+        purchase_amount(1,'button1');
+        break
+      case '2':
+        purchase_amount(10,'button10');
+        break
+      case '3':
+        purchase_amount(100,'button100');
+        break
+      case 'r':
+        reset();
+        break
+  }
+}
+
+
 ////////////////////////////////
 //Utilities
+
+function enableScientificNotation(){
+  document.getElementById('scientific-notation-checkbox').checked = true;
+}
 
 function showGoldGainedAnimation(goldGained) {
   // Create a new div element
@@ -724,21 +814,52 @@ function reset() {
 }
 
 function update_inventory() {
+
+  const Upgrades = {
+    clicker_upgrade: {
+      button_id: "clicker_upgrade",
+      cost_id: "clicker_upgrade_cost",
+      cost: 2,
+      clicker_upgrade_purchased: parseInt(localStorage.getItem('clicker_upgrade_purchased')) || 0,
+      click_multiplier: parseInt(localStorage.getItem('click_multiplier')) || 1,
+    },
+    hp_upgrade: {
+      button_id: "hp_upgrade",
+      cost_id: "hp_upgrade_cost",
+      cost: 5,
+      hp_upgrade_purchased: parseInt(localStorage.getItem('hp_upgrade_purchased')) || 0,
+      hp_multiplier: parseInt(localStorage.getItem('hp_multiplier')) || 1,
+    },
+    aura_upgrade: {
+      button_id: "aura_upgrade",
+      cost_id: "aura_upgrade_cost",
+      cost: 10,
+      aura_upgrade_purchased: parseInt(localStorage.getItem('aura_upgrade_purchased')) || 0,
+      aura_multiplier: parseInt(localStorage.getItem('aura_multiplier')) || 1,
+    }
+  }
+
+  const aura_status = document.getElementById('aura_damage');
+  const playerHpStatus = document.getElementById('player_health');
+  const skillpoints_status = document.getElementById('skill_point_status');
   const player_level_button = document.getElementById('player_level');
   const str_stat_button = document.getElementById('Strength');
   const stamina_stat_button = document.getElementById('Stamina');
+  const intellingence_stat_button = document.getElementById('Intelligence');
   let gold_status = document.getElementById('gold');
-  let boss_dps = 2 * boss_damage
+  let boss_dps = 2 * boss_damage;
   gold_status.innerHTML = "Gold: " + formatNumber(gold);
   let player_damage_status = document.getElementById('player_damage');
   let boss_damage_status = document.getElementById('boss_damage');
-  player_damage_status.innerHTML = "Player Damage: " + formatNumber(playerDmg * (1 + strength_stat_multi)) + " ";
+  player_damage_status.innerHTML = "Damage: " + formatNumber(playerDmg * (1 + strength_stat_multi)) + " ";
   boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " ";
   player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level);
   str_stat_button.innerHTML = 'Strength: ' + strength_stat_multi_added;
   stamina_stat_button.innerHTML = 'Stamina: ' + stamina_stat_multi_added;
-  console.log("Amount of skill points: ", skill_points)
-
+  intellingence_stat_button.innerHTML = 'Intelligence: ' + intelligence_stat_multi_added;
+  skillpoints_status.innerHTML = "Skill Points: " + skill_points;
+  aura_status.innerHTML = "Aura Damage: " + formatNumber(aura_damage);
+  playerHpStatus.innerHTML = "Max HP: " + formatNumber(player_MAX_HP);
 
   if (enemy_level > max_enemy_level) {
     max_enemy_level = enemy_level;
@@ -765,23 +886,55 @@ function update_inventory() {
     document.getElementById('glory').style.display = "inline"
   }
 
-
-  
+  if (Upgrades['aura_upgrade'].aura_upgrade_purchased > 0) {
+    startAuraAttack();
+}
 }
 
 function formatNumber(num) {
-  const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion"
-    , " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
-  ];
-  const suffixIndex = Math.floor(Math.log10(Math.abs(num)) / 3);
-  const formattedNum = parseFloat((num / Math.pow(1000, suffixIndex)).toFixed(2));
-  return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");
+
+  const checkbox = document.getElementById('scientific-notation-checkbox');
+  if (!checkbox.checked){
+    const suffixes = [
+      "", " K", " Million", " Billion", " Trillion", " Quadrillion",
+      " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion", " Decillion",
+      " Undecillion", " Duodecillion", " Tredecillion", " Quattuordecillion", " Quindecillion",
+      " Sexdecillion", " Septendecillion", " Octodecillion", " Novemdecillion", " Vigintillion",
+      " Unvigintillion", " Duovigintillion", " Trevigintillion", " Quattuorvigintillion", " Quinvigintillion",
+      " Sexvigintillion", " Septenvigintillion", " Octovigintillion", " Novemvigintillion", " Trigintillion",
+      " Untrigintillion", " Duotrigintillion", " Googol"
+    ];
+    
+  
+    const suffixIndex = Math.floor(Math.log10(Math.abs(num)) / 3);
+    const formattedNum = parseFloat((num / Math.pow(1000, suffixIndex)).toFixed(2));
+  
+    return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");
+  }
+  else{
+    if (num === 0 || isNaN(num)) {
+      return "0";
+    }
+  
+    const absNum = Math.abs(num);
+    if (absNum < 1000) {
+      return num.toFixed(2);
+    }
+  
+    const exponent = Math.floor(Math.log10(absNum));
+    const mantissa = absNum / Math.pow(10, exponent);
+  
+    return mantissa.toFixed(2) + "e" + exponent;
+  }
+
 }
+
+
 
 ////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////
-//Game //
+//Game Upgrades//
 
 function purchase_upgrade(id) {
   const Upgrades = {
@@ -798,6 +951,13 @@ function purchase_upgrade(id) {
       cost: 5,
       hp_upgrade_purchased: parseInt(localStorage.getItem('hp_upgrade_purchased')) || 0,
       hp_multiplier: parseInt(localStorage.getItem('hp_multiplier')) || 1,
+    },
+    aura_upgrade: {
+      button_id: "aura_upgrade",
+      cost_id: "aura_upgrade_cost",
+      cost: 100,
+      aura_upgrade_purchased: parseInt(localStorage.getItem('aura_upgrade_purchased')) || 0,
+      aura_multiplier: parseInt(localStorage.getItem('aura_multiplier')) || 1,
     }
   }
 
@@ -816,6 +976,12 @@ function purchase_upgrade(id) {
     const new_requiredCost = check_cost(requiredCost, upgrade.hp_upgrade_purchased, upgrade.cost, 1.5);
     buy_hp_upgrade(new_requiredCost, 'hp_upgrade');
   }
+  else if (id == "aura_upgrade"){
+    const baseCost = upgrade.cost;
+    const requiredCost = baseCost + (2 * upgrade.aura_upgrade_purchased);
+    const new_requiredCost = check_cost(requiredCost, upgrade.aura_upgrade_purchased, baseCost, 2);
+    buy_aura_upgrade(new_requiredCost, 'aura_upgrade');
+  }
   if (fx_play){
     default_fx.play();
   }
@@ -823,8 +989,38 @@ function purchase_upgrade(id) {
   localStorage.setItem('playerDmg', playerDmg);
   localStorage.setItem('player_MAX_HP', player_MAX_HP);
   localStorage.setItem('player_currentHP', player_currentHP);
+  localStorage.setItem('aura_damage', aura_damage);
   update_inventory();
 }
+
+function buy_aura_upgrade(new_requiredCost, id){
+  const Upgrades = {
+    aura_upgrade: {
+      button_id: "aura_upgrade",
+      cost_id: "aura_upgrade_cost",
+      cost: 100,
+      aura_upgrade_purchased: parseInt(localStorage.getItem('aura_upgrade_purchased')) || 0,
+      aura_multiplier: parseInt(localStorage.getItem('aura_multiplier')) || 1,
+    }
+  }
+
+  const upgrade = Upgrades[id];
+  baseCost = upgrade.cost
+  if (gold >= new_requiredCost) {
+    upgrade.aura_upgrade_purchased += buy_upgrade;
+    gold -= new_requiredCost;
+    upgrade.aura_multiplier += 0.01 * buy_upgrade;
+    const add_aura = Math.round(intelligence_stat_multi + (1 + intelligence_stat_multi) * (buy_upgrade + buy_upgrade * upgrade.aura_multiplier));
+    aura_damage += add_aura;
+    localStorage.setItem('aura_upgrade_purchased', upgrade.aura_upgrade_purchased);
+    localStorage.setItem('aura_multiplier', upgrade.aura_multiplier);
+    localStorage.setItem('aura_damage', aura_damage);
+    console.log("Base Cost:  " + baseCost, "New cost: " + new_requiredCost);}
+  else{
+  console.log("Base Cost:  " + baseCost, "New cost: " + new_requiredCost);
+}
+}
+
 
 function buy_clicker_upgrade(new_requiredCost, id){
   const Upgrades = {
@@ -841,7 +1037,7 @@ function buy_clicker_upgrade(new_requiredCost, id){
   if (gold >= new_requiredCost) {
     upgrade.clicker_upgrade_purchased += buy_upgrade;
     gold -= new_requiredCost;
-    upgrade.click_multiplier += 0.1
+    upgrade.click_multiplier += 0.01 * buy_upgrade;
     const add_playerDmg = Math.round(strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * upgrade.click_multiplier));
     playerDmg += add_playerDmg;
     // playerDmg = playerDmg * (1 + (strength_stat_multi / 20));
@@ -867,8 +1063,8 @@ function buy_hp_upgrade(new_requiredCost, id){
   if (gold >= new_requiredCost){
     upgrade.hp_upgrade_purchased += buy_upgrade;
     gold -= new_requiredCost;
-    upgrade.hp_multiplier += 0.1;
     const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** upgrade.hp_multiplier)));
+    upgrade.hp_multiplier += 0.01 * buy_upgrade;
     player_MAX_HP += add_hp;
     if (enemy_level % 5 !== 0){
       player_currentHP = player_MAX_HP;
@@ -894,6 +1090,13 @@ function check_upgrades() {
       cost: 5,
       hp_upgrade_purchased: parseInt(localStorage.getItem('hp_upgrade_purchased')) || 0,
       hp_multiplier: parseInt(localStorage.getItem('hp_multiplier')) || 1,
+    },
+    aura_upgrade: {
+      button_id: "aura_upgrade",
+      cost_id: "aura_upgrade_cost",
+      cost: 100,
+      aura_upgrade_purchased: parseInt(localStorage.getItem('aura_upgrade_purchased')) || 0,
+      aura_multiplier: parseInt(localStorage.getItem('aura_multiplier')) || 1,
     }
   }
 
@@ -905,7 +1108,7 @@ function check_upgrades() {
       let button = document.getElementById(data.button_id);
       const add_playerDmg = Math.round(strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * data.click_multiplier));
       upgrade_check(data.cost_id, new_requiredCost, button, data.clicker_upgrade_purchased, upgrade, 'clicker_upgrade', 
-        add_playerDmg, 'Player Damage', 'Train Strength')
+        add_playerDmg, 'Player Damage', 'Increases Player Click Damage')
     }
     else if (upgrade == 'hp_upgrade'){
       let data = Upgrades[upgrade];
@@ -914,7 +1117,16 @@ function check_upgrades() {
       let button = document.getElementById(data.button_id);
       const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** data.hp_multiplier)));
       upgrade_check(data.cost_id, new_requiredCost, button, data.hp_upgrade_purchased, upgrade, 'hp_upgrade',
-        add_hp, 'HP', 'Train Stamina')
+        add_hp, 'HP', 'Increases Max Health')
+    }
+    else if (upgrade == 'aura_upgrade'){
+      let data = Upgrades[upgrade];
+      const requiredCost = data.cost + (1.5 * data.aura_upgrade_purchased);
+      const new_requiredCost = check_cost(requiredCost, data.aura_upgrade_purchased, data.cost, 2);
+      let button = document.getElementById(data.button_id);
+      const add_aura = Math.round(intelligence_stat_multi + (1 + intelligence_stat_multi) * (buy_upgrade + buy_upgrade * data.aura_multiplier));
+      upgrade_check(data.cost_id, new_requiredCost, button, data.aura_upgrade_purchased, upgrade, 'aura_upgrade',
+        add_aura, 'Aura', 'Use your Aura to automatically damage enemies.') 
     }
   }
 }
@@ -928,14 +1140,14 @@ function upgrade_check(cost_id, requiredCost, button, amount_purchased, upgrade,
       button.disabled = false;
       button.style.background = "green";
       button.style.color = "white";
-      costElement.innerHTML = `Cost: ${requiredCost} Gold <br> Trained: (${amount_purchased}) <br> Purchase Amount: ${amountAble}<br>
-      Increase ${increase_by_name} : ${increase_by}`
-} else {
+      costElement.innerHTML = `Cost: ${formatNumber(requiredCost)} Gold <br> Trained: (${amount_purchased}) <br> Purchase Amount: ${amountAble}<br>
+      Increase ${increase_by_name} : ${formatNumber(increase_by)} <br>-------------<br> ${upgrade_name}`} 
+      else {
       button.style.background = "darkred";
       button.style.color = "white";
       button.disabled = true;
-      costElement.innerHTML = `Cost: ${requiredCost} Gold <br> Trained: (${amount_purchased}) <br> Purchase Amount: ${amountAble}<br>
-      Increase ${increase_by_name} : ${increase_by}`};
+      costElement.innerHTML = `Cost: ${formatNumber(requiredCost)} Gold <br> Trained: (${amount_purchased}) <br> Purchase Amount: ${amountAble}<br>
+      Increase ${increase_by_name} : ${formatNumber(increase_by)} <br>-------------<br> ${upgrade_name}`};
 
   }
 }
@@ -944,6 +1156,80 @@ function check_cost(requiredCost, purchased, baseCost, cost_multi) {
   const new_requiredCost = baseCost + (cost_multi * (purchased + buy_upgrade)) * buy_upgrade;
   return new_requiredCost;
 }
+
+
+/// Auto Clicker//
+
+function startAuraAttack() {
+  const auto_attacks = {
+      aura_upgrade: {
+          button_id: "aura_upgrade",
+          cost_id: "aura_upgrade_cost",
+          cost: 10,
+          aura_upgrade_purchased: parseInt(localStorage.getItem('aura_upgrade_purchased')) || 0,
+          aura_multiplier: parseInt(localStorage.getItem('aura_multiplier')) || 1,
+      }
+  };
+
+  if (!auraActive && auto_attacks['aura_upgrade'].aura_upgrade_purchased > 0) {
+      auraActive = true;
+      auraInterval = setInterval(function() {
+          currentHP -= aura_damage;
+          if (!isHurt) {
+              if (isAttacking) {
+                  currentHP -= playerDmg * (1 + strength_stat_multi);
+                  localStorage.setItem('currentHP', currentHP);
+                  if (currentHP <= 0) {
+                      bossTimer = 0;
+                      localStorage.setItem('bossTimer', bossTimer);
+                      isDead = true;
+                      framex = 0;
+                      resetPlayerHP();
+                      update_enemy();
+                      update_inventory();
+                  }
+              } else {
+                  isHurt = true;
+                  framex = 0;
+                  currentHP -= playerDmg * (1 + strength_stat_multi);
+                  localStorage.setItem('currentHP', currentHP);
+                  if (currentHP <= 0) {
+                      bossTimer = 0;
+                      localStorage.setItem('bossTimer', bossTimer);
+                      isDead = true;
+                      framex = 0;
+                      update_enemy();
+                      update_inventory();
+                  }
+                  if (fx_play) {
+                      slash_fx.play();
+                  }
+              }
+              
+              // Create a new HP particle with updated text
+              const HP_PARTICLE_TEXT = "-" + formatNumber(aura_damage) + " HP";
+              hpParticles.push({
+                  x: canvas1.width - 150,
+                  y: canvas1.height - 190,
+                  duration: HP_PARTICLE_DURATION,
+                  text: HP_PARTICLE_TEXT, // Add the text property
+                  color: 'black', // Set the color to blue
+              });
+          }
+      }, aura_frequency);
+  }
+}
+
+
+
+
+
+
+
+
+
+/// Stage and Locks
+
 
 
 function previous_level() {
@@ -1180,7 +1466,6 @@ function gain_xp_locked(){
     skill_points += level_add * 2;
     current_xp = 0;
     localStorage.setItem('skill_points', skill_points);
-    document.getElementById('skill_point').innerHTML = 'Skill Points: ' + skill_points;
 
   }
   localStorage.setItem('player_level', player_level);
@@ -1214,7 +1499,6 @@ function gain_xp_unlocked(){
     skill_points += level_add * 2;
     current_xp = 0;
     localStorage.setItem('skill_points', skill_points);
-    document.getElementById('skill_point').innerHTML = 'Skill Points: ' + skill_points;
   }
   localStorage.setItem('current_xp', current_xp);
   localStorage.setItem('player_MAX_XP', player_MAX_XP);
@@ -1239,6 +1523,16 @@ function add_stat(stat){
       stamina_stat_multi_added += 1;
       localStorage.setItem('stamina_stat_multi', stamina_stat_multi);
       localStorage.setItem('stamina_stat_multi_added', stamina_stat_multi_added);
+      localStorage.setItem('skill_points', skill_points);
+    }
+  }
+  else if (stat === 'Intelligence'){
+    if (skill_points >= 1){
+      skill_points -= 1;
+      intelligence_stat_multi += 0.1;
+      intelligence_stat_multi_added += 1;
+      localStorage.setItem('intelligence_stat_multi', intelligence_stat_multi);
+      localStorage.setItem('intelligence_stat_multi_added', intelligence_stat_multi_added);
       localStorage.setItem('skill_points', skill_points);
     }
   }

@@ -5,7 +5,7 @@ const CANVASHEIGHT = market_canva.height = 300;
 const CANVASWIDTH = market_canva.width = 300;
 
 let market_MAX_HP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
-let market_currentHP = parseInt(localStorage.getItem('player_currentHP')) || player_MAX_HP;
+let market_currentHP = parseInt(localStorage.getItem('player_currentHP')) || market_MAX_HP;
 
 //variables of images of weapons
 const epicSword = new Image();
@@ -79,7 +79,7 @@ const priceDict = {
     'Wood Pickaxe': 300,
     'Iron Pickaxe': 550,
     'Emerald Pickaxe': 800,
-    'Genki Dama':9999,
+    'Genki Dama':999999,
     'Helmet':999,
     'Epic Armer':19999,
     'Normal Armer':2999,
@@ -118,7 +118,7 @@ const skillDict = {
   },
   'Genki Dama':{
     damage:99999,
-    point:9999,
+    point:99999,
   },
   'Helmet':{
     damage:5,

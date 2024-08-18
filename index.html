@@ -13,7 +13,6 @@
     <audio id="skill_point">
         <source src="../music/skillPoint.wav" type="audio/mpeg">
     </audio>
-    
 <head>
     <link rel="stylesheet" href="css/style.css">
     <meta charset="UTF-8">
@@ -32,10 +31,13 @@
 <body class="main_Page">
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="pages/titan.html" class="menu_Item" id="glory">Battle For Glory</a>
+        <a><br></a>
         <a href="index.html" class="menu_Item">HOME</a>
         <a href="pages/market.html" class="menu_Item">MARKET</a>
         <a href="pages/contact.html" class="menu_Item">CONTACT</a>
         <a href="pages/about.html" class="menu_Item">ABOUT</a>
+        
     </div>
     <div class="top_bar">
         <div class="menu_container" onclick="openNav()">
@@ -53,22 +55,25 @@
             <span class="wood">Stats</span>
         </div>
         <button class = "tooltip" onclick="reset()">Reset
-            <span class="tooltiptext1">Resets the game.</span>
         </button>
-        <p id="player_damage" class="status">Player Damage: 1 </p>
-        <p  id="boss_damage" class="status">Boss Damage: ? </p>
         <P id="player_level" class="status">Player Level: 1 </P>
         <p id="skill_points"class="status">Skill Points: 0 </p>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play BGM</button>
+        <p id="player_damage" class="status">Player Damage: 1  </p>
+        <p id="player_health" class="status">Player Health: 100 </p>
+        <p id="player_regen" class="status">Regen HP: ?</p>
+        <P id="aura_damage" class="status">Player Aura: ?</P>
+        <p  id="boss_damage" class="status">Boss Damage: ? </p>
+        <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
         <button id="play_fx" onclick="PlayFx()">Play Sound</button>
         <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
-        <a href="/pages/titan.html">
-            <button id="glory">Battle For Glory</button>
-        </a>
+        <br>
+        <input type="checkbox" id="scientific-notation-checkbox">
+        <label for="scientific-notation-checkbox">Use Scientific Notation</label>
     </div>
     <div class="skill_point_menu" id="skill_p_menu">
             <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
-            <p id="skill_point" class="amount_skillp">Skill Points: 0 </p>
+            <p id= "skill_point_status" class="amount_skillp">Skill Points: 0</p>
         <div class="stats_add">
             <div class="strength_add">
                 <p id="Strength" class="status">Strength: 0</p>
@@ -77,6 +82,10 @@
             <div class="stamina_add">
                 <p id="Stamina" class="status">Stamina: 0</p>
                 <button id="Stamina" class="add_button" onclick="add_stat('Stamina')">+</button>
+            </div>
+            <div class="intelligence_add">
+                <p id="Intelligence" class="status">Intelligence: 0</p>
+                <button id="Intelligence" class="add_button" onclick="add_stat('Intelligence')">+</button>
             </div>
         </div>
     </div>
@@ -95,12 +104,18 @@
             Train Fist
             <span class="tooltiptext" id="clicker_upgrade_cost">Increases damage</span>
         </button>
-
         <button class="tooltip" id="hp_upgrade" onclick="purchase_upgrade('hp_upgrade')">
             Train Stamina
             <span class="tooltiptext" id="hp_upgrade_cost">Increases Hp</span>
         </button>
-        
+        <button class="tooltip" id="aura_upgrade" onclick="purchase_upgrade('aura_upgrade')">
+            Aura
+            <span class="tooltiptext" id="aura_upgrade_cost">Automatically damages enemy</span>
+        </button>
+        <button class="tooltip" id="regen_upgrade" onclick="purchase_upgrade('regen_upgrade')">
+            Regeneration
+            <span class="tooltiptext" id="regen_upgrade_cost">Regenerates Player Health</span>
+        </button>
         <div class="stage_setting">
             <button class="tooltip"  onclick="previous_level()">Previous Level
                 <span class="tooltiptext">Goes back 1 stage</span>
@@ -109,7 +124,7 @@
                 <span class="tooltiptext">Goes forward 1 stage</span>
             </button>
             <button  class="tooltip" id="lock_stage" onclick="lock_stage()">Lock stage
-                <span class="tooltiptext">Locks the stage. To unlock stage click again.</span>
+                <span class="tooltiptext">Locks the stage.</span>
             </button>
         </div>
     </div>

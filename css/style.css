@@ -15,9 +15,9 @@
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 * {
+    overflow-x: hidden;
     font-family: "Lugrasimo", cursive;
     --bg-primary: rgb(141, 141, 141);
-    overflow-x: hidden;
     --clr: #1e9bff;
     margin: 0;
     padding: 0;
@@ -191,8 +191,8 @@ body {
   
 
   .tooltip .tooltiptext1 {
-    top: -5px;
-    left: 105%;
+    top: -50px;
+    left: 0;
     visibility: hidden;
     width: 120px;
     background-color: #000;
@@ -338,6 +338,7 @@ body {
       inset -2px -2px 1px 1px lightgray,
       inset 2px 0px 1px 1px lightgray;
   margin-left: 8%;
+  overflow-y: auto;
 }
 
 .stage_setting {
@@ -359,9 +360,11 @@ body {
   width: 20%;
   top: 4rem;
   background-image: url(../images/quest-paper.jpg);
-  height: 100%;
+  height: 90%;
   text-align: center;
   border-right: 0.2rem black double;
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 1;
 }
 
@@ -394,13 +397,21 @@ p {
 }
 
 .add_button {
-  margin-top: 3.9%;
+  margin-top: 8%;
   font-size: 0.8rem;
   width: 2rem;
   height: 2rem;
 }
 
 .stamina_add{
+  display: flex;
+  width: 20%;
+  padding: 0;
+  height: 0%;
+}
+
+
+.intelligence_add{
   display: flex;
   width: 20%;
   padding: 0;
@@ -551,7 +562,6 @@ position: fixed;
 border: black solid 2px;
 height: 100%;
 width: 20rem;
-overflow-x: hidden;
 justify-content: center;
 text-align: center;
 background-image: url(../images/quest-paper.jpg);

@@ -41,7 +41,7 @@ const HP_BAR_Y = 50;
 const HP_BAR_WIDTH = CANVAS_WIDTH_TITAN - 30;
 const HP_TEXT_X = HP_BAR_X + 5;
 const HP_TEXT_Y = HP_BAR_Y + 25;
-let TitanMaxHP = parseInt(localStorage.getItem('TitanMaxHP')) || 1 * Math.pow(10, (titanLevel + 5) * titanLevel - 1);
+let TitanMaxHP = parseInt(localStorage.getItem('TitanMaxHP')) || 1 * Math.pow(10, (titanLevel + 1) * titanLevel - 1);
 let TitanCurrentHP = parseInt(localStorage.getItem('TitanCurrentHP')) || TitanMaxHP;
 let titanAttack = parseInt(localStorage.getItem('titanAttack')) || 10000 * titanLevel * titanLevel;
 

@@ -48,13 +48,14 @@ let isPlaying = false;
 let playPauseFxMarket = document.getElementById('play_fx_market');
 let fx_play_market = false;
 
-//function for opening the navigate page
+//function for opening the navigation page
 function openNav() {
   document.getElementById("mySidenav").style.width = "10rem";
   document.getElementById("main_Page").style.marginLeft == "11.5rem";
   document.getElementById("main_Page").style.transition = "0.9s";
 }
 
+//function for closing the navigation page
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
   document.getElementById("main_Page").style.marginLeft = "1.5rem";
@@ -86,7 +87,7 @@ const priceDict = {
 
   };
 
-// dictionary of the skill points and damage of the weapon
+// dictionary of the hp and damage of the weapon
 const skillDict = {
   "Epic Sword": {
     damage: 400,
@@ -173,53 +174,64 @@ function randomSentenceGenearte(){
 
 //draw the images of weapon on the canvas by clicking the button
 function drawAnimation(weaponPic, weaponName) {
-  ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);//clean the canavs
+  ctx2.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
+  //clean the canavs
+  //the different coordinate for different weapons.
   switch (weaponName) {
     case "Epic Sword":
-      ctx2.drawImage(epicSword, - 30, - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);//draw the image
-      marketPrice = priceDict["Epic Sword"];//get the price 
+      ctx2.drawImage(epicSword, - 30, - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+      //draw the image
+      marketPrice = priceDict["Epic Sword"];
+      check_button();
+      //get the price 
       play_sound_fx(preview);
       break;
     case "Wood Sword":
       ctx2.drawImage(w_Sword,  - 30,  - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Wood Sword"];
+      check_button();
       play_sound_fx(preview);
       break;
     case "Diamond Sword":
       ctx2.drawImage(d_Sword,  - 30,  - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Diamond Sword"];
+      check_button();
       play_sound_fx(preview);
       break;
     case "Dirty Icecream":
       ctx2.drawImage(dirtyIceCream, - 15,  - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict["Dirty Icecream"];
+      check_button();
       play_sound_fx(preview);
       break;
     case 'Wood Pickaxe':
       ctx2.drawImage(w_pickaxe,  - 15, - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Wood Pickaxe'];
+      check_button();
       play_sound_fx(preview);
       break;
     case 'Iron Pickaxe':
       ctx2.drawImage(i_pickaxe, - 15,  - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Iron Pickaxe'];
+      check_button();
       play_sound_fx(preview);
       break;
     case 'Emerald Pickaxe':
       ctx2.drawImage(e_pickaxe,  - 15, - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Emerald Pickaxe'];
+      check_button();
       play_sound_fx(preview);
       break;
     case 'Genki Dama':
       ctx2.drawImage(genkidama,  - 15, - 30, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict['Genki Dama'];
-      requestAnimationFrame(updateSpriteFrame); 
-      updateSpriteFrame();
+      check_button();
       play_sound_fx(preview);
       break;
     default:
       ctx2.drawImage(weaponPic, - 30,  - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       marketPrice = priceDict[weaponName];
+      check_button();
       play_sound_fx(preview);
       break;
   }
@@ -260,6 +272,7 @@ function getWeaponPointByPrice(price) {
 //function of purchasing items
 function purchaseItem() {
   let NameOfWeapon = getWeaponNameByPrice(marketPrice);
+  let weaponID =  NameOfWeapon.toLowerCase();
   // to check it the weapon has been purchased and owns enough money
   if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
       gold -= marketPrice;
@@ -267,9 +280,11 @@ function purchaseItem() {
       playerDmg+=skillDict[NameOfWeapon].damage/2;
       market_MAX_HP+=skillDict[NameOfWeapon].point;
       market_currentHP+=skillDict[NameOfWeapon].point;
+      document.getElementById('purchaseItem').style.backgroundColor = "darkred";
       localStorage.setItem('player_MAX_HP', market_MAX_HP);
       localStorage.setItem('player_currentHP',market_currentHP);
       localStorage.setItem('playerDmg', playerDmg);
+      localStorage.setItem('purchasedItems',JSON.stringify(purchasedItems));
       localStorage.setItem("gold", gold);
       play_sound_fx(coin_flip);
   }
@@ -281,17 +296,25 @@ function update_window() {
     document.getElementById('market_gold').innerHTML = "Gold: " + formatNumber(gold);
     document.getElementById('dmg_display').innerHTML = "Damage: "+ getWeaponDamageByPrice(marketPrice);
     document.getElementById('hp_display').innerHTML = "HP: +" + getWeaponPointByPrice(marketPrice);
+}
 
+function check_button(){
+  let NameOfWeapon = getWeaponNameByPrice(marketPrice);
+  if(purchasedItems.includes(NameOfWeapon)){
+    document.getElementById('purchaseItem').style.backgroundColor = "darkred";
+  }else{
+    document.getElementById('purchaseItem').style.backgroundColor = "#F0F0F0";
+  }
 }
 
 //control of background music playing
 function togglePlayPause() {
   if (isPlaying) {
     backGroundMusic.pause();
-    playPause.textContent = 'Play';
+    playPause.textContent = 'Play BGM';
   } else {
     backGroundMusic.play();
-    playPause.textContent = 'Pause';
+    playPause.textContent = 'Pause BGM';
   }
   isPlaying = !isPlaying;
 }
@@ -315,3 +338,4 @@ function play_sound_fx(sound){
 
 setInterval(update_window, 100);
 setInterval(randomSentenceGenearte,5000);
+setInterval(check_button_list,100);

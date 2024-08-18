@@ -1279,10 +1279,10 @@ let isPlayingTwo = false;
 function togglePlayPauseTwo() {
   if (isPlayingTwo) {
     backGroundMusicTwo.pause();
-    playPauseTwo.textContent = 'Play';
+    playPauseTwo.textContent = 'Play BGM';
   } else {
     backGroundMusicTwo.play();
-    playPauseTwo.textContent = 'Pause';
+    playPauseTwo.textContent = 'Pause BGM';
   }
   isPlayingTwo = !isPlayingTwo;
 }

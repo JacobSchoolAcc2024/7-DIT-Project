@@ -13,9 +13,10 @@ let click_delay  = parseInt(localStorage.getItem('click_delay')) || 100;
 let scientificNotation = localStorage.getItem('scientificNotation') || false;
 
 //Autoclickers
+let auraIisOn = JSON.parse(localStorage.getItem('auraIisOn')) || false;
 let auraActive = false;
 let auraInterval;
-let aura_damage = parseInt(localStorage.getItem('aura_damage')) || 1;
+let aura_damage = parseInt(localStorage.getItem('aura_damage')) || 0;
 let aura_frequency = parseInt(localStorage.getItem('aura_frequency')) || 2000;
 
 ///Boss Attack
@@ -548,7 +549,6 @@ function handle_click() {
           localStorage.setItem('bossTimer', bossTimer);
           isDead = true;
           framex = 0
-          resetPlayerHP();
           update_enemy();
           update_inventory();
         }
@@ -596,13 +596,14 @@ let canva_id = document.getElementById('canvas1');
 canva_id.addEventListener('click', handle_click);
 
 
-const checkbox = document.getElementById('scientific-notation-checkbox');
+const checkboxScientificNotation = document.getElementById('scientific-notation-checkbox');
 
 // Load saved state and set up change listener
-checkbox.checked = localStorage.getItem('scientificNotation') === 'true';
-checkbox.addEventListener('change', () => {
-    localStorage.setItem('scientificNotation', checkbox.checked);
+checkboxScientificNotation.checked = localStorage.getItem('scientificNotation') === 'true';
+checkboxScientificNotation.addEventListener('change', () => {
+    localStorage.setItem('scientificNotation', checkboxScientificNotation.checked);
 });
+
 
 window.onload = function () {
   restore_BossAttack();
@@ -915,6 +916,26 @@ function update_inventory() {
   if (Upgrades['regen_upgrade'].regen_upgrade_purchased > 0) {
     startHpRegeneration();
   }
+
+  const auraStatus = document.getElementById('turnAura')
+  if (auraIisOn === false){
+    auraStatus.innerHTML = "Off";
+    auraStatus.style.background = "darkred";
+    auraStatus.style.color = "white";
+    
+  }
+  else if (auraIisOn === true){
+    auraStatus.innerHTML = "On";
+    auraStatus.style.background = "green";
+    auraStatus.style.color = "white";
+  }
+
+  if (Upgrades['aura_upgrade'].aura_upgrade_purchased < 1) {
+    document.getElementById('turnAura').disabled = true;
+  } else {
+    document.getElementById('turnAura').disabled = false;
+  }
+  
 }
 
 function formatNumber(num) {
@@ -1061,6 +1082,7 @@ function buy_regen_upgrade(new_requiredCost, id){
     localStorage.setItem('regen_upgrade_purchased', upgrade.regen_upgrade_purchased);
     localStorage.setItem('regen_multiplier', upgrade.regen_multiplier);
     localStorage.setItem('regen_time', regen_time);
+    localStorage.setItem('hp_regen', hp_regen);
   }
 
 }
@@ -1137,11 +1159,9 @@ function buy_hp_upgrade(new_requiredCost, id){
     const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** upgrade.hp_multiplier)));
     upgrade.hp_multiplier += 0.01 * buy_upgrade;
     player_MAX_HP += add_hp;
-    if (enemy_level % 5 !== 0){
-      player_currentHP = player_MAX_HP;
-    }
     localStorage.setItem('hp_multiplier', upgrade.hp_multiplier)
     localStorage.setItem('hp_upgrade_purchased', upgrade.hp_upgrade_purchased);
+    localStorage.setItem('player_MAX_HP', player_MAX_HP);
   }
 
 }
@@ -1258,7 +1278,7 @@ function startAuraAttack() {
       }
   };
 
-  if (!auraActive && auto_attacks['aura_upgrade'].aura_upgrade_purchased > 0) {
+  if (!auraActive && auto_attacks['aura_upgrade'].aura_upgrade_purchased > 0 && auraIisOn === true) {
       auraActive = true;
       auraInterval = setInterval(function() {
           currentHP -= aura_damage;
@@ -1271,7 +1291,6 @@ function startAuraAttack() {
                       localStorage.setItem('bossTimer', bossTimer);
                       isDead = true;
                       framex = 0;
-                      resetPlayerHP();
                       update_enemy();
                       update_inventory();
                   }
@@ -1355,7 +1374,6 @@ function previous_level() {
   }
   bossTimer = 0
   localStorage.setItem('bossTimer', bossTimer);
-  resetPlayerHP();
   if ((enemy_level) % 5 === 0) {
     isAttacking = true;
     start_bossAttack();
@@ -1392,7 +1410,6 @@ function next_level() {
   else {
     bossTimer = 0
     localStorage.setItem('bossTimer', bossTimer);
-    resetPlayerHP();
     if ((enemy_level) % 5 === 0) {
       isAttacking = true;
       start_bossAttack();
@@ -1434,6 +1451,24 @@ function lock_stage(){
   }
 }
 
+function auraOn(){
+  const auraStatus = document.getElementById('turnAura')
+  if (auraIisOn === false){
+    auraIisOn = true;
+    auraStatus.innerHTML = "On";
+    auraStatus.style.background = "green";
+    auraStatus.style.color = "white";
+  }
+  else if (auraIisOn === true){
+    auraIisOn = false;
+    auraStatus.innerHTML = "Off";
+    auraStatus.style.background = "darkred";
+    auraStatus.style.color = "white";
+    location.reload(true);
+  }
+  localStorage.setItem('auraIisOn', JSON.stringify(auraIisOn));
+}
+
 function bossAttack(){
   isAttacking = true;
   boss_damage = Math.round(6 + enemy_level * (15 * (enemy_level / 20)))
@@ -1469,11 +1504,12 @@ function restore_BossAttack() {
 function check_player_hp(){
   if (player_currentHP <= 0){
     stop_bossAttack();
+    player_currentHP = 0;
+    enemy_level -= 2;
     if (islock_stage === 2){
       enemy_level -= 2;
     }
     localStorage.setItem('enemy_level', enemy_level);
-    player_currentHP = player_MAX_HP;
     localStorage.setItem('player_currentHP', player_currentHP);
     update_hp();
     handleBossAttack();

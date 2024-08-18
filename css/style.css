@@ -632,3 +632,17 @@ span {
   width: 5rem;
 }
 
+.aura_upgrade_div{
+  display: flex;
+}
+
+#aura_upgrade {
+  width: 100%;
+  margin-left: 5.4%;
+}
+
+#turnAura {
+  width: 30%;
+  margin-right: 5.4%;
+}
+

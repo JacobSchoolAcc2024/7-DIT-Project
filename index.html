@@ -56,11 +56,11 @@
         </div>
         <button class = "tooltip" onclick="reset()">Reset
         </button>
-        <p class="status">Player Stats</p>
+        <P id="player_level" class="status">Player Level: 1 </P>
         <p id="player_damage" class="status">Player Damage: 1  </p>
         <p id="player_health" class="status">Player Health: 100 </p>
+        <p id="player_regen" class="status">Regen HP: ?</p>
         <P id="aura_damage" class="status">Player Aura: ?</P>
-        <P id="player_level" class="status">Player Level: 1 </P>
         <p  id="boss_damage" class="status">Boss Damage: ? </p>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play</button>
         <button id="play_fx" onclick="PlayFx()">Play Sound</button>
@@ -109,6 +109,10 @@
         <button class="tooltip" id="aura_upgrade" onclick="purchase_upgrade('aura_upgrade')">
             Aura
             <span class="tooltiptext" id="aura_upgrade_cost">Automatically damages enemy</span>
+        </button>
+        <button class="tooltip" id="regen_upgrade" onclick="purchase_upgrade('regen_upgrade')">
+            Regeneration
+            <span class="tooltiptext" id="regen_upgrade_cost">Regenerates Player Health</span>
         </button>
         <div class="stage_setting">
             <button class="tooltip"  onclick="previous_level()">Previous Level

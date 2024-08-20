@@ -272,7 +272,6 @@ function getWeaponPointByPrice(price) {
 //function of purchasing items
 function purchaseItem() {
   let NameOfWeapon = getWeaponNameByPrice(marketPrice);
-  let weaponID =  NameOfWeapon.toLowerCase();
   // to check it the weapon has been purchased and owns enough money
   if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
       gold -= marketPrice;

@@ -18,7 +18,7 @@ let timeShardsTitan = parseInt(localStorage.getItem('timeShardsTitan')) || 1;
 
 //Reset Variables
 let regenAmount = localStorage.getItem('hp_regen') || 10;
-let auraDamage = localStorage.get('aura_damage') || 0;
+let auraDamage = localStorage.getItem('aura_damage') || 0;
 
 
 

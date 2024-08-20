@@ -16,6 +16,10 @@ let defeatedTitans = parseInt(localStorage.getItem('defeatedTitans')) || 0;
 let timeShardsMultiplier = parseInt(localStorage.getItem('timeShardsMultiplier')) || 1;
 let timeShardsTitan = parseInt(localStorage.getItem('timeShardsTitan')) || 1;
 
+//Reset Variables
+let regenAmount = localStorage.getItem('hp_regen') || 10;
+let auraDamage = localStorage.get('aura_damage') || 0;
+
 
 
 /////////////////////////////////
@@ -606,6 +610,9 @@ function reincarnation(){
     goldMultiplier += multiplplierAdd * timeShardsMultiplier;
     damageMultiplier += multiplplierAdd * timeShardsMultiplier;
     timeShardsMultiplier += multiplplierAdd/3;
+    playerDmg = 0;
+    playerHP = 100;
+
   }
   else{
     alert('You do not have enough time shards to reincarnate');

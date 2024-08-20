@@ -26,8 +26,8 @@ let bossAttackInterval;
 
 //Hp Restore
 let hpRegenActive;
-let hpRegenInterval
-let hp_regen = parseInt(localStorage.getItem('hp_regen')) || 10;
+let hpRegenInterval;
+let hp_regen = parseInt(localStorage.getItem('hp_regen')) || 100;
 let regen_time = parseInt(localStorage.getItem('regen_time')) || 5000;
 
 
@@ -40,7 +40,7 @@ let clickedButton = parseInt(localStorage.getItem('clickedButton')) || 0;
 let clickerCostMultiplier = parseInt(localStorage.getItem('clickerCostMultiplier')) || 5;
 let staminaCostMultiplier = parseInt(localStorage.getItem('staminaCostMultiplier')) || 10;
 let auraCostMultiplier = parseInt(localStorage.getItem('auraCostMultiplier')) || 10;
-let hpRegenCostMultiplier = parseInt(localStorage.getItem('hpRegenCostMultiplier')) || 20;
+let hpRegenCostMultiplier = parseInt(localStorage.getItem('hpRegenCostMultiplier')) || 6;
 
 //Gold Multiplier
 let gold = parseInt(localStorage.getItem('gold')) || 0;
@@ -74,14 +74,14 @@ const Upgrades = {
   aura_upgrade: {
     button_id: "aura_upgrade",
     cost_id: "aura_upgrade_cost",
-    cost: 100,
+    cost: 50,
     aura_upgrade_purchased: parseInt(localStorage.getItem('aura_upgrade_purchased')) || 0,
     aura_multiplier: parseInt(localStorage.getItem('aura_multiplier')) || 1,
   },
   regen_upgrade: {
     button_id: "regen_upgrade",
     cost_id: "regen_upgrade_cost",
-    cost: 100,
+    cost: 30,
     regen_upgrade_purchased: parseInt(localStorage.getItem('regen_upgrade_purchased')) || 0,
     regen_multiplier: parseInt(localStorage.getItem('regen_multiplier')) || 1,
   }
@@ -140,7 +140,7 @@ const HP_TEXT_Y = HP_BAR_Y + 15;
 
 
 // Player HP bar variables
-let player_MAX_HP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
+let player_MAX_HP = parseInt(localStorage.getItem('player_MAX_HP')) || 1000;
 var player_currentHP = parseInt(localStorage.getItem('player_currentHP')) || player_MAX_HP;
 const PLAYER_HP_BAR_HEIGHT = 25;
 const PLAYER_HP_BAR_X = 10;

@@ -110,6 +110,10 @@
             Train Stamina
             <span class="tooltiptext" id="hp_upgrade_cost">Increases Hp</span>
         </button>
+        <button class="tooltip" id="regen_upgrade" onclick="purchase_upgrade('regen_upgrade')">
+            Regeneration
+            <span class="tooltiptext" id="regen_upgrade_cost">Regenerates Player Health</span>
+        </button>
         <div class="aura_upgrade_div">
             <button class="tooltip" id="aura_upgrade" onclick="purchase_upgrade('aura_upgrade')">
                 Aura
@@ -119,10 +123,6 @@
                 <span class="tooltiptext">Turns aura on</span>
             </button>
         </div>        
-        <button class="tooltip" id="regen_upgrade" onclick="purchase_upgrade('regen_upgrade')">
-            Regeneration
-            <span class="tooltiptext" id="regen_upgrade_cost">Regenerates Player Health</span>
-        </button>
         <div class="stage_setting">
             <button class="tooltip"  onclick="previous_level()">Previous Level
                 <span class="tooltiptext">Goes back 1 stage</span>

@@ -1606,7 +1606,7 @@ function add_stat(stat){
   if (stat === 'Strength'){
     if (skill_points >= 1){
       skill_points -= 1;
-      strength_stat_multi += 0.1;
+      strength_stat_multi += 0.5;
       strength_stat_multi_added += 1;
       localStorage.setItem('strength_stat_multi', strength_stat_multi);
       localStorage.setItem('strength_stat_multi_added', strength_stat_multi_added);
@@ -1616,7 +1616,7 @@ function add_stat(stat){
   else if (stat === 'Stamina'){
     if (skill_points >= 1){
       skill_points -= 1;
-      stamina_stat_multi += 0.1;
+      stamina_stat_multi += 0.5;
       stamina_stat_multi_added += 1;
       localStorage.setItem('stamina_stat_multi', stamina_stat_multi);
       localStorage.setItem('stamina_stat_multi_added', stamina_stat_multi_added);
@@ -1626,7 +1626,7 @@ function add_stat(stat){
   else if (stat === 'Intelligence'){
     if (skill_points >= 1){
       skill_points -= 1;
-      intelligence_stat_multi += 0.1;
+      intelligence_stat_multi += 0.5;
       intelligence_stat_multi_added += 1;
       localStorage.setItem('intelligence_stat_multi', intelligence_stat_multi);
       localStorage.setItem('intelligence_stat_multi_added', intelligence_stat_multi_added);

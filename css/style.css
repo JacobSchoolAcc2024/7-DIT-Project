@@ -632,6 +632,17 @@ span {
   width: 5rem;
 }
 
+h1 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
 .aura_upgrade_div{
   display: flex;
 }

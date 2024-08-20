@@ -1,6 +1,7 @@
 
 *{
     overflow: hidden;
+    user-select: none;
 }
 
 body {
@@ -97,3 +98,39 @@ h1 {
 .menu_container {
     z-index: 999;
 }
+
+.checkbox{
+    margin-top: 10px;
+    position: relative;
+    cursor: pointer;
+    z-index: 1000;
+    color: white;
+  }
+
+
+
+#playerReincarnation, button {
+    font-size: 1rem;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 900;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    z-index: 900;
+  }
+  

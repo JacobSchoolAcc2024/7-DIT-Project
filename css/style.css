@@ -185,7 +185,7 @@ body {
   
     /* Position the tooltip */
     position: absolute;
-    z-index: 1;
+    z-index: 900;
   }
   
   
@@ -643,3 +643,20 @@ p {
   line-height: 1.5;
   margin-bottom: 20px;
 }
+.aura_upgrade_div{
+  display: flex;
+}
+
+#aura_upgrade {
+  width: 100%;
+  margin-left: 5.4%;
+}
+
+#turnAura {
+  width: 30%;
+  margin-right: 5.4%;
+}
+
+
+
+

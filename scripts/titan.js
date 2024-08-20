@@ -5,9 +5,19 @@ const CANVAS_HEIGHT_TITAN = canvasTitan.height = 600;
 let gameframetitan = 0;
 let framexTitan = 0;
 let currentState = 'idle';
-const stateChangeInterval = 300; // Change state every 300 frames
 let titanLevel = parseInt(localStorage.getItem('titanLevel')) || 1;
 let titanStart = parseInt(localStorage.getItem('titanStart')) || 5;
+
+//Prestige variables
+let reincarnationLevel = parseInt(localStorage.getItem('reincarnationLevel')) || 1;
+let damageMultiplier = parseInt(localStorage.getItem('damageMultiplier')) || 1;
+let timeShards = parseInt(localStorage.getItem('timeShards')) || 0;
+let defeatedTitans = parseInt(localStorage.getItem('defeatedTitans')) || 0;
+let timeShardsMultiplier = parseInt(localStorage.getItem('timeShardsMultiplier')) || 1;
+let timeShardsTitan = parseInt(localStorage.getItem('timeShardsTitan')) || 1;
+
+
+
 /////////////////////////////////
 //Player Attributes
 
@@ -17,11 +27,18 @@ let multipliers = {
     base_prestige_points: 10,
 }
 
-const finalDamage = playerDmg * multipliers.boss_attack_multi;
+let strengthStatMulti = localStorage.getItem('strength_stat_multi') || 0;
+const finalDamage = damageMultiplierClicker * (playerDmg * 1 + strengthStatMulti);
 
 //
 
 // StatusBar Var ////////////////////
+
+//Reincarnation Modal Variables
+const reincarnateButton = document.getElementById('playerReincarnation');
+const modal = document.getElementById('reincarnateModal');
+const confirmButton = document.getElementById('confirmReincarnate');
+const cancelButton = document.getElementById('cancelReincarnate');
 
 // Player Hp Animation Bar //
 const PLAYER_HP_BAR_HEIGHT = 20;
@@ -41,9 +58,9 @@ const HP_BAR_Y = 50;
 const HP_BAR_WIDTH = CANVAS_WIDTH_TITAN - 30;
 const HP_TEXT_X = HP_BAR_X + 5;
 const HP_TEXT_Y = HP_BAR_Y + 25;
-let TitanMaxHP = parseInt(localStorage.getItem('TitanMaxHP')) || 1 * Math.pow(10, (titanLevel + 1) * titanLevel - 1);
+let TitanMaxHP = parseInt(localStorage.getItem('TitanMaxHP')) ||  100000;
 let TitanCurrentHP = parseInt(localStorage.getItem('TitanCurrentHP')) || TitanMaxHP;
-let titanAttack = parseInt(localStorage.getItem('titanAttack')) || 10000 * titanLevel * titanLevel;
+let titanAttack = parseInt(localStorage.getItem('titanAttack')) || 5000;
 
 // HP particle variables
 const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
@@ -80,6 +97,9 @@ const wormIdleWidth = 90;
 let wormAttributes = {
     attack: 1 * Math.pow(10, 3),
 };
+let isRegenerating = false;
+let titantRegen;
+
 ////////////////////////////////////
 
 //Necromancer Boss Var ////////////////////
@@ -87,7 +107,7 @@ const necromancer = new Image();
 necromancer.src = '../images/Necromancer.png';
 
 //Necromancer Boss Attack Animation//
-let necromancerAttackFrameY = 3;
+let necromancerAttackFrameY = 2;
 let necromancerFrameX = 0;
 const necromancerAttackMaxFrames = 13;
 const necromancerAttackHeight = 128;
@@ -108,6 +128,7 @@ let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
 let bossAttackBegin = false;
 let titanName = localStorage.getItem('titanName') || 'Hell Worm';
 
+//Class Constructor
 
 class AnimateTitan {
     constructor(height, width, maxFrames, framey, animationImage, name, staggerFrames,xAxis,yAxis) {
@@ -191,17 +212,10 @@ const Worm_HP_BAR = new bar(HP_BAR_HEIGHT, HP_BAR_WIDTH, HP_BAR_X,
 HP_BAR_Y, HP_TEXT_Y, HP_TEXT_X,TitanMaxHP, TitanCurrentHP, 'black', 'white');
 const playerHpBar = new bar(HP_BAR_HEIGHT, HP_BAR_WIDTH, HP_BAR_X, PLAYER_HP_BAR_Y, PLAYER_HP_TEXT_Y, PLAYER_HP_TEXT_X, playerMaxHP, playerHP, 'darkred', 'green');
 
-function openNav() {
-  document.getElementById("mySidenav").style.width = "10rem";
-  document.getElementById("main_Page").style.marginleft == "11.5rem";
-  document.getElementById("main_Page").style.transition = "0.9s";
 
-}
 
-function closeNav() {
-  document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("main_Page").style.margin-left == "1.5rem";
-}
+
+// Animation FUnctions
 
 function drawHPText() {
     ctxTitan.font = '1.9rem Roboto';
@@ -210,9 +224,10 @@ function drawHPText() {
   }
 
   
-function drawBossTimer() {
+  function drawBossTimer() {
     let remainingTime = MAX_BOSS_TIME - bossTimer;
     let timerRatio = remainingTime / MAX_BOSS_TIME;
+
     // Draw the timer background
     ctxTitan.fillStyle = 'black';
     ctxTitan.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH, BOSS_TIMER_HEIGHT);
@@ -220,20 +235,21 @@ function drawBossTimer() {
     // Draw the timer bar
     ctxTitan.fillStyle = 'white';
     ctxTitan.fillRect(BOSS_TIMER_X, BOSS_TIMER_Y, BOSS_TIMER_WIDTH * timerRatio, BOSS_TIMER_HEIGHT);
-    bossTimer += TIMER_DECREASE_RATE;
-    // Check if the boss timer has reached the maximum time
 
-    if (bossTimer >= MAX_BOSS_TIME){
-      bossTimer = 0
-    }
-    if (bossTimer > MAX_BOSS_TIME && bossAttackBegin === true) {
-      BOSS_TIMER_X = 15;
-      playerHP -= 1;
-      document.getElementById('playerHP').innerHTML = formatNumber(playerHP);
-      console.log('Boss Damage: ', formatNumber(titanAttack));
-      bossAttackBegin = false;
+    bossTimer += TIMER_DECREASE_RATE;
+
+    // Check if the boss timer has reached the maximum time
+    if (bossTimer >= MAX_BOSS_TIME) {
+        if (bossAttackBegin === true) {
+            BOSS_TIMER_X = 15;
+            playerHP -= titanAttack;
+            checkPlayerHp();
+            document.getElementById('playerHP').innerHTML = 'Player Health: ' + formatNumber(playerHP);
+        }
+        bossTimer = 0;
     }
 }
+
 
 function drawEnemyLevel() {
     ctxTitan.font = '2rem Lugrasimo';
@@ -248,26 +264,8 @@ function drawEnemyLevel() {
 function drawPlayerHpText() {
   ctxTitan.font = '1rem Arial';
   ctxTitan.fillStyle = 'white';
-  ctxTitan.fillText(`Player HP: ${playerHP.toFixed(2)}/${playerMaxHP.toFixed(2)}`, PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y);
+  ctxTitan.fillText(`Player HP: ${formatNumber(playerHP)}/${formatNumber(playerMaxHP)}`, PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y);
 }
-
-
-
-
-
-function getValidState() {
-    if (titanLevel == 1) {
-        if (TitanCurrentHP <= (TitanMaxHP * 0.5)) {
-            return 'attack'}
-        else{
-            return 'idle';
-        }
-    } 
-    else if (titanLevel == 2) {
-        return 'necromancerAttack';
-    }
-}
-
 
 
 function animationTitan() {
@@ -279,16 +277,33 @@ function animationTitan() {
         case 'idle':
             wormIdleAnimation.drawTitan();
             BOSS_TIMER_X = -1000;
+            bossAttackBegin = false;
+            if (!isRegenerating) {
+                isRegenerating = true;
+                titantRegen = setInterval(function(){
+                    if (TitanCurrentHP < TitanMaxHP){
+                        TitanCurrentHP += (TitanMaxHP * 0.2);
+                        TitanCurrentHP = Math.min(TitanCurrentHP, TitanMaxHP);
+                    }
+                }, 10000);
+            }
             break;
         case 'attack':
             wormAttackAnimation.drawTitan();
             bossAttackBegin = true
             BOSS_TIMER_X = 15;
             MAX_BOSS_TIME = 2;
-            TIMER_DECREASE_RATE = 2.8 / 60
+            TIMER_DECREASE_RATE = 2.8 / 60;
+            isRegenerating = false;
+            clearInterval(titantRegen);
             break;
         case 'necromancerAttack':
             necromancerAttackAnimation.drawTitan();
+            bossAttackBegin = true;
+            MAX_BOSS_TIME = 2;
+            TIMER_DECREASE_RATE = 3 / 60;
+            isRegenerating = false;
+            clearInterval(titantRegen);
             break;
     }
 
@@ -299,6 +314,7 @@ function animationTitan() {
     drawBossTimer();
     drawHPText();
     drawPlayerHpText();
+    drawHPParticle();
 
     gameframetitan++;
     requestAnimationFrame(animationTitan);
@@ -310,14 +326,52 @@ function drawLoop() {
     requestAnimationFrame(drawLoop);
 }
 
-function formatNumber(num) {
-    const suffixes = ["", " K", " Million", " Billion", " Trillion", " Quadrillion"
-      , " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion"
-    ];
-    const suffixIndex = Math.floor(Math.log10(Math.abs(num)) / 3);
-    const formattedNum = parseFloat((num / Math.pow(1000, suffixIndex)).toFixed(2));
-    return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");
+
+
+
+
+//Utilities//
+
+function openNav() {
+  document.getElementById("mySidenav").style.width = "10rem";
+  document.getElementById("main_Page").style.marginleft == "11.5rem";
+  document.getElementById("main_Page").style.transition = "0.9s";
+
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main_Page").style.margin-left == "1.5rem";
+}
+
+reincarnateButton.addEventListener('click', () => {
+  modal.style.display = 'block';
+});
+
+confirmButton.addEventListener('click', () => {
+  reincarnate();
+  modal.style.display = 'none';
+});
+
+cancelButton.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+function getValidState() {
+  if (playerHP <= 0){
+    return 'idle';
   }
+  if (titanLevel == 1) {
+      if (TitanCurrentHP <= (TitanMaxHP * 0.5)) {
+          return 'attack'}
+      else{
+          return 'idle';
+      }
+  } 
+  else if (titanLevel == 2) {
+      return 'necromancerAttack';
+  }
+}
 
 function drawHPParticle() {
     for (let i = hpParticles.length - 1; i >= 0; i--) {
@@ -342,10 +396,15 @@ canvasTitan.addEventListener('click', () => {
     if (TitanCurrentHP <= 0){
         
         titanLevel += 1
-        if (titanLevel <= 5){
-            TitanMaxHP = 1 * Math.pow(10,(titanLevel + 3))
-            TitanCurrentHP = TitanMaxHP;
-        }
+        defeatedTitans += 1;
+        TitanMaxHP = 10 * Math.pow(10,(defeatedTitans + 4))
+        titanAttack = 1 * Math.pow(10,(defeatedTitans + 3))
+        TitanCurrentHP = TitanMaxHP;
+        const addTimeShards = timeShardsTitan * timeShardsMultiplier * (1 * Math.pow(1.5,(defeatedTitans + 1)))
+        timeShards += addTimeShards;
+    }
+        if (titanLevel > 2){
+          titanLevel = 1;
     }
 
     const HP_PARTICLE_TEXT = "-" + formatNumber(finalDamage) + " HP";
@@ -359,6 +418,7 @@ canvasTitan.addEventListener('click', () => {
 
 animationTitan();
 
+
 function save(){
     localStorage.setItem('TitanMaxHP', TitanMaxHP);
     localStorage.setItem('TitanCurrentHP', TitanCurrentHP);
@@ -370,14 +430,38 @@ function save(){
     localStorage.setItem('base_prestige_points', multipliers.base_prestige_points);
     localStorage.setItem('player_currentHP', playerHP);
     localStorage.setItem('player_MAX_HP', playerMaxHP);
+    localStorage.setItem('timeShards', timeShards);
+    localStorage.setItem('defeatedTitans', defeatedTitans);
+    localStorage.setItem('timeShardsMultiplier', timeShardsMultiplier);
+    localStorage.setItem('timeShardsTitan', timeShardsTitan);
+    localStorage.setItem('damageMultiplier', damageMultiplier);
+    localStorage.setItem('goldMultiplier', goldMultiplier);
+    localStorage.setItem('reincarnationLevel', reincarnationLevel);
 
-    document.getElementById('wormHP').innerHTML = TitanCurrentHP;
-    document.getElementById('playerHP').innerHTML = formatNumber(playerHP);
+    document.getElementById('wormHP').innerHTML = 'Titan Health: ' + formatNumber(TitanCurrentHP);
+    document.getElementById('bossDamage').innerHTML = 'Boss Damage: ' + formatNumber(titanAttack);
+    document.getElementById('titanLevel').innerHTML = 'Titan Reincarnations: ' + formatNumber(defeatedTitans);
+    document.getElementById('timeShards').innerHTML = 'Time Shards: ' + formatNumber(timeShards);
+    checkTimeShards();
+
 }
 
 
-
-
+function checkPlayerHp(){
+  if (playerHP <= 0){
+    setTimeout(function(){
+      alert("You have died");
+      defeatedTitans = 0;
+      titanLevel = 1;
+      TitanMaxHP = 10 * Math.pow(10,(defeatedTitans + 4))
+      titanAttack = 1 * Math.pow(10,(defeatedTitans + 3))
+      timeShardsTitan = 0;
+      playerHP = playerMaxHP;
+      TitanCurrentHP = TitanMaxHP;
+    }, 1000)
+    
+  }
+}
 
 
 function reset(){
@@ -385,6 +469,147 @@ function reset(){
     location.reload();
 }
 
+
+/**
+ * Formats a number into a readable string representation.
+ * Supports both standard notation with suffixes and scientific notation.
+ * @param {number} num - The number to format.
+ * @returns {string} The formatted number as a string.
+ */
+function formatNumber(num) {
+  // Check if scientific notation is enabled via a checkbox in the UI
+  const checkbox = document.getElementById('scientific-notation-checkbox');
+
+  if (!checkbox.checked) {
+    // Standard notation (with suffixes)
+    // This array contains suffixes for every 3 orders of magnitude up to 10^99 (Googol)
+    const suffixes = [
+      "", " K", " Million", " Billion", " Trillion", " Quadrillion",
+      " Quintillion", " Sextillion", " Septillion", " Octillion", " Nonillion", " Decillion",
+      " Undecillion", " Duodecillion", " Tredecillion", " Quattuordecillion", " Quindecillion",
+      " Sexdecillion", " Septendecillion", " Octodecillion", " Novemdecillion", " Vigintillion",
+      " Unvigintillion", " Duovigintillion", " Trevigintillion", " Quattuorvigintillion", " Quinvigintillion",
+      " Sexvigintillion", " Septenvigintillion", " Octovigintillion", " Novemvigintillion", " Trigintillion",
+      " Untrigintillion", " Duotrigintillion", " Googol"
+    ];
+
+    // Calculate the index for the appropriate suffix
+    // We use log base 10 and divide by 3 because each suffix represents 3 orders of magnitude
+    // Math.floor ensures we round down to the nearest suffix
+    const suffixIndex = Math.floor(Math.log10(Math.abs(num)) / 3);
+
+    // Scale down the number by dividing it by 1000^suffixIndex
+    // This brings the number into the range 1-999.99
+    // toFixed(2) rounds to 2 decimal places, parseFloat removes trailing zeros
+    const formattedNum = parseFloat((num / Math.pow(1000, suffixIndex)).toFixed(2));
+
+    // Return the formatted number with its suffix, or "0" for invalid inputs
+    // The || "" at the end ensures we don't append "undefined" for numbers larger than our suffix list
+    return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");
+  }
+  else {
+    // Scientific notation
+    if (num === 0 || isNaN(num)) {
+      return "0"; // Return "0" for zero or invalid inputs
+    }
+
+    const absNum = Math.abs(num);
+    if (absNum < 1000) {
+      // For small numbers, just return with 2 decimal places
+      return num.toFixed(2);
+    }
+
+    // Calculate the exponent (power of 10)
+    // This represents how many places the decimal point should move
+    const exponent = Math.floor(Math.log10(absNum));
+
+    // Calculate the mantissa
+    // The mantissa is the part of the number before the 'e' in scientific notation
+    // It's always a number between 1 and 9.99 in normalized scientific notation
+    // For example, in 3.14e2, 3.14 is the mantissa
+    const mantissa = absNum / Math.pow(10, exponent);
+
+    // Return in scientific notation format: mantissa e exponent
+    // The mantissa is rounded to 2 decimal places for readability
+    return mantissa.toFixed(2) + "e" + exponent;
+  }
+}
+
+
+const checkboxScientificNotation = document.getElementById('scientific-notation-checkbox');
+
+// Load saved state and set up change listener
+checkboxScientificNotation.checked = localStorage.getItem('scientificNotation') === 'true';
+checkboxScientificNotation.addEventListener('change', () => {
+    localStorage.setItem('scientificNotation', checkboxScientificNotation.checked);
+});
+
+document.addEventListener('keydown', handleKeyPress);
+function handleKeyPress(event) {
+  switch(event.key) {
+    case 'r':
+      reset();
+      break
+  }
+
+}
+
 setInterval(save, 1000);
+
+// Time Shard Functions
+
+function checkTimeShards() {
+  const baseTimeShardsRequirements = [
+    { level: 1, shards: 1 },
+    { level: 2, shards: 10 },
+    { level: 3, shards: 100 },
+    // ... other levels ...
+  ];
+  // Get the requirement for the current reincarnation level
+  const currentRequirement = baseTimeShardsRequirements[reincarnationLevel - 1];
+  const reincarnationButton = document.getElementById('playerReincarnation'); 
+  const reincarnationRequirement = document.getElementById('reincarnationRequirements');
+  const timeShardMulti = document.getElementById('timeShardMulti');
+  const goldMulti = document.getElementById('goldMulti');
+  const reincarnationLevelDisplay = document.getElementById('reincarnationLevel');
+  const damageMulti = document.getElementById('damageMulti');
+
+  if (currentRequirement && timeShards >= currentRequirement.shards) {
+    reincarnationButton.style.backgroundColor = 'darkgreen';
+    reincarnationButton.style.color = 'wheat';
+   
+    // Unlock the corresponding level or feature
+    // You can add your logic here
+  }
+  else{
+    reincarnationButton.style.backgroundColor = 'darkred';
+    reincarnationButton.style.color = 'white';
+  }
+  reincarnationRequirement.innerHTML = 'Requirements: ' + currentRequirement.shards + ' Time Shards';
+  timeShardMulti.innerHTML = 'Time Shard Multiplier: ' + timeShardsMultiplier;
+  goldMulti.innerHTML = 'Gold Multiplier: ' + goldMultiplier;
+  reincarnationLevelDisplay.innerHTML = 'Reincarnation Level: ' + reincarnationLevel;
+  damageMulti.innerHTML = 'Damage Multiplier: ' + damageMultiplier;
+}
+
+function reincarnation(){
+  const baseTimeShardsRequirements = [
+    { level: 1, shards: 1 },
+    { level: 2, shards: 10 },
+    { level: 3, shards: 100 },
+  ];
+  const currentRequirement = baseTimeShardsRequirements[reincarnationLevel - 1];
+  const multiplplierAdd = 2 * Math.pow(2, reincarnationLevel + 1);
+  if (currentRequirement && timeShards >= currentRequirement.shards){
+    timeShards -= currentRequirement.shards;
+    reincarnationLevel++;
+    goldMultiplier += multiplplierAdd * timeShardsMultiplier;
+    damageMultiplier += multiplplierAdd * timeShardsMultiplier;
+    timeShardsMultiplier += multiplplierAdd/3;
+  }
+  else{
+    alert('You do not have enough time shards to reincarnate');
+  }
+}
 
 

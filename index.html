@@ -57,18 +57,20 @@
         <button class = "tooltip" onclick="reset()">Reset
         </button>
         <P id="player_level" class="status">Player Level: 1 </P>
-        <p id="skill_points"class="status">Skill Points: 0 </p>
         <p id="player_damage" class="status">Player Damage: 1  </p>
         <p id="player_health" class="status">Player Health: 100 </p>
         <p id="player_regen" class="status">Regen HP: ?</p>
         <P id="aura_damage" class="status">Player Aura: ?</P>
         <p  id="boss_damage" class="status">Boss Damage: ? </p>
-        <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play BGM</button>
+        <p id="shards">Time Shards: ?</p>
         <button id="play_fx" onclick="PlayFx()">Play Sound</button>
+        <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play BGM</button>
+        <br>
         <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
         <br>
         <input type="checkbox" id="scientific-notation-checkbox">
         <label for="scientific-notation-checkbox">Use Scientific Notation</label>
+        <br>
     </div>
     <div class="skill_point_menu" id="skill_p_menu">
             <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
@@ -107,10 +109,15 @@
             Train Stamina
             <span class="tooltiptext" id="hp_upgrade_cost">Increases Hp</span>
         </button>
-        <button class="tooltip" id="aura_upgrade" onclick="purchase_upgrade('aura_upgrade')">
-            Aura
-            <span class="tooltiptext" id="aura_upgrade_cost">Automatically damages enemy</span>
-        </button>
+        <div class="aura_upgrade_div">
+            <button class="tooltip" id="aura_upgrade" onclick="purchase_upgrade('aura_upgrade')">
+                Aura
+                <span class="tooltiptext" id="aura_upgrade_cost">Automatically damages enemy</span>
+            </button>
+            <button class="tooltip" id="turnAura" onclick="auraOn()">On
+                <span class="tooltiptext">Turns aura on</span>
+            </button>
+        </div>        
         <button class="tooltip" id="regen_upgrade" onclick="purchase_upgrade('regen_upgrade')">
             Regeneration
             <span class="tooltiptext" id="regen_upgrade_cost">Regenerates Player Health</span>

@@ -13,9 +13,10 @@ let click_delay  = parseInt(localStorage.getItem('click_delay')) || 100;
 let scientificNotation = localStorage.getItem('scientificNotation') || false;
 
 //Autoclickers
+let auraIisOn = JSON.parse(localStorage.getItem('auraIisOn')) || false;
 let auraActive = false;
 let auraInterval;
-let aura_damage = parseInt(localStorage.getItem('aura_damage')) || 1;
+let aura_damage = parseInt(localStorage.getItem('aura_damage')) || 0;
 let aura_frequency = parseInt(localStorage.getItem('aura_frequency')) || 2000;
 
 ///Boss Attack
@@ -26,7 +27,7 @@ let bossAttackInterval;
 //Hp Restore
 let hpRegenActive;
 let hpRegenInterval
-let hp_regen = parseInt(localStorage.getItem('hp_regen')) || 0;
+let hp_regen = parseInt(localStorage.getItem('hp_regen')) || 10;
 let regen_time = parseInt(localStorage.getItem('regen_time')) || 5000;
 
 
@@ -43,9 +44,54 @@ let hpRegenCostMultiplier = parseInt(localStorage.getItem('hpRegenCostMultiplier
 
 //Gold Multiplier
 let gold = parseInt(localStorage.getItem('gold')) || 0;
-let goldMulMultiplier = parseInt(localStorage.getItem('goldMultiplier')) || 1;
+let goldMultiplier = parseInt(localStorage.getItem('goldMultiplier')) || 1;
 
 
+/// Stat Variables
+var strength_stat_multi = parseInt(localStorage.getItem('strength_stat_multi')) || 0;
+let strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_multi_added')) || 0;
+let stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
+let stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
+let intelligence_stat_multi = parseInt(localStorage.getItem('intelligence_stat_multi')) || 1;
+let intelligence_stat_multi_added = parseInt(localStorage.getItem('intelligence_stat_multi_added')) || 0;
+
+// Upgrades
+const Upgrades = {
+  clicker_upgrade: {
+    button_id: "clicker_upgrade",
+    cost_id: "clicker_upgrade_cost",
+    cost: 2,
+    clicker_upgrade_purchased: parseInt(localStorage.getItem('clicker_upgrade_purchased')) || 0,
+    click_multiplier: parseInt(localStorage.getItem('click_multiplier')) || 1,
+  },
+  hp_upgrade: {
+    button_id: "hp_upgrade",
+    cost_id: "hp_upgrade_cost",
+    cost: 5,
+    hp_upgrade_purchased: parseInt(localStorage.getItem('hp_upgrade_purchased')) || 0,
+    hp_multiplier: parseInt(localStorage.getItem('hp_multiplier')) || 1,
+  },
+  aura_upgrade: {
+    button_id: "aura_upgrade",
+    cost_id: "aura_upgrade_cost",
+    cost: 100,
+    aura_upgrade_purchased: parseInt(localStorage.getItem('aura_upgrade_purchased')) || 0,
+    aura_multiplier: parseInt(localStorage.getItem('aura_multiplier')) || 1,
+  },
+  regen_upgrade: {
+    button_id: "regen_upgrade",
+    cost_id: "regen_upgrade_cost",
+    cost: 100,
+    regen_upgrade_purchased: parseInt(localStorage.getItem('regen_upgrade_purchased')) || 0,
+    regen_multiplier: parseInt(localStorage.getItem('regen_multiplier')) || 1,
+  }
+}
+
+//Final Stats
+let damageMultiplierClicker = localStorage.getItem('damageMultiplier') || 1;
+let reincarnationLevelClicker = localStorage.getItem('reincarnationLevel') || 1;
+let finalPlayerDamage = damageMultiplierClicker * (playerDmg * 1 + strength_stat_multi);
+let finalPurchaseMulti = reincarnationLevelClicker
 
 ///Game Var////
 /////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +176,7 @@ const PLAYER_ENERGY_TEXT_X = PLAYER_XP_BAR_X + 5;
 const PLAYER_ENERGY_TEXT_Y = PLAYER_XP_BAR_Y + 15;
 
 // HP particle variables
-const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
+const HP_PARTICLE_TEXT = "-" + finalPlayerDamage + "HP";
 const HP_PARTICLE_SIZE = 20;
 const HP_PARTICLE_DURATION = 20;
 const hpParticles = [];
@@ -162,13 +208,6 @@ const default_fx = document.getElementById("default_fx");
 const slash_fx = document.getElementById("dagger_slash");
 const skill_point_fx =document.getElementById("skill_point");
 let fx_play = false;
-/// Stat Variables
-var strength_stat_multi = parseInt(localStorage.getItem('strength_stat_multi')) || 1;
-let strength_stat_multi_added = parseInt(localStorage.getItem('strength_stat_multi_added')) || 0;
-let stamina_stat_multi = parseInt(localStorage.getItem('stamina_stat_multi')) || 1;
-let stamina_stat_multi_added = parseInt(localStorage.getItem('stamina_stat_multi_added')) || 0;
-let intelligence_stat_multi = parseInt(localStorage.getItem('intelligence_stat_multi')) || 1;
-let intelligence_stat_multi_added = parseInt(localStorage.getItem('intelligence_stat_multi_added')) || 0;
 
 
 
@@ -541,21 +580,20 @@ function handle_click() {
 
     if (!isHurt) {
       if (isAttacking) {
-        currentHP -= playerDmg * (1 + strength_stat_multi);
+        currentHP -= finalPlayerDamage;
         localStorage.setItem('currentHP', currentHP);
         if (currentHP <= 0) {
           bossTimer = 0
           localStorage.setItem('bossTimer', bossTimer);
           isDead = true;
           framex = 0
-          resetPlayerHP();
           update_enemy();
           update_inventory();
         }
   } else {
     isHurt = true;
     framex = 0;
-    currentHP -= playerDmg * (1 + strength_stat_multi);
+    currentHP -= finalPlayerDamage;
     localStorage.setItem('currentHP', currentHP);
     if (currentHP <= 0) {
       bossTimer = 0;
@@ -570,13 +608,18 @@ function handle_click() {
     }
   }
       // Create a new HP particle with updated text
-    const HP_PARTICLE_TEXT = "-" + formatNumber(playerDmg * (1 + strength_stat_multi)) + " HP";
+    const HP_PARTICLE_TEXT = "-" + formatNumber(finalPlayerDamage) + " HP";
     hpParticles.push({
       x: canvas1.width - 150,
       y: canvas1.height - 190,
       duration: HP_PARTICLE_DURATION,
       text: HP_PARTICLE_TEXT, // Add the text property
     });
+    console.log('FInal Damage: ' + damageMultiplierClicker * (playerDmg * 1 + strength_stat_multi))
+    console.log('damageMultiplierClicker:', damageMultiplierClicker);
+    console.log('playerDmg:', playerDmg);
+    console.log('strength_stat_multi:', strength_stat_multi);
+
   }
 
   // Add a delay of 500 milliseconds (0.5 seconds) before re-enabling the click
@@ -596,13 +639,14 @@ let canva_id = document.getElementById('canvas1');
 canva_id.addEventListener('click', handle_click);
 
 
-const checkbox = document.getElementById('scientific-notation-checkbox');
+const checkboxScientificNotation = document.getElementById('scientific-notation-checkbox');
 
 // Load saved state and set up change listener
-checkbox.checked = localStorage.getItem('scientificNotation') === 'true';
-checkbox.addEventListener('change', () => {
-    localStorage.setItem('scientificNotation', checkbox.checked);
+checkboxScientificNotation.checked = localStorage.getItem('scientificNotation') === 'true';
+checkboxScientificNotation.addEventListener('change', () => {
+    localStorage.setItem('scientificNotation', checkboxScientificNotation.checked);
 });
+
 
 window.onload = function () {
   restore_BossAttack();
@@ -796,12 +840,12 @@ function locked_stage(){
 
 function calculate_gold_gain(){
   if ((enemy_level - 1) % 5 === 0) {
-    const goldGained =  goldMulMultiplier * (10 + Math.round((12 * (enemy_level / 5))));
+    const goldGained =  goldMultiplier * (10 + Math.round((12 * (enemy_level / 5))));
     gold += goldGained;
     localStorage.setItem('gold', gold);
     showGoldGainedAnimation(goldGained)}
   else{
-    const goldGained = goldMulMultiplier * (1 + Math.round((6 * (enemy_level / 10))));
+    const goldGained = goldMultiplier * (1 + Math.round((6 * (enemy_level / 10))));
     gold += goldGained;
     localStorage.setItem('gold', gold);
     showGoldGainedAnimation(goldGained)}
@@ -810,12 +854,12 @@ function calculate_gold_gain(){
 
 function lock_stage_gold_gain(){
   if ((enemy_level) % 5 === 0) {
-    const goldGained = goldMulMultiplier * (10 + Math.round((12 * (enemy_level / 5))));
+    const goldGained = goldMultiplier * (10 + Math.round((12 * (enemy_level / 5))));
     gold += goldGained;
     localStorage.setItem('gold', gold);
     showGoldGainedAnimation(goldGained)}
   else{
-    const goldGained = goldMulMultiplier * (1 + Math.round((6 * (enemy_level / 10))));
+    const goldGained = goldMultiplier * (1 + Math.round((6 * (enemy_level / 10))));
     gold += goldGained;
     localStorage.setItem('gold', gold);
     showGoldGainedAnimation(goldGained)}
@@ -873,7 +917,7 @@ function update_inventory() {
   gold_status.innerHTML = "Gold: " + formatNumber(gold);
   let player_damage_status = document.getElementById('player_damage');
   let boss_damage_status = document.getElementById('boss_damage');
-  player_damage_status.innerHTML = "Damage: " + formatNumber(playerDmg * (1 + strength_stat_multi)) + " ";
+  player_damage_status.innerHTML = "Damage: " + formatNumber(finalPlayerDamage) + " ";
   boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " ";
   player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level);
   str_stat_button.innerHTML = 'Strength: ' + strength_stat_multi_added;
@@ -915,6 +959,26 @@ function update_inventory() {
   if (Upgrades['regen_upgrade'].regen_upgrade_purchased > 0) {
     startHpRegeneration();
   }
+
+  const auraStatus = document.getElementById('turnAura')
+  if (auraIisOn === false){
+    auraStatus.innerHTML = "Off";
+    auraStatus.style.background = "darkred";
+    auraStatus.style.color = "white";
+    
+  }
+  else if (auraIisOn === true){
+    auraStatus.innerHTML = "On";
+    auraStatus.style.background = "green";
+    auraStatus.style.color = "white";
+  }
+
+  if (Upgrades['aura_upgrade'].aura_upgrade_purchased < 1) {
+    document.getElementById('turnAura').disabled = true;
+  } else {
+    document.getElementById('turnAura').disabled = false;
+  }
+  
 }
 
 function formatNumber(num) {
@@ -963,36 +1027,6 @@ function formatNumber(num) {
 //Game Upgrades//
 
 function purchase_upgrade(id) {
-  const Upgrades = {
-    clicker_upgrade: {
-      button_id: "clicker_upgrade",
-      cost_id: "clicker_upgrade_cost",
-      cost: 2,
-      clicker_upgrade_purchased: parseInt(localStorage.getItem('clicker_upgrade_purchased')) || 0,
-      click_multiplier: parseInt(localStorage.getItem('click_multiplier')) || 1,
-    },
-    hp_upgrade: {
-      button_id: "hp_upgrade",
-      cost_id: "hp_upgrade_cost",
-      cost: 5,
-      hp_upgrade_purchased: parseInt(localStorage.getItem('hp_upgrade_purchased')) || 0,
-      hp_multiplier: parseInt(localStorage.getItem('hp_multiplier')) || 1,
-    },
-    aura_upgrade: {
-      button_id: "aura_upgrade",
-      cost_id: "aura_upgrade_cost",
-      cost: 100,
-      aura_upgrade_purchased: parseInt(localStorage.getItem('aura_upgrade_purchased')) || 0,
-      aura_multiplier: parseInt(localStorage.getItem('aura_multiplier')) || 1,
-    },
-    regen_upgrade: {
-      button_id: "regen_upgrade",
-      cost_id: "regen_upgrade_cost",
-      cost: 100,
-      regen_upgrade_purchased: parseInt(localStorage.getItem('regen_upgrade_purchased')) || 0,
-      regen_multiplier: parseInt(localStorage.getItem('regen_multiplier')) || 1,
-    }
-  }
 
   const upgrade = Upgrades[id];
 
@@ -1035,15 +1069,7 @@ function purchase_upgrade(id) {
 
 
 function buy_regen_upgrade(new_requiredCost, id){
-  const Upgrades = {
-    regen_upgrade: {
-      button_id: "regen_upgrade",
-      cost_id: "regen_upgrade_cost",
-      cost: 100,
-      regen_upgrade_purchased: parseInt(localStorage.getItem('regen_upgrade_purchased')) || 0,
-      regen_multiplier: parseInt(localStorage.getItem('regen_multiplier')) || 1,
-    }
-  }
+
   const upgrade = Upgrades[id];
   baseCost = upgrade.cost
   if (gold >= new_requiredCost) {
@@ -1051,7 +1077,7 @@ function buy_regen_upgrade(new_requiredCost, id){
     gold -= new_requiredCost;
     upgrade.regen_multiplier += 0.001 * buy_upgrade;
     const add_hp_regen = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade * upgrade.regen_multiplier)));
-    hp_regen += add_hp_regen;
+    hp_regen += add_hp_regen * finalPurchaseMulti;
     if (regen_time <= 500){
       regen_time = 500;
     }
@@ -1061,23 +1087,14 @@ function buy_regen_upgrade(new_requiredCost, id){
     localStorage.setItem('regen_upgrade_purchased', upgrade.regen_upgrade_purchased);
     localStorage.setItem('regen_multiplier', upgrade.regen_multiplier);
     localStorage.setItem('regen_time', regen_time);
+    localStorage.setItem('hp_regen', hp_regen);
   }
-
 }
 
 
 
 function buy_aura_upgrade(new_requiredCost, id){
-  const Upgrades = {
-    aura_upgrade: {
-      button_id: "aura_upgrade",
-      cost_id: "aura_upgrade_cost",
-      cost: 100,
-      aura_upgrade_purchased: parseInt(localStorage.getItem('aura_upgrade_purchased')) || 0,
-      aura_multiplier: parseInt(localStorage.getItem('aura_multiplier')) || 1,
-    }
-  }
-
+  
   const upgrade = Upgrades[id];
   baseCost = upgrade.cost
   if (gold >= new_requiredCost) {
@@ -1085,7 +1102,7 @@ function buy_aura_upgrade(new_requiredCost, id){
     gold -= new_requiredCost;
     upgrade.aura_multiplier += 0.01 * buy_upgrade;
     const add_aura = Math.round(intelligence_stat_multi + (1 + intelligence_stat_multi) * (buy_upgrade + buy_upgrade * upgrade.aura_multiplier));
-    aura_damage += add_aura;
+    aura_damage += add_aura * finalPurchaseMulti;
     localStorage.setItem('aura_upgrade_purchased', upgrade.aura_upgrade_purchased);
     localStorage.setItem('aura_multiplier', upgrade.aura_multiplier);
     localStorage.setItem('aura_damage', aura_damage);
@@ -1094,26 +1111,19 @@ function buy_aura_upgrade(new_requiredCost, id){
 
 
 function buy_clicker_upgrade(new_requiredCost, id){
-  const Upgrades = {
-    clicker_upgrade: {
-      button_id: "clicker_upgrade",
-      cost_id: "clicker_upgrade_cost",
-      cost: 2,
-      clicker_upgrade_purchased: parseInt(localStorage.getItem('clicker_upgrade_purchased')) || 0,
-      click_multiplier: parseInt(localStorage.getItem('click_multiplier')) || 1,
-    }}
-
   const upgrade = Upgrades[id];
   baseCost = upgrade.cost
   if (gold >= new_requiredCost) {
     upgrade.clicker_upgrade_purchased += buy_upgrade;
     gold -= new_requiredCost;
     upgrade.click_multiplier += 0.01 * buy_upgrade;
-    const add_playerDmg = Math.round(strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * upgrade.click_multiplier));
-    playerDmg += add_playerDmg;
+    const add_playerDmg = Math.round((strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * upgrade.click_multiplier)));
+    playerDmg += add_playerDmg * finalPurchaseMulti;
+    finalPlayerDamage = damageMultiplierClicker * (playerDmg * 1 + strength_stat_multi);
     // playerDmg = playerDmg * (1 + (strength_stat_multi / 20));
     localStorage.setItem('click_multiplier', upgrade.click_multiplier)
     localStorage.setItem('clicker_upgrade_purchased', upgrade.clicker_upgrade_purchased);
+    localStorage.setItem('playerDmg', playerDmg);
   }
   else{
     console.log("Not enough gold", new_requiredCost);
@@ -1122,69 +1132,29 @@ function buy_clicker_upgrade(new_requiredCost, id){
 }
 
 function buy_hp_upgrade(new_requiredCost, id){
-  Upgrades = {hp_upgrade: {
-    button_id: "hp_upgrade",
-    cost_id: "hp_upgrade_cost",
-    cost: 5,
-    hp_upgrade_purchased: parseInt(localStorage.getItem('hp_upgrade_purchased')) || 0,
-    hp_multiplier: parseInt(localStorage.getItem('hp_multiplier')) || 1,
-  }}
-
-  upgrade = Upgrades[id]
+  
+  const upgrade = Upgrades[id]
   if (gold >= new_requiredCost){
     upgrade.hp_upgrade_purchased += buy_upgrade;
     gold -= new_requiredCost;
     const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** upgrade.hp_multiplier)));
     upgrade.hp_multiplier += 0.01 * buy_upgrade;
-    player_MAX_HP += add_hp;
-    if (enemy_level % 5 !== 0){
-      player_currentHP = player_MAX_HP;
-    }
+    player_MAX_HP += add_hp * finalPurchaseMulti;
     localStorage.setItem('hp_multiplier', upgrade.hp_multiplier)
     localStorage.setItem('hp_upgrade_purchased', upgrade.hp_upgrade_purchased);
+    localStorage.setItem('player_MAX_HP', player_MAX_HP);
   }
 
 }
 
-function check_upgrades() {
-  const Upgrades = {
-    clicker_upgrade: {
-      button_id: "clicker_upgrade",
-      cost_id: "clicker_upgrade_cost",
-      cost: 2,
-      clicker_upgrade_purchased: parseInt(localStorage.getItem('clicker_upgrade_purchased')) || 0,
-      click_multiplier: parseInt(localStorage.getItem('click_multiplier')) || 1,
-    },
-    hp_upgrade: {
-      button_id: "hp_upgrade",
-      cost_id: "hp_upgrade_cost",
-      cost: 5,
-      hp_upgrade_purchased: parseInt(localStorage.getItem('hp_upgrade_purchased')) || 0,
-      hp_multiplier: parseInt(localStorage.getItem('hp_multiplier')) || 1,
-    },
-    aura_upgrade: {
-      button_id: "aura_upgrade",
-      cost_id: "aura_upgrade_cost",
-      cost: 100,
-      aura_upgrade_purchased: parseInt(localStorage.getItem('aura_upgrade_purchased')) || 0,
-      aura_multiplier: parseInt(localStorage.getItem('aura_multiplier')) || 1,
-    },
-    regen_upgrade: {
-      button_id: "regen_upgrade",
-      cost_id: "regen_upgrade_cost",
-      cost: 100,
-      regen_upgrade_purchased: parseInt(localStorage.getItem('regen_upgrade_purchased')) || 0,
-      regen_multiplier: parseInt(localStorage.getItem('regen_multiplier')) || 1,
-    }
-  }
-
+function check_upgrades() {    
   for (const upgrade in Upgrades) {
     if (upgrade == "clicker_upgrade") {
       let data = Upgrades[upgrade];
       const requiredCost = data.cost + (1.5 * data.clicker_upgrade_purchased);
       const new_requiredCost = check_cost(requiredCost, data.clicker_upgrade_purchased, data.cost, clickerCostMultiplier);
       let button = document.getElementById(data.button_id);
-      const add_playerDmg = Math.round(strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * data.click_multiplier));
+      const add_playerDmg = finalPurchaseMulti * Math.round(strength_stat_multi + (1 + strength_stat_multi) * (buy_upgrade + buy_upgrade * data.click_multiplier));
       upgrade_check(data.cost_id, new_requiredCost, button, data.clicker_upgrade_purchased, upgrade, 'clicker_upgrade', 
         add_playerDmg, 'Player Damage by', 'Increases Player Click Damage')
     }
@@ -1193,7 +1163,7 @@ function check_upgrades() {
       const requiredCost = data.cost + (1.5 * data.hp_upgrade_purchased);
       const new_requiredCost = check_cost(requiredCost, data.hp_upgrade_purchased, data.cost, staminaCostMultiplier);
       let button = document.getElementById(data.button_id);
-      const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** data.hp_multiplier)));
+      const add_hp = finalPurchaseMulti * Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** data.hp_multiplier)));
       upgrade_check(data.cost_id, new_requiredCost, button, data.hp_upgrade_purchased, upgrade, 'hp_upgrade',
         add_hp, 'HP by', 'Increases Max Health')
     }
@@ -1202,7 +1172,7 @@ function check_upgrades() {
       const requiredCost = data.cost + (1.5 * data.aura_upgrade_purchased);
       const new_requiredCost = check_cost(requiredCost, data.aura_upgrade_purchased, data.cost, auraCostMultiplier);
       let button = document.getElementById(data.button_id);
-      const add_aura = Math.round(intelligence_stat_multi + (1 + intelligence_stat_multi) * (buy_upgrade + buy_upgrade * data.aura_multiplier));
+      const add_aura = finalPurchaseMulti * Math.round(intelligence_stat_multi + (1 + intelligence_stat_multi) * (buy_upgrade + buy_upgrade * data.aura_multiplier));
       upgrade_check(data.cost_id, new_requiredCost, button, data.aura_upgrade_purchased, upgrade, 'aura_upgrade',
         add_aura, 'Aura by', 'Use your Aura to automatically damage enemies.') 
     }
@@ -1211,7 +1181,7 @@ function check_upgrades() {
       const requiredCost = data.cost + (1.5 * data.regen_upgrade_purchased);
       const new_requiredCost = check_cost(requiredCost, data.regen_upgrade_purchased, data.cost, hpRegenCostMultiplier);
       let button = document.getElementById(data.button_id);
-      const add_hp_regen = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade * data.regen_multiplier)));
+      const add_hp_regen = finalPurchaseMulti * Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade * data.regen_multiplier)));
       upgrade_check(data.cost_id, new_requiredCost, button, data.regen_upgrade_purchased, upgrade, 'regen_upgrade',
         add_hp_regen, 'Regenation by', 'Automatically Regenerates Health Every ' + (regen_time/1000).toFixed(2) + ' seconds')
     }
@@ -1258,27 +1228,26 @@ function startAuraAttack() {
       }
   };
 
-  if (!auraActive && auto_attacks['aura_upgrade'].aura_upgrade_purchased > 0) {
+  if (!auraActive && auto_attacks['aura_upgrade'].aura_upgrade_purchased > 0 && auraIisOn === true) {
       auraActive = true;
       auraInterval = setInterval(function() {
           currentHP -= aura_damage;
           if (!isHurt) {
               if (isAttacking) {
-                  currentHP -= playerDmg * (1 + strength_stat_multi);
+                  currentHP -= aura_damage;
                   localStorage.setItem('currentHP', currentHP);
                   if (currentHP <= 0) {
                       bossTimer = 0;
                       localStorage.setItem('bossTimer', bossTimer);
                       isDead = true;
                       framex = 0;
-                      resetPlayerHP();
                       update_enemy();
                       update_inventory();
                   }
               } else {
                   isHurt = true;
                   framex = 0;
-                  currentHP -= playerDmg * (1 + strength_stat_multi);
+                  currentHP -= aura_damage;
                   localStorage.setItem('currentHP', currentHP);
                   if (currentHP <= 0) {
                       bossTimer = 0;
@@ -1355,7 +1324,6 @@ function previous_level() {
   }
   bossTimer = 0
   localStorage.setItem('bossTimer', bossTimer);
-  resetPlayerHP();
   if ((enemy_level) % 5 === 0) {
     isAttacking = true;
     start_bossAttack();
@@ -1392,7 +1360,6 @@ function next_level() {
   else {
     bossTimer = 0
     localStorage.setItem('bossTimer', bossTimer);
-    resetPlayerHP();
     if ((enemy_level) % 5 === 0) {
       isAttacking = true;
       start_bossAttack();
@@ -1434,6 +1401,24 @@ function lock_stage(){
   }
 }
 
+function auraOn(){
+  const auraStatus = document.getElementById('turnAura')
+  if (auraIisOn === false){
+    auraIisOn = true;
+    auraStatus.innerHTML = "On";
+    auraStatus.style.background = "green";
+    auraStatus.style.color = "white";
+  }
+  else if (auraIisOn === true){
+    auraIisOn = false;
+    auraStatus.innerHTML = "Off";
+    auraStatus.style.background = "darkred";
+    auraStatus.style.color = "white";
+    location.reload(true);
+  }
+  localStorage.setItem('auraIisOn', JSON.stringify(auraIisOn));
+}
+
 function bossAttack(){
   isAttacking = true;
   boss_damage = Math.round(6 + enemy_level * (15 * (enemy_level / 20)))
@@ -1468,12 +1453,14 @@ function restore_BossAttack() {
 
 function check_player_hp(){
   if (player_currentHP <= 0){
+    setTimeout(alert('You have died!'), 1000);
     stop_bossAttack();
+    player_currentHP = 0;
+    enemy_level -= 2;
     if (islock_stage === 2){
       enemy_level -= 2;
     }
     localStorage.setItem('enemy_level', enemy_level);
-    player_currentHP = player_MAX_HP;
     localStorage.setItem('player_currentHP', player_currentHP);
     update_hp();
     handleBossAttack();

@@ -185,7 +185,7 @@ body {
   
     /* Position the tooltip */
     position: absolute;
-    z-index: 1;
+    z-index: 900;
   }
   
   
@@ -645,4 +645,7 @@ span {
   width: 30%;
   margin-right: 5.4%;
 }
+
+
+
 

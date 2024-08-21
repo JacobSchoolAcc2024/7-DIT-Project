@@ -73,17 +73,17 @@ function formatNumber(num) {
 
 // dictionary of the weapon price
 const priceDict = {
-    "Epic Sword": 1500,
-    "Wood Sword": 200,
-    "Diamond Sword": 5000,
-    "Dirty Icecream": 500,
-    'Wood Pickaxe': 300,
-    'Iron Pickaxe': 550,
-    'Emerald Pickaxe': 800,
-    'Genki Dama':999999,
-    'Helmet':999,
-    'Epic Armer':19999,
-    'Normal Armer':2999,
+    "Epic Sword": 15000,
+    "Wood Sword": 500,
+    "Diamond Sword": 50000,
+    "Dirty Icecream": 100000,
+    'Wood Pickaxe': 3000,
+    'Iron Pickaxe': 5500,
+    'Emerald Pickaxe': 8000,
+    'Genki Dama':9999999,
+    'Helmet':9999,
+    'Epic Armer':199990,
+    'Normal Armer':29990,
 
   };
 

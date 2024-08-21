@@ -70,12 +70,32 @@
         <p id="player_regen" class="status">Regen HP: ?</p>
         <P id="aura_damage" class="status">Player Aura: ?</P>
         <p  id="boss_damage" class="status">Boss Damage: ? </p>
-        <p id="shards">Time Shards: ?</p>
+        <p id="shards" class="status">Time Shards: ?</p>
         <button id="play_fx" onclick="PlayFx()">Play Sound</button>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play BGM</button>
         <br>
         <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
         <br>
+        <button id="playerReincarnation">
+            <span>Reincarnation</span><br>
+            <span id="reincarnationRequirements">Requirements: ?</span>
+        </button>
+        <div id="reincarnateModal" class="modalReincarnation">
+            <div class="modal-contentReincarnation">
+              <h2>Are you sure you want to reincarnate?</h2>
+              <p>This action will reset your progress to improve future potential.</p>
+                ---------------------------------<br>
+                <span id="timeShardMulti">Time Shard Multiplier: ?</span><br>
+                <span id="goldMulti">Gold Multiplier: ?</span><br>
+                <span id="damageMulti">Damage Multiplier: ?</span>
+                <br>---------------------------------<br>
+                <span id="reincarnationLevel">Player Reincarnation Level: ?</span>
+                <br><br>
+              <button id="confirmReincarnate" onclick="reincarnation()">Yes, Reincarnate</button>
+              <button id="cancelReincarnate">Cancel</button>
+            </div>
+        </div>
+        <br>   
         <input type="checkbox" id="scientific-notation-checkbox">
         <label for="scientific-notation-checkbox">Use Scientific Notation</label>
         <br>

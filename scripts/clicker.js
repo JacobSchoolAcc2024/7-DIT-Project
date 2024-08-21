@@ -3,7 +3,7 @@
 var playerDmg = parseInt(localStorage.getItem('playerDmg')) || 1;
 var skill_points = parseInt(localStorage.getItem('skill_points')) || 0;
 let enemy_level = parseInt(localStorage.getItem('enemy_level')) || 1;
-let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 100;
+let max_enemy_level = parseInt(localStorage.getItem('max_enemy_level')) || 1;
 let enemy_level_increase = parseInt(localStorage.getItem('enemy_level_increase')) || 1;
 let enemy_name = localStorage.getItem('enemy_name') || 'Demon Fly: ';
 let islock_stage = parseInt(localStorage.getItem('islock_stage')) || 2;
@@ -88,10 +88,14 @@ const Upgrades = {
 }
 
 //Final Stats
-let damageMultiplierClicker = localStorage.getItem('damageMultiplier') || 1;
-let reincarnationLevelClicker = localStorage.getItem('reincarnationLevel') || 1;
+let defeatedTitansClicker = parseInt(localStorage.getItem('defeatedTitans')) || 0;
+let timeShardsMultiplierClicker = parseInt(localStorage.getItem('timeShardsMultiplier')) || 1;
+let timeShardsTitanClicker = parseInt(localStorage.getItem('timeShardsTitan')) || 1;
+let damageMultiplierClicker = parseInt(localStorage.getItem('damageMultiplier')) || 1;
+let reincarnationLevelClicker = parseInt(localStorage.getItem('reincarnationLevel')) || 1;
+let timeShardsClicker = parseInt(localStorage.getItem('timeShards')) || 0;
 let finalPlayerDamage = damageMultiplierClicker * (playerDmg * 1 + strength_stat_multi);
-let finalPurchaseMulti = reincarnationLevelClicker
+let finalPurchaseMulti = reincarnationLevelClicker;
 
 ///Game Var////
 /////////////////////////////////////////////////////////////////////////////////////
@@ -210,6 +214,22 @@ const skill_point_fx =document.getElementById("skill_point");
 let fx_play = false;
 
 ///Modal Functions///
+
+let currentStep = 0;
+
+const helpButton = document.getElementById('help-button');
+const tutorialModal = document.getElementById('tutorial-modal');
+const tutorialContent = document.getElementById('tutorial-content');
+const prevButton = document.getElementById('prev-tutorial');
+const nextButton = document.getElementById('next-tutorial');
+const closeButton = document.getElementById('close-tutorial');
+
+//Reincarnation Modal Variables
+const reincarnateButton = document.getElementById('playerReincarnation');
+const modal = document.getElementById('reincarnateModal');
+const confirmButton = document.getElementById('confirmReincarnate');
+const cancelButton = document.getElementById('cancelReincarnate');
+
 const tutorialSteps = [
   "Click on the monster to deal damage to enemies.",
   `Use gold to buy ugrades on the right hand side of the screen.<br>
@@ -245,13 +265,16 @@ const tutorialSteps = [
    Defeat Titans to earn Time Shards.`
 ];
 
-let currentStep = 0;
+const tutorialTitles = [
+  "Welcome to Idle Reincarnation!",
+  "Gold",
+  "Upgrading Stats",
+  "Skill Points and Stats",
+  "Tips and Tricks",
+  "Hot Keys",
+  "Reincarnation"
+];
 
-const helpButton = document.getElementById('help-button');
-const tutorialModal = document.getElementById('tutorial-modal');
-const tutorialContent = document.getElementById('tutorial-content');
-const nextButton = document.getElementById('next-tutorial');
-const closeButton = document.getElementById('close-tutorial');
 
 function showTutorial() {
   currentStep = 0;
@@ -284,7 +307,6 @@ if (!localStorage.getItem('tutorialShown')) {
   localStorage.setItem('tutorialShown', 'true');
 }
 
-const prevButton = document.getElementById('prev-tutorial');
 
 prevButton.onclick = () => {
   if (currentStep > 0) {
@@ -293,15 +315,6 @@ prevButton.onclick = () => {
   }
 };
 
-const tutorialTitles = [
-  "Welcome to Idle Reincarnation!",
-  "Gold",
-  "Upgrading Stats",
-  "Skill Points and Stats",
-  "Tips and Tricks",
-  "Hot Keys",
-  "Reincarnation"
-];
 
 function updateTutorialContent() {
   const tutorialTitle = document.querySelector('.modal-content h2');
@@ -312,8 +325,19 @@ function updateTutorialContent() {
 }
 
 
+//Reincarnation Modal Functions
+reincarnateButton.addEventListener('click', () => {
+  modal.style.display = 'block';
+});
 
+confirmButton.addEventListener('click', () => {
+  reincarnate();
+  modal.style.display = 'none';
+});
 
+cancelButton.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
 
 
 
@@ -836,6 +860,23 @@ function handleKeyPress(event) {
 
 ////////////////////////////////
 //Utilities
+function clearUpgradeData() {
+  const upgradeKeys = ['clicker_upgrade', 'hp_upgrade', 'aura_upgrade', 'regen_upgrade'];
+  
+  upgradeKeys.forEach(key => {
+    localStorage.removeItem(`${key}_purchased`);
+    localStorage.removeItem(`${key.split('_')[0]}_multiplier`);
+  });
+
+  // Reset the values in the Upgrades object
+  for (let upgrade in Upgrades) {
+    Upgrades[upgrade].clicker_upgrade_purchased = 0;
+    Upgrades[upgrade][`${upgrade.split('_')[0]}_multiplier`] = 1;
+  }
+}
+
+
+
 
 function enableScientificNotation(){
   document.getElementById('scientific-notation-checkbox').checked = true;
@@ -1018,6 +1059,7 @@ function update_inventory() {
   const stamina_stat_button = document.getElementById('Stamina');
   const intellingence_stat_button = document.getElementById('Intelligence');
   const player_regen_status = document.getElementById('player_regen');
+  const amountTimeShards = document.getElementById('shards');
   let gold_status = document.getElementById('gold');
   let boss_dps = 2 * boss_damage;
   gold_status.innerHTML = "Gold: " + formatNumber(gold);
@@ -1033,6 +1075,8 @@ function update_inventory() {
   aura_status.innerHTML = "Aura Damage: " + formatNumber(aura_damage);
   playerHpStatus.innerHTML = "Max HP: " + formatNumber(player_MAX_HP);
   player_regen_status.innerHTML = "Player Regen: " + formatNumber(hp_regen);
+  amountTimeShards.innerHTML = "Time Shards: " + timeShardsClicker;
+  
 
   if (enemy_level > max_enemy_level) {
     max_enemy_level = enemy_level;
@@ -1084,6 +1128,7 @@ function update_inventory() {
   } else {
     document.getElementById('turnAura').disabled = false;
   }
+  checkTimeShards();
   
 }
 
@@ -1181,7 +1226,7 @@ function buy_regen_upgrade(new_requiredCost, id){
   if (gold >= new_requiredCost) {
     upgrade.regen_upgrade_purchased += buy_upgrade;
     gold -= new_requiredCost;
-    upgrade.regen_multiplier += 0.001 * buy_upgrade;
+    upgrade.regen_multiplier += 0.01 * buy_upgrade;
     const add_hp_regen = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade * upgrade.regen_multiplier)));
     hp_regen += add_hp_regen * finalPurchaseMulti;
     if (regen_time <= 500){
@@ -1319,6 +1364,95 @@ function check_cost(requiredCost, purchased, baseCost, cost_multi) {
   const new_requiredCost = baseCost + (cost_multi * (purchased + buy_upgrade)) * buy_upgrade;
   return new_requiredCost;
 }
+
+// Time Shard Functions //////////////////////////////////////////////////////////////
+
+function checkTimeShards() {
+  const baseTimeShardsRequirements = [
+    { level: 1, shards: 1 },
+    { level: 2, shards: 10 },
+    { level: 3, shards: 100 },
+    // ... other levels ...
+  ];
+
+  // Get the requirement for the current reincarnation level
+  const currentRequirement = baseTimeShardsRequirements[reincarnationLevelClicker - 1] || baseTimeShardsRequirements[baseTimeShardsRequirements.length - 1];
+
+  const reincarnationButton = document.getElementById('playerReincarnation');
+  const reincarnationRequirement = document.getElementById('reincarnationRequirements');
+  const timeShardMulti = document.getElementById('timeShardMulti');
+  const goldMulti = document.getElementById('goldMulti');
+  const reincarnationLevelDisplay = document.getElementById('reincarnationLevel');
+  const damageMulti = document.getElementById('damageMulti');
+
+  if (currentRequirement && timeShardsClicker >= currentRequirement.shards) {
+    reincarnationButton.style.backgroundColor = 'darkgreen';
+    reincarnationButton.style.color = 'wheat';
+    // Unlock the corresponding level or feature
+    // You can add your logic here
+  } else {
+    reincarnationButton.style.backgroundColor = 'darkred';
+    reincarnationButton.style.color = 'white';
+  }
+
+  if (currentRequirement) {
+    reincarnationRequirement.innerHTML = 'Requirements: ' + currentRequirement.shards + ' Time Shards';
+  } else {
+    reincarnationRequirement.innerHTML = 'Max level reached';
+  }
+
+  timeShardMulti.innerHTML = 'Time Shard Multiplier: ' + timeShardsMultiplierClicker;
+  goldMulti.innerHTML = 'Gold Multiplier: ' + goldMultiplier;
+  reincarnationLevelDisplay.innerHTML = 'Reincarnation Level: ' + reincarnationLevelClicker;
+  damageMulti.innerHTML = 'Damage Multiplier: ' + damageMultiplierClicker;
+}
+
+function reincarnation(){
+  const baseTimeShardsRequirements = [
+    { level: 1, shards: 1 },
+    { level: 2, shards: 10 },
+    { level: 3, shards: 100 },
+    { level: 4, shards: 1000 },
+  ];
+  const currentRequirement = baseTimeShardsRequirements[reincarnationLevelClicker - 1];
+  const multiplierAdd = 2 * Math.pow(2, reincarnationLevelClicker + 1);
+  if (currentRequirement && timeShardsClicker >= currentRequirement.shards){
+    timeShardsClicker -= currentRequirement.shards;
+    reincarnationLevelClicker++;
+    goldMultiplier += multiplierAdd * timeShardsMultiplierClicker;
+    damageMultiplierClicker += multiplierAdd * timeShardsMultiplierClicker;
+    timeShardsMultiplierClicker += multiplierAdd/3;
+    clearUpgradeData();
+    playerDmg = 0;
+    player_MAX_HP = 1000
+    player_currentHP = player_MAX_HP;
+    hp_regen = 100;
+    aura_damage = 0;
+    aura_frequency = 750;
+    gold = 0;
+    localStorage.setItem('playerDmg',playerDmg);
+    localStorage.setItem('player_currentHP',player_currentHP);
+    localStorage.setItem('player_MAX_HP',player_MAX_HP);
+    localStorage.setItem('hp_regen',hp_regen);
+    localStorage.setItem('aura_damage',aura_damage);
+    localStorage.setItem('timeShardsClicker',timeShardsClicker);
+    localStorage.setItem('goldMultiplier',goldMultiplier);
+    localStorage.setItem('timeShardsMultiplierClicker',timeShardsMultiplierClicker);
+    localStorage.setItem('reincarnationLevel',reincarnationLevelClicker);
+    localStorage.setItem('damageMultiplierClicker',damageMultiplierClicker);
+    localStorage.setItem('gold',gold);
+    localStorage.setItem('aura_frequency',aura_frequency);
+    localStorage.setItem('timeShards',timeShardsClicker);
+
+
+  }
+  else{
+    alert('You do not have enough time shards to reincarnate');
+    modal.style.display = 'none';
+
+  }
+}
+
 
 
 /// Auto Clicker//

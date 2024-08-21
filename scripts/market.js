@@ -276,7 +276,7 @@ function purchaseItem() {
   if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
       gold -= marketPrice;
       purchasedItems.push(NameOfWeapon);
-      playerDmg+=skillDict[NameOfWeapon].damage/2;
+      playerDmg+=skillDict[NameOfWeapon].damage;
       market_MAX_HP+=skillDict[NameOfWeapon].point;
       market_currentHP+=skillDict[NameOfWeapon].point;
       document.getElementById('purchaseItem').style.backgroundColor = "darkred";

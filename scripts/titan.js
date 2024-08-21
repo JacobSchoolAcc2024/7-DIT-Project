@@ -8,6 +8,14 @@ let currentState = 'idle';
 let titanLevel = parseInt(localStorage.getItem('titanLevel')) || 1;
 let titanStart = parseInt(localStorage.getItem('titanStart')) || 5;
 
+//Aura Variables
+let auraIisOnTitan = JSON.parse(localStorage.getItem('auraIisOn')) || false;
+let auraActiveTItan = false;
+let auraIntervalTItan;
+let aura_damageTitan = parseInt(localStorage.getItem('aura_damage')) || 0;
+let aura_frequencyTitan = parseInt(localStorage.getItem('aura_frequency')) || 750;
+
+
 //Prestige variables
 let reincarnationLevel = parseInt(localStorage.getItem('reincarnationLevel')) || 1;
 let damageMultiplier = parseInt(localStorage.getItem('damageMultiplier')) || 1;
@@ -18,7 +26,7 @@ let timeShardsTitan = parseInt(localStorage.getItem('timeShardsTitan')) || 1;
 
 //Reset Variables
 let regenAmount = localStorage.getItem('hp_regen') || 10;
-let auraDamage = localStorage.get('aura_damage') || 0;
+let auraDamage = localStorage.getItem('aura_damage') || 0;
 
 
 
@@ -38,11 +46,7 @@ const finalDamage = damageMultiplierClicker * (playerDmg * 1 + strengthStatMulti
 
 // StatusBar Var ////////////////////
 
-//Reincarnation Modal Variables
-const reincarnateButton = document.getElementById('playerReincarnation');
-const modal = document.getElementById('reincarnateModal');
-const confirmButton = document.getElementById('confirmReincarnate');
-const cancelButton = document.getElementById('cancelReincarnate');
+
 
 // Player Hp Animation Bar //
 const PLAYER_HP_BAR_HEIGHT = 20;
@@ -51,7 +55,7 @@ const PLAYER_HP_BAR_Y = 10;
 const PLAYER_HP_BAR_WIDTH = CANVAS_WIDTH_TITAN - 20;
 const PLAYER_HP_TEXT_X = PLAYER_HP_BAR_X + 5;
 const PLAYER_HP_TEXT_Y = PLAYER_HP_BAR_Y + 20;
-let playerMaxHP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
+let playerMaxHP = parseInt(localStorage.getItem('player_MAX_HP')) || 1000;
 let playerHP = parseInt(localStorage.getItem('player_currentHP')) || playerMaxHP;
 
 // Titan Hp Animation Bar //
@@ -348,18 +352,7 @@ function closeNav() {
   document.getElementById("main_Page").style.margin-left == "1.5rem";
 }
 
-reincarnateButton.addEventListener('click', () => {
-  modal.style.display = 'block';
-});
 
-confirmButton.addEventListener('click', () => {
-  reincarnate();
-  modal.style.display = 'none';
-});
-
-cancelButton.addEventListener('click', () => {
-  modal.style.display = 'none';
-});
 
 function getValidState() {
   if (playerHP <= 0){
@@ -381,7 +374,7 @@ function drawHPParticle() {
     for (let i = hpParticles.length - 1; i >= 0; i--) {
       const particle = hpParticles[i];
       ctxTitan.font = `${HP_PARTICLE_SIZE}px Arial`;
-      ctxTitan.fillStyle = 'white';
+      ctxTitan.fillStyle = particle.color || 'white';
       ctxTitan.fillText(particle.text, particle.x, particle.y);
       particle.y -= 3;
       particle.duration -= 0.12;
@@ -397,6 +390,7 @@ function drawHPParticle() {
 // Update the click event listener
 canvasTitan.addEventListener('click', () => {
     TitanCurrentHP -= finalDamage;
+    timeShards += 1;
     if (TitanCurrentHP <= 0){
         
         titanLevel += 1
@@ -446,23 +440,20 @@ function save(){
     document.getElementById('bossDamage').innerHTML = 'Boss Damage: ' + formatNumber(titanAttack);
     document.getElementById('titanLevel').innerHTML = 'Titan Reincarnations: ' + formatNumber(defeatedTitans);
     document.getElementById('timeShards').innerHTML = 'Time Shards: ' + formatNumber(timeShards);
-    checkTimeShards();
-
 }
 
 
 function checkPlayerHp(){
   if (playerHP <= 0){
-    setTimeout(function(){
+    setTimeout(function(){b
       alert("You have died");
       defeatedTitans = 0;
       titanLevel = 1;
       TitanMaxHP = 10 * Math.pow(10,(defeatedTitans + 4))
       titanAttack = 1 * Math.pow(10,(defeatedTitans + 3))
       timeShardsTitan = 0;
-      playerHP = playerMaxHP;
       TitanCurrentHP = TitanMaxHP;
-    }, 1000)
+    }, 100)
     
   }
 }
@@ -539,7 +530,6 @@ function formatNumber(num) {
   }
 }
 
-
 const checkboxScientificNotation = document.getElementById('scientific-notation-checkbox');
 
 // Load saved state and set up change listener
@@ -557,66 +547,9 @@ function handleKeyPress(event) {
   }
 
 }
-
 setInterval(save, 1000);
 
-// Time Shard Functions
 
-function checkTimeShards() {
-  const baseTimeShardsRequirements = [
-    { level: 1, shards: 1 },
-    { level: 2, shards: 10 },
-    { level: 3, shards: 100 },
-    // ... other levels ...
-  ];
-  // Get the requirement for the current reincarnation level
-  const currentRequirement = baseTimeShardsRequirements[reincarnationLevel - 1];
-  const reincarnationButton = document.getElementById('playerReincarnation'); 
-  const reincarnationRequirement = document.getElementById('reincarnationRequirements');
-  const timeShardMulti = document.getElementById('timeShardMulti');
-  const goldMulti = document.getElementById('goldMulti');
-  const reincarnationLevelDisplay = document.getElementById('reincarnationLevel');
-  const damageMulti = document.getElementById('damageMulti');
 
-  if (currentRequirement && timeShards >= currentRequirement.shards) {
-    reincarnationButton.style.backgroundColor = 'darkgreen';
-    reincarnationButton.style.color = 'wheat';
-   
-    // Unlock the corresponding level or feature
-    // You can add your logic here
-  }
-  else{
-    reincarnationButton.style.backgroundColor = 'darkred';
-    reincarnationButton.style.color = 'white';
-  }
-  reincarnationRequirement.innerHTML = 'Requirements: ' + currentRequirement.shards + ' Time Shards';
-  timeShardMulti.innerHTML = 'Time Shard Multiplier: ' + timeShardsMultiplier;
-  goldMulti.innerHTML = 'Gold Multiplier: ' + goldMultiplier;
-  reincarnationLevelDisplay.innerHTML = 'Reincarnation Level: ' + reincarnationLevel;
-  damageMulti.innerHTML = 'Damage Multiplier: ' + damageMultiplier;
-}
-
-function reincarnation(){
-  const baseTimeShardsRequirements = [
-    { level: 1, shards: 1 },
-    { level: 2, shards: 10 },
-    { level: 3, shards: 100 },
-  ];
-  const currentRequirement = baseTimeShardsRequirements[reincarnationLevel - 1];
-  const multiplplierAdd = 2 * Math.pow(2, reincarnationLevel + 1);
-  if (currentRequirement && timeShards >= currentRequirement.shards){
-    timeShards -= currentRequirement.shards;
-    reincarnationLevel++;
-    goldMultiplier += multiplplierAdd * timeShardsMultiplier;
-    damageMultiplier += multiplplierAdd * timeShardsMultiplier;
-    timeShardsMultiplier += multiplplierAdd/3;
-    playerDmg = 0;
-    playerHP = 100;
-
-  }
-  else{
-    alert('You do not have enough time shards to reincarnate');
-  }
-}
 
 

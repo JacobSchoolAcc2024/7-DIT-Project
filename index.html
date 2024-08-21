@@ -49,25 +49,53 @@
     <button>
         <canvas id="canvas1"></canvas>
     </button>
+    <div id="tutorial-modal" class="modal">
+        <div class="modal-content">
+          <h2>Welcome to the Game!</h2>
+          <div id="tutorial-content"></div>
+          <button id="prev-tutorial">Previous</button>
+          <button id="next-tutorial">Next</button>
+          <button id="close-tutorial">Close</button>
+        </div>
+    </div>
     <div class="player_stats">
         <div class="wood_plate_background">
             <img class="stats_icon" src="images/noun-stats-6801159.png">
             <span class="wood">Stats</span>
         </div>
-        <button class = "tooltip" onclick="reset()">Reset
-        </button>
+        <button id="help-button">Help</button>
         <P id="player_level" class="status">Player Level: 1 </P>
         <p id="player_damage" class="status">Player Damage: 1  </p>
         <p id="player_health" class="status">Player Health: 100 </p>
         <p id="player_regen" class="status">Regen HP: ?</p>
         <P id="aura_damage" class="status">Player Aura: ?</P>
         <p  id="boss_damage" class="status">Boss Damage: ? </p>
-        <p id="shards">Time Shards: ?</p>
+        <p id="shards" class="status">Time Shards: ?</p>
         <button id="play_fx" onclick="PlayFx()">Play Sound</button>
         <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play BGM</button>
         <br>
         <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
         <br>
+        <button id="playerReincarnation">
+            <span>Reincarnation</span><br>
+            <span id="reincarnationRequirements">Requirements: ?</span>
+        </button>
+        <div id="reincarnateModal" class="modalReincarnation">
+            <div class="modal-contentReincarnation">
+              <h2>Are you sure you want to reincarnate?</h2>
+              <p>This action will reset your progress to improve future potential.</p>
+                ---------------------------------<br>
+                <span id="timeShardMulti">Time Shard Multiplier: ?</span><br>
+                <span id="goldMulti">Gold Multiplier: ?</span><br>
+                <span id="damageMulti">Damage Multiplier: ?</span>
+                <br>---------------------------------<br>
+                <span id="reincarnationLevel">Player Reincarnation Level: ?</span>
+                <br><br>
+              <button id="confirmReincarnate" onclick="reincarnation()">Yes, Reincarnate</button>
+              <button id="cancelReincarnate">Cancel</button>
+            </div>
+        </div>
+        <br>   
         <input type="checkbox" id="scientific-notation-checkbox">
         <label for="scientific-notation-checkbox">Use Scientific Notation</label>
         <br>

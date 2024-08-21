@@ -88,9 +88,9 @@ button {
 }
 
 h1 {
+    right: 37%;
     position: relative;
     z-index: 900;
-    cursor: pointer;
     color: white;
 
 }
@@ -111,6 +111,8 @@ h1 {
 
 #playerReincarnation, button {
     font-size: 1rem;
+    font-family: 'Press Start 2P', cursive;
+    margin-left: 70px;
 }
 
 .modal {

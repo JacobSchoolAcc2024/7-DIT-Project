@@ -17,7 +17,7 @@ let auraIisOn = JSON.parse(localStorage.getItem('auraIisOn')) || false;
 let auraActive = false;
 let auraInterval;
 let aura_damage = parseInt(localStorage.getItem('aura_damage')) || 0;
-let aura_frequency = parseInt(localStorage.getItem('aura_frequency')) || 2000;
+let aura_frequency = parseInt(localStorage.getItem('aura_frequency')) || 750;
 
 ///Boss Attack
 let boss_damage = parseInt(localStorage.getItem('boss_attack')) || 20;

@@ -51,7 +51,7 @@ const PLAYER_HP_BAR_Y = 10;
 const PLAYER_HP_BAR_WIDTH = CANVAS_WIDTH_TITAN - 20;
 const PLAYER_HP_TEXT_X = PLAYER_HP_BAR_X + 5;
 const PLAYER_HP_TEXT_Y = PLAYER_HP_BAR_Y + 20;
-let playerMaxHP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
+let playerMaxHP = parseInt(localStorage.getItem('player_MAX_HP')) || 1000;
 let playerHP = parseInt(localStorage.getItem('player_currentHP')) || playerMaxHP;
 
 // Titan Hp Animation Bar //
@@ -560,7 +560,7 @@ function handleKeyPress(event) {
 
 setInterval(save, 1000);
 
-// Time Shard Functions
+// Time Shard Functions //////////////////////////////////////////////////////////////
 
 function checkTimeShards() {
   const baseTimeShardsRequirements = [
@@ -601,6 +601,7 @@ function reincarnation(){
     { level: 1, shards: 1 },
     { level: 2, shards: 10 },
     { level: 3, shards: 100 },
+    { level: 4, shards: 1000 },
   ];
   const currentRequirement = baseTimeShardsRequirements[reincarnationLevel - 1];
   const multiplplierAdd = 2 * Math.pow(2, reincarnationLevel + 1);
@@ -616,6 +617,8 @@ function reincarnation(){
   }
   else{
     alert('You do not have enough time shards to reincarnate');
+    modal.style.display = 'none';
+
   }
 }
 

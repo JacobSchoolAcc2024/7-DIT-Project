@@ -209,6 +209,112 @@ const slash_fx = document.getElementById("dagger_slash");
 const skill_point_fx =document.getElementById("skill_point");
 let fx_play = false;
 
+///Modal Functions///
+const tutorialSteps = [
+  "Click on the monster to deal damage to enemies.",
+  `Use gold to buy ugrades on the right hand side of the screen.<br>
+   Gold can also be used to buy special weapon and armor in the market.<br>
+   To access the market, press m or click the navbar.  `, 
+  `Buy upgrades using gold.<br>
+   Training Fist will increase how much damage you deal to the monster per click.<br>
+   Training Stamina will increase your max hp, allowing you to take more hits from monsters.<br>
+   Training Regeneration will increase how much hp you will gain back and shorten the time required.<br>
+   Training Aura will enable you to automatically attack monsters within a set amount of time.<br>
+   Training Aura will increase aura damage and increase the frequency of damage done.`,
+   `Skill points can be used to increase 3 stats: <br>
+    Strength: Increases how much damage you get per upgrade when training Fist.<br>
+    Stamina: Increases how much health you get per upgrade when training Stamina and
+    increases how much hp regen you get per upgrade when training Regeneration.<br>
+    Intelligence: Increases how much aura damage you get when training Aura and will decrease the
+    interval between clicks.`,
+  `To earn gold quickly, lock the stage by clicking on lock stage.<br>
+   To lock a stage, you must first beat it.<br>
+   Bosses give more gold and experience, so defeating lower level bosses
+   is better than defeating higher leveled mobs.<br>
+   Use skill points immediately as they increase how much you get from upgrades.<br>
+   The more upgrades you buy at once, the bigger the increase, so save wisely.`,
+   `A/leftArrowKey: Go back to previous stage.<br>
+    D/RightArrowKey: Go to next stage (to move forward, stage must be beaten).<br>
+    L: Lock and unlocks stage (stage must be beaten).<br>
+    B: Open skill menu.<br>
+    Spacebar: Damage enemy.<br>
+    M: Opens menu.`,
+  `Reincarnate and reset progress to gain multipliers.<br>
+   To reincarnate, max stage must reach 100 and above.<br>
+   Time Shards are required to reincarnate.<br>
+   Defeat Titans to earn Time Shards.`
+];
+
+let currentStep = 0;
+
+const helpButton = document.getElementById('help-button');
+const tutorialModal = document.getElementById('tutorial-modal');
+const tutorialContent = document.getElementById('tutorial-content');
+const nextButton = document.getElementById('next-tutorial');
+const closeButton = document.getElementById('close-tutorial');
+
+function showTutorial() {
+  currentStep = 0;
+  tutorialModal.style.display = 'block';
+  updateTutorialContent();
+}
+
+function updateTutorialContent() {
+  tutorialContent.textContent = tutorialSteps[currentStep];
+}
+
+helpButton.onclick = showTutorial;
+
+nextButton.onclick = () => {
+  currentStep++;
+  if (currentStep < tutorialSteps.length) {
+    updateTutorialContent();
+  } else {
+    tutorialModal.style.display = 'none';
+  }
+};
+
+closeButton.onclick = () => {
+  tutorialModal.style.display = 'none';
+};
+
+// Initial tutorial check (optional)
+if (!localStorage.getItem('tutorialShown')) {
+  showTutorial();
+  localStorage.setItem('tutorialShown', 'true');
+}
+
+const prevButton = document.getElementById('prev-tutorial');
+
+prevButton.onclick = () => {
+  if (currentStep > 0) {
+    currentStep--;
+    updateTutorialContent();
+  }
+};
+
+const tutorialTitles = [
+  "Welcome to Idle Reincarnation!",
+  "Gold",
+  "Upgrading Stats",
+  "Skill Points and Stats",
+  "Tips and Tricks",
+  "Hot Keys",
+  "Reincarnation"
+];
+
+function updateTutorialContent() {
+  const tutorialTitle = document.querySelector('.modal-content h2');
+  tutorialTitle.textContent = tutorialTitles[currentStep];
+  tutorialContent.innerHTML = tutorialSteps[currentStep];
+  prevButton.disabled = currentStep === 0;
+  nextButton.textContent = currentStep === tutorialSteps.length - 1 ? "Finish" : "Next";
+}
+
+
+
+
+
 
 
 ///Animation Functions//

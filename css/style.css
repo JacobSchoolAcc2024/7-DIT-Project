@@ -360,7 +360,7 @@ body {
   width: 20%;
   top: 4rem;
   background-image: url(../images/quest-paper.jpg);
-  height: 90%;
+  height: 100%;
   text-align: center;
   border-right: 0.2rem black double;
   overflow-y: auto;
@@ -578,14 +578,14 @@ height: 5%;
 
 .canvas_stats {
 margin-right: 2rem;
-width: 12rem;
+width: 15rem;
 margin: auto;
 text-align: center;
 }
 
 #market_price {
 font-family: "Bebas Neue", sans-serif;
-font-size: 2rem;
+font-size: 1.8rem;
 color: gold;
 text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
   1px 1px 0 black;
@@ -605,6 +605,15 @@ text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
   color: rgb(201, 0, 0);
   text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
   1px 1px 0 black;
+  margin-top: 1rem;
+}
+
+.heart_icon{
+  margin-top: ;
+}
+
+img {
+  user-select: none;
 }
 
 .market_icons {
@@ -736,3 +745,6 @@ p {
 }
 
 
+#glory_button {
+  display: none;
+}

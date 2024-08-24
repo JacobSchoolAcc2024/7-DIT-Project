@@ -40,7 +40,8 @@ let multipliers = {
 }
 
 let strengthStatMulti = localStorage.getItem('strength_stat_multi') || 0;
-const finalDamage = damageMultiplierClicker * (playerDmg * 1 + strengthStatMulti);
+let intelligenceStatMulti = localStorage.getItem('intelligence_stat_multi') || 0;
+const finalDamage = damageMultiplierClicker * ((playerDmg + aura_damageTitan) * 1 + strengthStatMulti + intelligenceStatMulti);
 
 //
 

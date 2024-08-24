@@ -854,6 +854,17 @@ function handleKeyPress(event) {
       case 'z':
         gold += 1000000000000000000000000000000000000000000000000;
         break
+      case 'f':
+        if (auraIisOn){
+          auraIisOn = false;
+          location.reload(true)
+          localStorage.setItem('auraIisOn', auraIisOn);
+        }
+        else{
+          auraIisOn = true;
+          localStorage.setItem('auraIisOn', auraIisOn);
+        }
+        break
   }
 }
 
@@ -870,7 +881,9 @@ function clearUpgradeData() {
 
   // Reset the values in the Upgrades object
   for (let upgrade in Upgrades) {
-    Upgrades[upgrade].clicker_upgrade_purchased = 0;
+    // Reset the purchased count to 0 for each upgrade type
+    // This effectively removes all bought upgrades
+    Upgrades[upgrade][`${upgrade}_purchased`] = 0;
     Upgrades[upgrade][`${upgrade.split('_')[0]}_multiplier`] = 1;
   }
 }
@@ -1072,7 +1085,7 @@ function update_inventory() {
   stamina_stat_button.innerHTML = 'Stamina: ' + stamina_stat_multi_added;
   intellingence_stat_button.innerHTML = 'Intelligence: ' + intelligence_stat_multi_added;
   skillpoints_status.innerHTML = "Skill Points: " + skill_points;
-  aura_status.innerHTML = "Aura Damage: " + formatNumber(aura_damage);
+  aura_status.innerHTML = "Aura Damage: " + formatNumber(aura_damage * 2);
   playerHpStatus.innerHTML = "Max HP: " + formatNumber(player_MAX_HP);
   player_regen_status.innerHTML = "Player Regen: " + formatNumber(hp_regen);
   amountTimeShards.innerHTML = "Time Shards: " + timeShardsClicker;
@@ -1503,7 +1516,7 @@ function startAuraAttack() {
               }
               
               // Create a new HP particle with updated text
-              const HP_PARTICLE_TEXT = "-" + formatNumber(aura_damage) + " HP";
+              const HP_PARTICLE_TEXT = "-" + formatNumber(aura_damage * 2) + " HP";
               hpParticles.push({
                   x: canvas1.width - 150,
                   y: canvas1.height - 190,

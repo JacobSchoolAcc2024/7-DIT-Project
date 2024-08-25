@@ -1,34 +1,51 @@
 const canvasTitan = document.getElementById('titanCanvas');
+// Get the canvas element with id 'titanCanvas' and store it in a variable
 const ctxTitan = canvasTitan.getContext('2d');
+// Get the 2D drawing context from the canvas for drawing
 const CANVAS_WIDTH_TITAN = canvasTitan.width = 600;
+// Set the canvas width to 600 pixels and store the value in a variable
 const CANVAS_HEIGHT_TITAN = canvasTitan.height = 600;
+// Set the canvas height to 600 pixels and store the value in a variable
 let gameframetitan = 0;
+// Variable to keep track of the current frame number in the game
 let framexTitan = 0;
+// Variable to keep track of the current frame for animations
 let currentState = 'idle';
+// Variable to store the current state of the game or titan
 let titanLevel = parseInt(localStorage.getItem('titanLevel')) || 1;
-let titanStart = parseInt(localStorage.getItem('titanStart')) || 5;
+// Get the titan's level from localStorage, defaulting to 1 if not found
 
 //Aura Variables
 let auraIisOnTitan = JSON.parse(localStorage.getItem('auraIisOn')) || false;
+// Get the aura state from localStorage (true/false), defaulting to false if not found
 let auraActiveTItan = false;
+// Variable to track if the aura is currently active
 let auraIntervalTItan;
+// Variable to store the interval ID for aura effects
 let aura_damageTitan = parseInt(localStorage.getItem('aura_damage')) || 0;
+// Get the aura damage from localStorage, defaulting to 0 if not found
 let aura_frequencyTitan = parseInt(localStorage.getItem('aura_frequency')) || 750;
-
+// Get the aura frequency from localStorage, defaulting to 750 if not found
 
 //Prestige variables
 let reincarnationLevel = parseInt(localStorage.getItem('reincarnationLevel')) || 1;
+// Get the reincarnation level from localStorage, defaulting to 1 if not found
 let damageMultiplier = parseInt(localStorage.getItem('damageMultiplier')) || 1;
+// Get the damage multiplier from localStorage, defaulting to 1 if not found
 let timeShards = parseInt(localStorage.getItem('timeShards')) || 0;
+// Get the number of time shards from localStorage, defaulting to 0 if not found
 let defeatedTitans = parseInt(localStorage.getItem('defeatedTitans')) || 0;
+// Get the number of defeated titans from localStorage, defaulting to 0 if not found
 let timeShardsMultiplier = parseInt(localStorage.getItem('timeShardsMultiplier')) || 1;
+// Get the time shards multiplier from localStorage, defaulting to 1 if not found
 let timeShardsTitan = parseInt(localStorage.getItem('timeShardsTitan')) || 1;
+// Get the time shards for titans from localStorage, defaulting to 1 if not found
 
 //Reset Variables
 let regenAmount = localStorage.getItem('hp_regen') || 10;
+// Get the HP regeneration amount from localStorage, defaulting to 10 if not found
 let auraDamage = localStorage.getItem('aura_damage') || 0;
-
-
+// Get the aura damage from localStorage, defaulting to 0 if not found
 
 /////////////////////////////////
 //Player Attributes
@@ -38,10 +55,14 @@ let multipliers = {
     prestige_multi: 1,
     base_prestige_points: 10,
 }
+// Object to store different multipliers for boss attack, prestige, etc.
 
 let strengthStatMulti = localStorage.getItem('strength_stat_multi') || 0;
+// Get the strength stat multiplier from localStorage, defaulting to 0 if not found
 let intelligenceStatMulti = localStorage.getItem('intelligence_stat_multi') || 0;
+// Get the intelligence stat multiplier from localStorage, defaulting to 0 if not found
 const finalDamage = damageMultiplierClicker * ((playerDmg + aura_damageTitan) * 1 + strengthStatMulti + intelligenceStatMulti);
+// Calculate the final damage based on various factors, including player damage and aura damage
 
 //
 
@@ -51,176 +72,241 @@ const finalDamage = damageMultiplierClicker * ((playerDmg + aura_damageTitan) * 
 
 // Player Hp Animation Bar //
 const PLAYER_HP_BAR_HEIGHT = 20;
+// Height of the player HP bar
 const PLAYER_HP_BAR_X = 10;
+// X position of the player HP bar
 const PLAYER_HP_BAR_Y = 10;
+// Y position of the player HP bar
 const PLAYER_HP_BAR_WIDTH = CANVAS_WIDTH_TITAN - 20;
+// Width of the player HP bar, slightly smaller than canvas width
 const PLAYER_HP_TEXT_X = PLAYER_HP_BAR_X + 5;
+// X position for the player HP text
 const PLAYER_HP_TEXT_Y = PLAYER_HP_BAR_Y + 20;
+// Y position for the player HP text
 let playerMaxHP = parseInt(localStorage.getItem('player_MAX_HP')) || 1000;
+// Get the player's max HP from localStorage, defaulting to 1000 if not found
 let playerHP = parseInt(localStorage.getItem('player_currentHP')) || playerMaxHP;
+// Get the player's current HP from localStorage, defaulting to max HP if not found
 
 // Titan Hp Animation Bar //
 
 const HP_BAR_HEIGHT = 30;
+// Height of the titan HP bar
 const HP_BAR_X = 15;
+// X position of the titan HP bar
 const HP_BAR_Y = 50;
+// Y position of the titan HP bar
 const HP_BAR_WIDTH = CANVAS_WIDTH_TITAN - 30;
+// Width of the titan HP bar, slightly smaller than canvas width
 const HP_TEXT_X = HP_BAR_X + 5;
+// X position for the titan HP text
 const HP_TEXT_Y = HP_BAR_Y + 25;
+// Y position for the titan HP text
 let TitanMaxHP = parseInt(localStorage.getItem('TitanMaxHP')) ||  100000;
+// Get the titan's max HP from localStorage, defaulting to 100000 if not found
 let TitanCurrentHP = parseInt(localStorage.getItem('TitanCurrentHP')) || TitanMaxHP;
+// Get the titan's current HP from localStorage, defaulting to max HP if not found
 let titanAttack = parseInt(localStorage.getItem('titanAttack')) || 5000;
+// Get the titan's attack value from localStorage, defaulting to 5000 if not found
 
 // HP particle variables
 const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
+// Text to display for HP particles
 const HP_PARTICLE_SIZE = 20;
+// Size of the HP particle text
 const HP_PARTICLE_DURATION = 10;
+// Duration for how long HP particles are displayed
 const hpParticles = [];
+// Array to store HP particle objects
 let hpParticle = null;
+// Placeholder for a single HP particle object
 
 // Worm Boss Var ////////////////////
 const wormIdle = new Image();
+// Create a new image object for the worm idle animation
 const wormAttack = new Image();
+// Create a new image object for the worm attack animation
 const wormDead = new Image();
+// Create a new image object for the worm dead animation
 const wormHit = new Image();
+// Create a new image object for the worm hit animation
 wormIdle.src = '../images/WormIdle.png';
+// Set the source of the worm idle image
 wormAttack.src = '../images/WormAttack.png';
+// Set the source of the worm attack image
 wormDead.src = '../images/WormDead.png';
+// Set the source of the worm dead image
 wormHit.src = '../images/WormHit.png';
-
+// Set the source of the worm hit image
 
 /// Worm Attack Animation ////////////////////////////
 const wormAttackWidth = 90;
+// Width of the worm attack animation frames
 const wormAttackHeight = 90;
+// Height of the worm attack animation frames
 const maxWormAttackFrames = 15;
+// Maximum number of frames in the worm attack animation
 let wormAttackFrameY = 0;
+// Y position of the current frame in the worm attack animation
 
 /////////////// Worm Idle Animation ////////////////////////////
 let wormIdleFrameY = 0;
+// Y position of the current frame in the worm idle animation
 let maxWormIdleFrames = 9;
+// Maximum number of frames in the worm idle animation
 const wormIdleHeight = 90;
+// Height of the worm idle animation frames
 const wormIdleWidth = 90;
-
+// Width of the worm idle animation frames
 
 //Worm Boss Attributes//
 let wormAttributes = {
     attack: 1 * Math.pow(10, 3),
+// Attributes for the worm boss, including attack power
 };
 let isRegenerating = false;
+// Flag to indicate if the worm is currently regenerating
 let titantRegen;
+// Placeholder for titan regeneration value
 
 ////////////////////////////////////
 
 //Necromancer Boss Var ////////////////////
 const necromancer = new Image();
+// Create a new image object for the necromancer boss
 necromancer.src = '../images/Necromancer.png';
+// Set the source of the necromancer image
 
 //Necromancer Boss Attack Animation//
 let necromancerAttackFrameY = 2;
+// Y position of the current frame in the necromancer attack animation
 let necromancerFrameX = 0;
+// X position of the current frame in the necromancer attack animation
 const necromancerAttackMaxFrames = 13;
+// Maximum number of frames in the necromancer attack animation
 const necromancerAttackHeight = 128;
+// Height of the necromancer attack animation frames
 const necromancerAttackWidth = 160;
-
-
+// Width of the necromancer attack animation frames
 
 ///////////////////////////////////////
 
 // Boss timer variables
 let BOSS_TIMER_X = 15;
+// X position of the boss timer on the canvas
 const BOSS_TIMER_Y = 100;
+// Y position of the boss timer on the canvas
 const BOSS_TIMER_WIDTH = CANVAS_WIDTH_TITAN - 30;
+// Width of the boss timer bar, slightly smaller than canvas width
 const BOSS_TIMER_HEIGHT = 5
+// Height of the boss timer bar
 let TIMER_DECREASE_RATE = 3 / 60; // Decrease 1 second per frame (assuming 60 FPS)
+// Rate at which the boss timer decreases, aiming for 1 second per frame
 let MAX_BOSS_TIME = parseInt(localStorage.getItem('MAX_BOSS_TIME')) || 5;
+// Get the maximum boss time from localStorage, defaulting to 5 seconds if not found
 let bossTimer = parseInt(localStorage.getItem('bossTimer')) || MAX_BOSS_TIME;
+// Get the current boss timer value from localStorage, defaulting to max boss time if not found
 let bossAttackBegin = false;
+// Flag to indicate if the boss attack has begun
 let titanName = localStorage.getItem('titanName') || 'Hell Worm';
+// Get the titan's name from localStorage, defaulting to 'Hell Worm' if not found
 
 //Class Constructor
 
+// Class for handling titan animations
 class AnimateTitan {
-    constructor(height, width, maxFrames, framey, animationImage, name, staggerFrames,xAxis,yAxis) {
-        this.titanHeight = height;
-        this.titanWidth = width;
-        this.maxFrames = maxFrames;
-        this.titanImage = animationImage;
-        this.titanName = name;
-        this.staggerFrames = staggerFrames;
-        this.titanFrameY = framey;
-        this.x = xAxis;
-        this.y = yAxis;
-    }
+  // Constructor for initializing a new titan animation
+  constructor(height, width, maxFrames, framey, animationImage, name, staggerFrames, xAxis, yAxis) {
+      this.titanHeight = height;         // Height of each frame in the animation
+      this.titanWidth = width;           // Width of each frame in the animation
+      this.maxFrames = maxFrames;        // Total number of frames in the animation
+      this.titanImage = animationImage;  // Image object containing all frames of the animation
+      this.titanName = name;             // Name of the titan (used for identification)
+      this.staggerFrames = staggerFrames; // Number of frames to wait before advancing to the next frame
+      this.titanFrameY = framey;         // Y position of the frame in the animation image
+      this.x = xAxis;                    // X position on the canvas where the titan will be drawn
+      this.y = yAxis;                    // Y position on the canvas where the titan will be drawn
+  }
 
-    drawTitan() {
-        ctxTitan.drawImage(
-            this.titanImage,
-            framexTitan * this.titanWidth,
-            this.titanFrameY * this.titanHeight,
-            this.titanWidth,
-            this.titanHeight,
-            this.x,
-            this.y,
-            this.titanWidth * (canvasTitan.width / this.titanWidth),
-            this.titanHeight * (canvasTitan.height / this.titanHeight),
-        );
-        if (gameframetitan % this.staggerFrames === 0) {
-            if (framexTitan < (this.maxFrames - 1)){
-                framexTitan++;
-            } else {
-                framexTitan = 0; // Reset to first frame when animation completes
-            }
-        }
-    }
+  // Method to draw the titan animation on the canvas
+  drawTitan() {
+      ctxTitan.drawImage(
+          this.titanImage,
+          framexTitan * this.titanWidth, // X position of the current frame in the image
+          this.titanFrameY * this.titanHeight, // Y position of the current frame in the image
+          this.titanWidth,   // Width of the current frame
+          this.titanHeight,  // Height of the current frame
+          this.x,            // X position on the canvas
+          this.y,            // Y position on the canvas
+          this.titanWidth * (canvasTitan.width / this.titanWidth), // Scaled width of the titan
+          this.titanHeight * (canvasTitan.height / this.titanHeight), // Scaled height of the titan
+      );
+      if (gameframetitan % this.staggerFrames === 0) { // Check if it's time to advance the animation frame
+          if (framexTitan < (this.maxFrames - 1)) { // If not at the last frame
+              framexTitan++; // Move to the next frame
+          } else {
+              framexTitan = 0; // Reset to the first frame when animation completes
+          }
+      }
+  }
 }
 
+// Class for handling HP bars (both player and titan)
 class bar {
-    constructor(height, width, x, y, text_y, text_x, max, current, color, color2){
-      this.bar_height = height;
-      this.bar_width = width;
-      this.bar_x = x;
-      this.bar_y = y;
-      this.bar_text_y = text_y;
-      this.bar_text_x = text_x;
-      this.bar_max = max;
-      this.bar_current = current;
-      this.bar_color = color;
-      this.bar_color_2 = color2
-    }
-  
-    updateBoss(){
-      this.bar_current = TitanCurrentHP;
-      this.bar_max = TitanMaxHP;
-    }
+  // Constructor for initializing a new HP bar
+  constructor(height, width, x, y, text_y, text_x, max, current, color, color2){
+    this.bar_height = height;         // Height of the HP bar
+    this.bar_width = width;           // Width of the HP bar
+    this.bar_x = x;                   // X position of the HP bar on the canvas
+    this.bar_y = y;                   // Y position of the HP bar on the canvas
+    this.bar_text_y = text_y;         // Y position of the text on the HP bar
+    this.bar_text_x = text_x;         // X position of the text on the HP bar
+    this.bar_max = max;               // Maximum value for the HP bar (e.g., max HP)
+    this.bar_current = current;       // Current value of the HP bar (e.g., current HP)
+    this.bar_color = color;           // Color of the HP bar background
+    this.bar_color_2 = color2;        // Color of the HP bar foreground (filled portion)
+  }
 
-    updatePlayer(){
-      this.bar_current = playerHP;
-      this.bar_max = playerMaxHP;
-    }
+  // Method to update the HP bar for the boss (titan)
+  updateBoss(){
+    this.bar_current = TitanCurrentHP; // Set current HP to the titan's current HP
+    this.bar_max = TitanMaxHP;         // Set max HP to the titan's max HP
+  }
 
-    drawHPBar(){
-      ctxTitan.fillStyle = this.bar_color;
-      ctxTitan.fillRect(this.bar_x, this.bar_y, this.bar_width, this.bar_height);
-      if (this.bar_current > 0){
-        const ratio = this.bar_current / this.bar_max;
-        const width = this.bar_width * ratio;
-        ctxTitan.fillStyle = this.bar_color_2;
-        ctxTitan.fillRect(this.bar_x, this.bar_y, width, this.bar_height);
-      }else{
-        ctxTitan.fillStyle = this.bar_color;
-        ctxTitan.fillRect(this.bar_x, this.bar_y, this.bar_width, this.bar_height);
-      }
+  // Method to update the HP bar for the player
+  updatePlayer(){
+    this.bar_current = playerHP;       // Set current HP to the player's current HP
+    this.bar_max = playerMaxHP;        // Set max HP to the player's max HP
+  }
+
+  // Method to draw the HP bar on the canvas
+  drawHPBar(){
+    ctxTitan.fillStyle = this.bar_color; // Set the color for the HP bar background
+    ctxTitan.fillRect(this.bar_x, this.bar_y, this.bar_width, this.bar_height); // Draw the background of the HP bar
+    if (this.bar_current > 0) { // Check if there is any HP left to display
+      const ratio = this.bar_current / this.bar_max; // Calculate the ratio of current HP to max HP
+      const width = this.bar_width * ratio; // Calculate the width of the filled portion based on the ratio
+      ctxTitan.fillStyle = this.bar_color_2; // Set the color for the filled portion of the HP bar
+      ctxTitan.fillRect(this.bar_x, this.bar_y, width, this.bar_height); // Draw the filled portion of the HP bar
+    } else {
+      ctxTitan.fillStyle = this.bar_color; // If no HP left, display the bar in its background color
+      ctxTitan.fillRect(this.bar_x, this.bar_y, this.bar_width, this.bar_height); // Draw the empty HP bar
     }
   }
+}
+
   
 const wormAttackAnimation = new AnimateTitan(wormAttackHeight, wormAttackWidth, maxWormAttackFrames, wormAttackFrameY, wormAttack, 'wormAttack', 3, 10, 150);
+// Create an AnimateTitan instance for the worm attack animation
 const wormIdleAnimation = new AnimateTitan(wormIdleHeight, wormIdleWidth, maxWormIdleFrames, wormIdleFrameY, wormIdle, 'wormIdle', 4, 10,150);
-const necromancerAttackAnimation = new AnimateTitan(necromancerAttackHeight,necromancerAttackWidth,necromancerAttackMaxFrames,necromancerAttackFrameY,necromancer,'necromancerAttack', 3,10,0)
+// Create an AnimateTitan instance for the worm idle animation
+const necromancerAttackAnimation = new AnimateTitan(necromancerAttackHeight, necromancerAttackWidth, necromancerAttackMaxFrames, necromancerAttackFrameY, necromancer, 'necromancerAttack', 3, 10, 0)
+// Create an AnimateTitan instance for the necromancer attack animation
 
-const Worm_HP_BAR = new bar(HP_BAR_HEIGHT, HP_BAR_WIDTH, HP_BAR_X, 
-HP_BAR_Y, HP_TEXT_Y, HP_TEXT_X,TitanMaxHP, TitanCurrentHP, 'black', 'white');
+const Worm_HP_BAR = new bar(HP_BAR_HEIGHT, HP_BAR_WIDTH, HP_BAR_X, HP_BAR_Y, HP_TEXT_Y, HP_TEXT_X, TitanMaxHP, TitanCurrentHP, 'black', 'white');
+// Create a bar instance for the titan HP bar
 const playerHpBar = new bar(HP_BAR_HEIGHT, HP_BAR_WIDTH, HP_BAR_X, PLAYER_HP_BAR_Y, PLAYER_HP_TEXT_Y, PLAYER_HP_TEXT_X, playerMaxHP, playerHP, 'darkred', 'green');
-
+// Create a bar instance for the player HP bar
 
 
 
@@ -276,64 +362,97 @@ function drawPlayerHpText() {
   ctxTitan.fillText(`Player HP: ${formatNumber(playerHP)}/${formatNumber(playerMaxHP)}`, PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y);
 }
 
-
+// Main function for animating the titan and updating the canvas
 function animationTitan() {
-    ctxTitan.clearRect(0, 0, CANVAS_WIDTH_TITAN, CANVAS_HEIGHT_TITAN);
+  // Clear the entire canvas before drawing the next frame
+  ctxTitan.clearRect(0, 0, CANVAS_WIDTH_TITAN, CANVAS_HEIGHT_TITAN);
 
-    currentState = getValidState();
+  // Determine the current state of the titan (idle, attack, etc.)
+  currentState = getValidState();
 
-    switch (currentState) {
-        case 'idle':
-            wormIdleAnimation.drawTitan();
-            BOSS_TIMER_X = -1000;
-            bossAttackBegin = false;
-            if (!isRegenerating) {
-                isRegenerating = true;
-                titantRegen = setInterval(function(){
-                    if (TitanCurrentHP < TitanMaxHP){
-                        TitanCurrentHP += (TitanMaxHP * 0.2);
-                        TitanCurrentHP = Math.min(TitanCurrentHP, TitanMaxHP);
-                    }
-                }, 10000);
-            }
-            break;
-        case 'attack':
-            wormAttackAnimation.drawTitan();
-            bossAttackBegin = true
-            BOSS_TIMER_X = 15;
-            MAX_BOSS_TIME = 2;
-            TIMER_DECREASE_RATE = 2.8 / 60;
-            isRegenerating = false;
-            clearInterval(titantRegen);
-            break;
-        case 'necromancerAttack':
-            necromancerAttackAnimation.drawTitan();
-            bossAttackBegin = true;
-            MAX_BOSS_TIME = 2;
-            TIMER_DECREASE_RATE = 3 / 60;
-            isRegenerating = false;
-            clearInterval(titantRegen);
-            break;
-    }
+  // Handle different titan states
+  switch (currentState) {
+      case 'idle':
+          // Draw the idle animation for the worm
+          wormIdleAnimation.drawTitan();
+          
+          // Hide the boss timer and reset attack status
+          BOSS_TIMER_X = -1000;
+          bossAttackBegin = false;
+          
+          // Start or continue the titan's regeneration if not already regenerating
+          if (!isRegenerating) {
+              isRegenerating = true;
+              // Set up a timer to regenerate titan HP every 10 seconds
+              titantRegen = setInterval(function(){
+                  if (TitanCurrentHP < TitanMaxHP) {
+                      // Regenerate 20% of max HP each interval
+                      TitanCurrentHP += (TitanMaxHP * 0.2);
+                      // Ensure HP does not exceed max HP
+                      TitanCurrentHP = Math.min(TitanCurrentHP, TitanMaxHP);
+                  }
+              }, 10000); // 10000 milliseconds = 10 seconds
+          }
+          break;
+      
+      case 'attack':
+          // Draw the attack animation for the worm
+          wormAttackAnimation.drawTitan();
+          
+          // Set boss timer to visible and adjust parameters for attack
+          bossAttackBegin = true;
+          BOSS_TIMER_X = 15; // Position of the boss timer
+          MAX_BOSS_TIME = 2; // Set the maximum time for the boss attack
+          TIMER_DECREASE_RATE = 2.8 / 60; // Timer decrease rate (assuming 60 FPS)
+          
+          // Stop regeneration while the titan is attacking
+          isRegenerating = false;
+          clearInterval(titantRegen); // Clear the regeneration interval
+          break;
+      
+      case 'necromancerAttack':
+          // Draw the necromancer's attack animation
+          necromancerAttackAnimation.drawTitan();
+          
+          // Set boss timer to visible and adjust parameters for attack
+          bossAttackBegin = true;
+          MAX_BOSS_TIME = 2; // Set the maximum time for the boss attack
+          TIMER_DECREASE_RATE = 3 / 60; // Timer decrease rate (assuming 60 FPS)
+          
+          // Stop regeneration while the necromancer is attacking
+          isRegenerating = false;
+          clearInterval(titantRegen); // Clear the regeneration interval
+          break;
+  }
 
-    Worm_HP_BAR.drawHPBar();
-    Worm_HP_BAR.updateBoss();
-    playerHpBar.drawHPBar();
-    playerHpBar.updatePlayer();
-    drawBossTimer();
-    drawHPText();
-    drawPlayerHpText();
-    drawHPParticle();
+  // Update and draw the HP bars for the titan and the player
+  Worm_HP_BAR.drawHPBar();
+  Worm_HP_BAR.updateBoss(); // Update the HP bar to reflect the titan's current HP
+  playerHpBar.drawHPBar();
+  playerHpBar.updatePlayer(); // Update the HP bar to reflect the player's current HP
+  
+  // Draw additional elements on the canvas
+  drawBossTimer();        // Draw the boss timer
+  drawHPText();           // Draw text showing HP values
+  drawPlayerHpText();    // Draw text showing player HP
+  drawHPParticle();       // Draw HP particle effects
 
-    gameframetitan++;
-    requestAnimationFrame(animationTitan);
+  // Increment the frame count for animation updates
+  gameframetitan++;
+  
+  // Request the next frame to continue the animation loop
+  requestAnimationFrame(animationTitan);
 }
 
-
+// Function to handle drawing of static elements (e.g., HP text)
 function drawLoop() {
-    drawHPText();
-    requestAnimationFrame(drawLoop);
+  // Draw text showing HP values
+  drawHPText();
+  
+  // Request the next frame to continue the drawing loop
+  requestAnimationFrame(drawLoop);
 }
+
 
 
 
@@ -354,7 +473,7 @@ function closeNav() {
 }
 
 
-
+// Validates and returns animation state of titan.
 function getValidState() {
   if (playerHP <= 0){
     return 'idle';
@@ -418,6 +537,7 @@ canvasTitan.addEventListener('click', () => {
 animationTitan();
 
 
+// Saves game state ie variables into local storage.
 function save(){
     localStorage.setItem('TitanMaxHP', TitanMaxHP);
     localStorage.setItem('TitanCurrentHP', TitanCurrentHP);
@@ -469,8 +589,8 @@ function reset(){
 /**
  * Formats a number into a readable string representation.
  * Supports both standard notation with suffixes and scientific notation.
- * @param {number} num - The number to format.
- * @returns {string} The formatted number as a string.
+ * param {number} num - The number to format.
+ * returns {string} The formatted number as a string.
  */
 function formatNumber(num) {
   // Check if scientific notation is enabled via a checkbox in the UI

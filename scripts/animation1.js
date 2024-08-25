@@ -31,12 +31,41 @@
 // animate1();
 
 
-const canvas = document.getElementById("canvas1");
-const ctx = canvas.getContext("2d");
-const CANVAS_WIDTH = canvas.width = 4000;
-const CANVAS_HEIGHT = canvas.height = 2500;
-let gameSpeed = 50
+// Get the canvas element with id 'canvas1'
+const canvas1 = document.getElementById('canvas1');
 
+// Check if the canvas element exists
+if (canvas1) {
+    // Get the 2D rendering context for the canvas
+    const ctx = canvas1.getContext('2d');
+
+    // Set the canvas width to 600 pixels and store it in CANVAS_WIDTH
+    const CANVAS_WIDTH = canvas1.width = 600;
+
+    // Set the canvas height to 650 pixels and store it in CANVAS_HEIGHT
+    const CANVAS_HEIGHT = canvas1.height = 650;
+}
+// Set the game speed
+let gameSpeed = 20
+
+// Initialize frame counters for different animations
+let framex = 0
+let hurt_framex = 3
+let framey = 0
+let gameframe = 0
+
+// Define stagger frames for different animations
+const staggerframes = 7
+const staggerframes_hurt = 12
+const staggerframes_dead = 4
+const staggerframes_attack = 5
+
+// Initialize player state flags
+let isHurt = false
+let isDead = false
+
+// Retrieve attacking state from localStorage, default to false if not found
+let isAttacking = localStorage.getItem('isAttacking') || false
 
 const backgroundLayer1 = new Image();
 backgroundLayer1.src = "layer-1.png";

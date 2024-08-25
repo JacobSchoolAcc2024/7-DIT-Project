@@ -403,7 +403,7 @@ function animationTitan() {
           bossAttackBegin = true;
           BOSS_TIMER_X = 15; // Position of the boss timer
           MAX_BOSS_TIME = 2; // Set the maximum time for the boss attack
-          TIMER_DECREASE_RATE = 2.8 / 60; // Timer decrease rate (assuming 60 FPS)
+          TIMER_DECREASE_RATE = 2.8 / 60; // Timer decrease rate (assum 60 FPS)
           
           // Stop regeneration while the titan is attacking
           isRegenerating = false;
@@ -417,7 +417,7 @@ function animationTitan() {
           // Set boss timer to visible and adjust parameters for attack
           bossAttackBegin = true;
           MAX_BOSS_TIME = 2; // Set the maximum time for the boss attack
-          TIMER_DECREASE_RATE = 3 / 60; // Timer decrease rate (assuming 60 FPS)
+          TIMER_DECREASE_RATE = 3 / 60; // Timer decrease rate (60 FPS)
           
           // Stop regeneration while the necromancer is attacking
           isRegenerating = false;
@@ -537,7 +537,7 @@ canvasTitan.addEventListener('click', () => {
 animationTitan();
 
 
-// Saves game state ie variables into local storage.
+// Saves game state ie variables into local storage and updates game visibility.
 function save(){
     localStorage.setItem('TitanMaxHP', TitanMaxHP);
     localStorage.setItem('TitanCurrentHP', TitanCurrentHP);
@@ -587,7 +587,7 @@ function reset(){
 
 
 /**
- * Formats a number into a readable string representation.
+ * Formats a number into a string representation.
  * Supports both standard notation with suffixes and scientific notation.
  * param {number} num - The number to format.
  * returns {string} The formatted number as a string.
@@ -659,15 +659,17 @@ checkboxScientificNotation.addEventListener('change', () => {
     localStorage.setItem('scientificNotation', checkboxScientificNotation.checked);
 });
 
+// Event listener when user press keydown.
 document.addEventListener('keydown', handleKeyPress);
 function handleKeyPress(event) {
   switch(event.key) {
-    case 'r':
+    case 'r': //When user presses letter r, then reset the game.
       reset();
       break
   }
 
 }
+// Saves game state every second.
 setInterval(save, 1000);
 
 

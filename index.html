@@ -1,89 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-    <title>Idle_gym</title>
-    <audio id="BGM-2" loop>
-        <source src="../music/BGM-2.m4a" type="audio/mpeg" >
-    </audio>
-    <audio id="default_fx">
-        <source src="../music/normalSound.wav" type="audio/mpeg">
-    </audio>
-    <audio id="dagger_slash">
-        <source src="../music/dagger-slash.wav" type="audio/mpeg">
-    </audio>
-    <audio id="skill_point">
-        <source src="../music/skillPoint.wav" type="audio/mpeg">
-    </audio>
-<head>
-    <link rel="stylesheet" href="css/style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<!DOCTYPE html> <!-- This line specifies the document type and version of HTML -->
+<html lang="en"> <!-- Declares the language of the document to be English -->
+<head> <!-- Head section contains metadata, styles, and links to external resources -->
+    <meta charset="UTF-8"> <!-- Sets the character encoding for the document -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Sets the viewport to ensure responsive design -->
+    <title>Idle Gym</title> <!-- Title of the webpage, displayed in the browser tab -->
+    <link rel="stylesheet" href="css/style.css"> <!-- Link to an external CSS file for styling -->
+    
     <style>
+        /* Internal CSS to set the background properties for the body element */
         body {
-            background-image: url(../images/dark-brown-bg.avif);
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-image: url(../images/dark-brown-bg.avif); /* Background image for the page */
+            background-repeat: no-repeat; /* Ensures the background image doesn't repeat */
+            background-size: cover; /* Background image covers the entire viewport */
+            background-position: center; /* Centers the background image */
+            background-attachment: fixed; /* Background stays fixed when scrolling */
         }
     </style>
 </head>
-<body class="main_Page">
+
+<body class="main_Page"> <!-- Body of the document, with a class for additional styling -->
+    
+    <!-- Audio elements to include background music and sound effects -->
+    <audio id="BGM-2" loop> <!-- Background music that loops continuously -->
+        <source src="../music/BGM-2.m4a" type="audio/mp4">
+    </audio>
+    <audio id="default_fx"> <!-- Placeholder audio element for default sound effects -->
+        <source src="../music/normalSound.wav" type="audio/wav">
+    </audio>
+    <audio id="dagger_slash"> <!-- Audio element for dagger slash sound effect -->
+        <source src="../music/dagger-slash.wav" type="audio/wav">
+    </audio>
+    <audio id="skill_point"> <!-- Audio element for skill point sound effect -->
+        <source src="../music/skillPoint.wav" type="audio/wav">
+    </audio>
+
+    <!-- Side navigation menu -->
     <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="pages/titan.html" class="menu_Item" id="glory">Battle For Glory</a>
-        <a><br></a>
-        <a href="index.html" class="menu_Item">HOME</a>
-        <a href="pages/market.html" class="menu_Item">MARKET</a>
-        <a href="pages/contact.html" class="menu_Item">CONTACT</a>
-        <a href="pages/about.html" class="menu_Item">ABOUT</a>
-        
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> <!-- Close button for the side navigation -->
+        <a href="pages/titan.html" class="menu_Item" id="glory">Battle For Glory</a> <!-- Link to another page for a battle game mode -->
+        <a href="index.html" class="menu_Item">HOME</a> <!-- Home page link -->
+        <a href="pages/market.html" class="menu_Item">MARKET</a> <!-- Market page link -->
+        <a href="pages/contact.html" class="menu_Item">CONTACT</a> <!-- Contact page link -->
+        <a href="pages/about.html" class="menu_Item">ABOUT</a> <!-- About page link -->
     </div>
+
+    <!-- Top navigation bar -->
     <div class="top_bar">
-        <div class="menu_container" onclick="openNav()">
-            <div class="bar1"></div>
+        <div class="menu_container" onclick="openNav()"> <!-- Menu button to open side navigation -->
+            <div class="bar1"></div> <!-- Visual elements of the menu button -->
             <div class="bar2"></div>
             <div class="bar3"></div>
         </div>
     </div>
+
+    <!-- Button with canvas (possibly for visual effects or user interactions) -->
     <button>
-        <canvas id="canvas1"></canvas>
+        <canvas id="canvas1"></canvas> <!-- Canvas element used for drawing graphics -->
     </button>
+
+    <!-- Tutorial modal dialog for guiding new players -->
     <div id="tutorial-modal" class="modal">
         <div class="modal-content">
-          <h2>Welcome to the Game!</h2>
-          <div id="tutorial-content"></div>
-          <button id="prev-tutorial">Previous</button>
-          <button id="next-tutorial">Next</button>
-          <button id="close-tutorial">Close</button>
+          <h2>Welcome to the Game!</h2> <!-- Title of the tutorial modal -->
+          <div id="tutorial-content"></div> <!-- Container for dynamic tutorial content -->
+          <button id="prev-tutorial">Previous</button> <!-- Button to go to the previous tutorial step -->
+          <button id="next-tutorial">Next</button> <!-- Button to go to the next tutorial step -->
+          <button id="close-tutorial">Close</button> <!-- Button to close the tutorial modal -->
         </div>
     </div>
+
+    <!-- Player stats section -->
     <div class="player_stats">
         <div class="wood_plate_background">
-            <img class="stats_icon" src="images/noun-stats-6801159.png">
-            <span class="wood">Stats</span>
+            <img class="stats_icon" src="images/noun-stats-6801159.png" alt="Stats Icon"> <!-- Icon representing stats -->
+            <span class="wood">Stats</span> <!-- Title label for stats section -->
         </div>
-        <button id="help-button">Help</button>
-        <P id="player_level" class="status">Player Level: 1 </P>
-        <p id="player_damage" class="status">Player Damage: 1  </p>
-        <p id="player_health" class="status">Player Health: 100 </p>
+        <button id="help-button">Help</button> <!-- Help button -->
+        <!-- Displaying various player statistics -->
+        <p id="player_level" class="status">Player Level: 1</p>
+        <p id="player_damage" class="status">Player Damage: 1</p>
+        <p id="player_health" class="status">Player Health: 100</p>
         <p id="player_regen" class="status">Regen HP: ?</p>
-        <P id="aura_damage" class="status">Player Aura: ?</P>
-        <p  id="boss_damage" class="status">Boss Damage: ? </p>
+        <p id="aura_damage" class="status">Player Aura: ?</p>
+        <p id="boss_damage" class="status">Boss Damage: ?</p>
         <p id="shards" class="status">Time Shards: ?</p>
-        <button id="play_fx" onclick="PlayFx()">Play Sound</button>
-        <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play BGM</button>
+        <button id="play_fx" onclick="PlayFx()">Play Sound</button> <!-- Button to play a sound effect -->
+        <button id="play_audio_2" onclick="togglePlayPauseTwo()">Play BGM</button> <!-- Button to play or pause background music -->
         <br>
-        <button id="skill_menu" onclick="openSkills()" onclick="closeNav()">Skills</button>
+        <!-- Button to open skill menu and close navigation -->
+        <button id="skill_menu" onclick="openSkills(); closeNav();">Skills</button>
         <br>
+        <!-- Button for player reincarnation with requirements -->
         <button id="playerReincarnation">
             <span>Reincarnation</span><br>
             <span id="reincarnationRequirements">Requirements: ?</span>
         </button>
+        
+        <!-- Modal for reincarnation confirmation -->
         <div id="reincarnateModal" class="modalReincarnation">
             <div class="modal-contentReincarnation">
-              <h2>Are you sure you want to reincarnate?</h2>
-              <p>This action will reset your progress to improve future potential.</p>
+              <h2>Are you sure you want to reincarnate?</h2> <!-- Modal header -->
+              <p>This action will reset your progress to improve future potential.</p> <!-- Description of reincarnation -->
                 ---------------------------------<br>
                 <span id="timeShardMulti">Time Shard Multiplier: ?</span><br>
                 <span id="goldMulti">Gold Multiplier: ?</span><br>
@@ -91,77 +108,88 @@
                 <br>---------------------------------<br>
                 <span id="reincarnationLevel">Player Reincarnation Level: ?</span>
                 <br><br>
-              <button id="confirmReincarnate" onclick="reincarnation()">Yes, Reincarnate</button>
-              <button id="cancelReincarnate">Cancel</button>
+              <button id="confirmReincarnate" onclick="reincarnation()">Yes, Reincarnate</button> <!-- Button to confirm reincarnation -->
+              <button id="cancelReincarnate">Cancel</button> <!-- Button to cancel reincarnation -->
             </div>
         </div>
         <br>   
+        <!-- Checkbox for using scientific notation -->
         <input type="checkbox" id="scientific-notation-checkbox">
         <label for="scientific-notation-checkbox">Use Scientific Notation</label>
         <br>
     </div>
+
+    <!-- Skill point menu for upgrading player skills -->
     <div class="skill_point_menu" id="skill_p_menu">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a>
-            <p id= "skill_point_status" class="amount_skillp">Skill Points: 0</p>
+        <a href="javascript:void(0)" class="closebtn" onclick="closeSkills()">&times;</a> <!-- Close button for skill menu -->
+        <p id="skill_point_status" class="amount_skillp">Skill Points: 0</p> <!-- Display current skill points -->
         <div class="stats_add">
             <div class="strength_add">
-                <p id="Strength" class="status">Strength: 0</p>
-                <button id="Strength" class="add_button" onclick="add_stat('Strength')">+</button>
+                <p id="Strength" class="status">Strength: 0</p> <!-- Displays current strength -->
+                <button class="add_button" onclick="add_stat('Strength')">+</button> <!-- Button to increase strength -->
             </div>
             <div class="stamina_add">
-                <p id="Stamina" class="status">Stamina: 0</p>
-                <button id="Stamina" class="add_button" onclick="add_stat('Stamina')">+</button>
+                <p id="Stamina" class="status">Stamina: 0</p> <!-- Displays current stamina -->
+                <button class="add_button" onclick="add_stat('Stamina')">+</button> <!-- Button to increase stamina -->
             </div>
             <div class="intelligence_add">
-                <p id="Intelligence" class="status">Intelligence: 0</p>
-                <button id="Intelligence" class="add_button" onclick="add_stat('Intelligence')">+</button>
+                <p id="Intelligence" class="status">Intelligence: 0</p> <!-- Displays current intelligence -->
+                <button class="add_button" onclick="add_stat('Intelligence')">+</button> <!-- Button to increase intelligence -->
             </div>
         </div>
     </div>
+
+    <!-- Upgrades section for the player -->
     <div class="upgrades_div">
         <div class="gold_plate_background">
-            <img class="stats_icon" src="images/noun-coin-6929625.png">
-            <span id="gold">Gold: 0</span>
+            <img class="stats_icon" src="images/noun-coin-6929625.png" alt="Gold Icon"> <!-- Icon representing gold -->
+            <span id="gold">Gold: 0</span> <!-- Display current amount of gold -->
         </div>
         <p>Upgrades</p>
+        <!-- Buttons to purchase different amounts of upgrades -->
         <div class="upgrade_how_much">
-            <button id="button1" class="purchase-button" onclick="purchase_amount(1, 'button1')">1x</button>
-            <button id="button10" class="purchase-button" onclick="purchase_amount(10, 'button10')">10x</button>
-            <button id="button100" class="purchase-button" onclick="purchase_amount(100, 'button100')">100x</button>
+            <button id="button1" class="purchase-button" onclick="purchase_amount(1, 'button1')">1x</button> <!-- Purchase 1x amount -->
+            <button id="button10" class="purchase-button" onclick="purchase_amount(10, 'button10')">10x</button> <!-- Purchase 10x amount -->
+            <button id="button100" class="purchase-button" onclick="purchase_amount(100, 'button100')">100x</button> <!-- Purchase 100x amount -->
         </div>
-        <button class ="tooltip" id="clicker_upgrade" onclick="purchase_upgrade('clicker_upgrade')">
+        <!-- Upgrade buttons with tooltips for each type of upgrade -->
+        <button class="tooltip" id="clicker_upgrade" onclick="purchase_upgrade('clicker_upgrade')">
             Train Fist
-            <span class="tooltiptext" id="clicker_upgrade_cost">Increases damage</span>
+            <span class="tooltiptext" id="clicker_upgrade_cost">Increases damage</span> <!-- Tooltip for clicker upgrade -->
         </button>
         <button class="tooltip" id="hp_upgrade" onclick="purchase_upgrade('hp_upgrade')">
             Train Stamina
-            <span class="tooltiptext" id="hp_upgrade_cost">Increases Hp</span>
+            <span class="tooltiptext" id="hp_upgrade_cost">Increases HP</span> <!-- Tooltip for stamina upgrade -->
         </button>
         <button class="tooltip" id="regen_upgrade" onclick="purchase_upgrade('regen_upgrade')">
             Regeneration
-            <span class="tooltiptext" id="regen_upgrade_cost">Regenerates Player Health</span>
+            <span class="tooltiptext" id="regen_upgrade_cost">Regenerates Player Health</span> <!-- Tooltip for regeneration upgrade -->
         </button>
+        <!-- Aura upgrade section -->
         <div class="aura_upgrade_div">
             <button class="tooltip" id="aura_upgrade" onclick="purchase_upgrade('aura_upgrade')">
                 Aura
-                <span class="tooltiptext" id="aura_upgrade_cost">Automatically damages enemy</span>
+                <span class="tooltiptext" id="aura_upgrade_cost">Automatically damages enemy</span> <!-- Tooltip for aura upgrade -->
             </button>
             <button class="tooltip" id="turnAura" onclick="auraOn()">On
-                <span class="tooltiptext">Turns aura on</span>
+                <span class="tooltiptext">Turns aura on</span> <!-- Tooltip for turning aura on -->
             </button>
         </div>        
+        <!-- Buttons for navigating between different stages or locking the stage -->
         <div class="stage_setting">
-            <button class="tooltip"  onclick="previous_level()">Previous Level
-                <span class="tooltiptext">Goes back 1 stage</span>
+            <button class="tooltip" onclick="previous_level()">Previous Level
+                <span class="tooltiptext">Goes back 1 stage</span> <!-- Tooltip for previous level button -->
             </button>
-            <button class="tooltip"  onclick="next_level()">Next Level
-                <span class="tooltiptext">Goes forward 1 stage</span>
+            <button class="tooltip" onclick="next_level()">Next Level
+                <span class="tooltiptext">Goes forward 1 stage</span> <!-- Tooltip for next level button -->
             </button>
-            <button  class="tooltip" id="lock_stage" onclick="lock_stage()">Lock stage
-                <span class="tooltiptext">Locks the stage.</span>
+            <button class="tooltip" id="lock_stage" onclick="lock_stage()">Lock stage
+                <span class="tooltiptext">Locks the stage.</span> <!-- Tooltip for lock stage button -->
             </button>
         </div>
     </div>
-    <script src="scripts/clicker.js"></script>
+
+    <!-- JavaScript file for clicker game functionality -->
+    <script src="scripts/clicker.js"></script> <!-- Link to external JavaScript file -->
 </body>
 </html>

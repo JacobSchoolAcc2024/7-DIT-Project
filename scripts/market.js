@@ -4,6 +4,7 @@ const ctx2 = market_canva.getContext('2d');
 const CANVASHEIGHT = market_canva.height = 300;
 const CANVASWIDTH = market_canva.width = 300;
 
+//variables for increasing player hp
 let market_MAX_HP = parseInt(localStorage.getItem('player_MAX_HP')) || 100;
 let market_currentHP = parseInt(localStorage.getItem('player_currentHP')) || market_MAX_HP;
 
@@ -237,14 +238,6 @@ function drawAnimation(weaponPic, weaponName) {
   }
 }
 
-function updateSpriteFrame() {
-  // Update the frameX and frameY values
-  frameX++;
-  if (frameX >= 24) { // Assuming the sprite sheet has 4 frames horizontally
-    frameX = 0;
-  }
-}
-
 
 
 //get weapon name by its price
@@ -276,7 +269,8 @@ function purchaseItem() {
   if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
       gold -= marketPrice;
       purchasedItems.push(NameOfWeapon);
-      playerDmg+=skillDict[NameOfWeapon].damage/2;
+      //add the 
+      playerDmg+=skillDict[NameOfWeapon].damage;
       market_MAX_HP+=skillDict[NameOfWeapon].point;
       market_currentHP+=skillDict[NameOfWeapon].point;
       document.getElementById('purchaseItem').style.backgroundColor = "darkred";
@@ -297,6 +291,7 @@ function update_window() {
     document.getElementById('hp_display').innerHTML = "HP: +" + getWeaponPointByPrice(marketPrice);
 }
 
+//function for checking if the weapon has been purchased
 function check_button(){
   let NameOfWeapon = getWeaponNameByPrice(marketPrice);
   if(purchasedItems.includes(NameOfWeapon)){
@@ -337,4 +332,3 @@ function play_sound_fx(sound){
 
 setInterval(update_window, 100);
 setInterval(randomSentenceGenearte,5000);
-setInterval(check_button_list,100);

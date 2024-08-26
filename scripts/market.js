@@ -1,4 +1,4 @@
-//variables for canvas size
+//variables for creating of canvas and canvas size
 const market_canva = document.getElementById("market_canvas");
 const ctx2 = market_canva.getContext('2d');
 const CANVASHEIGHT = market_canva.height = 300;
@@ -10,7 +10,9 @@ let market_currentHP = parseInt(localStorage.getItem('player_currentHP')) || mar
 
 //variables of images of weapons
 const epicSword = new Image();
+//create a new const of picture an save it as a ImageElement
 epicSword.src = '../images/epic_Sword.png';
+//import the picture from folder
 const dirtyIceCream = new Image();
 dirtyIceCream.src ='../images/dirtyIceCream.png';
 const w_Sword = new Image();
@@ -69,12 +71,13 @@ function formatNumber(num) {
     ];
     const suffixIndex = Math.floor(Math.log10(Math.abs(num)) / 3);
     const formattedNum = parseFloat((num / Math.pow(1000, suffixIndex)).toFixed(2));
-    return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");
+    //convert the number into format
+    return (isNaN(formattedNum) || formattedNum === 0) ? "0" : formattedNum + (suffixes[suffixIndex] || "");//return zero once it's not a real number or equal to zero
 }
 
 // dictionary of the weapon price
 const priceDict = {
-    "Epic Sword": 15000,
+    "Epic Sword": 15000,// price of weapon and so on
     "Wood Sword": 500,
     "Diamond Sword": 50000,
     "Dirty Icecream": 100000,
@@ -90,9 +93,11 @@ const priceDict = {
 
 // dictionary of the hp and damage of the weapon
 const skillDict = {
-  "Epic Sword": {
+  "Epic Sword": {//name of weapon
     damage: 400,
+    //damage of weapon
     point:0,
+    //hp increase for players
   },
   "Wood Sword": {
     damage: 20,
@@ -140,6 +145,7 @@ const skillDict = {
 // dictionary of the npc's random sentences
 const sentences = {
   1: "Yeah babe",
+  //dialog of npc and index of key sentence
   2: "Buy some.",
   3: "Plz......",
   4: "Let's popping.",
@@ -183,9 +189,11 @@ function drawAnimation(weaponPic, weaponName) {
       ctx2.drawImage(epicSword, - 30, - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
       //draw the image
       marketPrice = priceDict["Epic Sword"];
+      //set the price to the corresponding object
       check_button();
       //get the price 
       play_sound_fx(preview);
+      //play sound effect
       break;
     case "Wood Sword":
       ctx2.drawImage(w_Sword,  - 30,  - 10, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
@@ -247,6 +255,7 @@ function getWeaponNameByPrice(price) {
         return weaponName;
       }
     }
+    //search the word price in the whole dictionary
     return null; 
   }
 
@@ -269,17 +278,22 @@ function purchaseItem() {
   if (gold >= marketPrice && !purchasedItems.includes(NameOfWeapon)) {
       gold -= marketPrice;
       purchasedItems.push(NameOfWeapon);
-      //add the 
+      //add the name of weapon into the purchase list
       playerDmg+=skillDict[NameOfWeapon].damage;
+      //add the player damage
       market_MAX_HP+=skillDict[NameOfWeapon].point;
+      //add the hp and max hp for players
       market_currentHP+=skillDict[NameOfWeapon].point;
       document.getElementById('purchaseItem').style.backgroundColor = "darkred";
+      //set the button to red color 
       localStorage.setItem('player_MAX_HP', market_MAX_HP);
       localStorage.setItem('player_currentHP',market_currentHP);
       localStorage.setItem('playerDmg', playerDmg);
       localStorage.setItem('purchasedItems',JSON.stringify(purchasedItems));
       localStorage.setItem("gold", gold);
+      //localstorage of data
       play_sound_fx(coin_flip);
+      // sound playing after th epurchase of weapon
   }
 }
 
@@ -295,6 +309,7 @@ function update_window() {
 function check_button(){
   let NameOfWeapon = getWeaponNameByPrice(marketPrice);
   if(purchasedItems.includes(NameOfWeapon)){
+    //check if the weapon has been purchased
     document.getElementById('purchaseItem').style.backgroundColor = "darkred";
   }else{
     document.getElementById('purchaseItem').style.backgroundColor = "#F0F0F0";
@@ -306,29 +321,38 @@ function togglePlayPause() {
   if (isPlaying) {
     backGroundMusic.pause();
     playPause.textContent = 'Play BGM';
+     //change of button context
   } else {
     backGroundMusic.play();
     playPause.textContent = 'Pause BGM';
+    //change of button context
   }
   isPlaying = !isPlaying;
+  //set the boolean varibale to control the toggle of music
 }
 
 //control of sound effect playing
 function PlayFxMarket(){
   if (fx_play_market) {
     playPauseFxMarket.textContent = 'Play Sound';
+     //change of button context
   } else {
     playPauseFxMarket.textContent = 'Pause Sound';
+     //change of button context
   }
   fx_play_market = !fx_play_market;
+  //set the boolean varibale to control the toggle of sound effect
 }
+
 
 //control which sound to play
 function play_sound_fx(sound){
   if(fx_play_market){
     sound.play();
+    //get the sound to play if the player choose to play the sound effect from the page
   }
 }
 
 setInterval(update_window, 100);
 setInterval(randomSentenceGenearte,5000);
+//set time inerval for npc dialog generation and update of weapon data

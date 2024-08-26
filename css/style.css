@@ -227,31 +227,35 @@ body {
 .upgrades_div {
   z-index: 0;
   position: fixed;
-  right: 0;
-  top: 4rem;
+  right: 0; /*Aligns the skills section to the whole page*/
+  top: 4rem; /*Makes the nav bar still appear visible even when the skill menu is up*/
   background-image: url(../images/quest-paper.jpg);
   height: 100%;
   width: 20%;
-  text-align: center;
+  text-align: center; /*Aligns all text in the skill points menu to the center*/
   border-left: 0.2rem rgb(48, 48, 48) double;
-  border-radius: 0.2rem;
+  border-radius: 0.2rem; /*Rounds the edges of the border*/
 }
 
+/*Adjusts the width of the buttons in the Upgrades section*/
 .upgrades_div button{
   width: 16rem;
 }
 
+/*Adjusts the size of the Gold display*/
 #gold {
   font-size: 2rem;
   margin-bottom: 3rem;
 }
 
+/*Makes the size of the stats icon to be the same*/
 .stats_icon {
   display: inline-block;
   height: 2rem;
   margin-top: 3rem;
 }
 
+/*Makes the gold background fit the whole top of the div*/
 .gold_plate_background {
   font-family: "Lugrasimo", cursive;
   width: 100%;
@@ -261,49 +265,52 @@ body {
   padding-bottom: 3rem;
 }
 
+/*Adjusts the font size of text in the upgrades section*/
 .upgrades_div p{
   font-size: 2rem;
   align-items: center;
 }
 
-
+/*Adjusts the box size that displays the player's stats*/
 .status{
   width: 80%;
-  background-color: white;
+  background-color: rgb(240, 236, 236);
   font-size: 1.5rem;
-  box-shadow:
+  box-shadow: /*Makes the box look 3d by giving it shadows*/
       inset -2px 2px 1px 1px grey,
       inset -2px -2px 1px 1px lightgray,
       inset 2px 0px 1px 1px lightgray;
   margin-left: 8%;
-  overflow-y: auto;
 }
 
+/*Adjusts the style of the box that contains tooltip text.*/
 .stage_setting {
-  position: absolute;
-  bottom: 10%;
-  left: 6%;
+  position: absolute; 
+  bottom: 10%; /*Makes the tooltip box appear 10% blow the button*/
+  left: 6%; /*Makes the tooltip box appear 6% to the left of the button*/
 }
 
-
+/*MARKET CSS*/
+/*Adjusts the size of the canvas that displays the market item in the market page*/
 #market_canvas {
   border: 4px solid black;
-  width: 300px;
-  height: 300px;
-  background-color: rgb(255, 255, 255);
+  width: 300px; /*Sets the width of the canvas to be 300px*/
+  height: 300px; /*Sets the height of the canvas to be 300px*/
+  background-color: rgb(255, 255, 255); /*Sets the background in the box to be white*/
 }
 
+/*Adjusts style for the div that contains the player's stats*/
 .player_stats {
   position: fixed;
-  width: 20%;
-  top: 4rem;
-  background-image: url(../images/quest-paper.jpg);
-  height: 100%;
-  text-align: center;
+  width: 20%; /*Sets width of the div to be 20% of the page*/
+  top: 4rem; /*Makes it start 4rem from the top, makes the nav bar visible*/
+  background-image: url(../images/quest-paper.jpg); /*Background of the div*/
+  height: 100%; /*Makes it cover the whole height of the page*/
+  text-align: center; /*Centers all content in the div*/
   border-right: 0.2rem black double;
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: 1;
+  overflow-y: auto; 
+  overflow-x: hidden; /*Hides scroll bar in case any content is larger than the div*/
+  z-index: 1; /*Makes it appear above the page but below the nav bar*/
 }
 
 p {

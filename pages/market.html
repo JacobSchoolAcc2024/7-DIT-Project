@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
     <title>Market</title>
+    <!--All audio files used for sound fx-->
         <audio id="BGM-1" loop>
             <source src="../music/BGM-1.m4a" type="audio/mpeg">
         </audio>
@@ -14,7 +15,7 @@
         
         <link rel="stylesheet" href="../css/style.css">
         <style>
-            body {
+            body { /*Adjusts the style of the body in market section*/
                 background-image: url(../images/brown_paper_bg.avif);
                 background-repeat: no-repeat;
                 background-size: cover;
@@ -27,7 +28,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-    <div id="mySidenav" class="sidenav">
+    <div id="mySidenav" class="sidenav"> <!--Navigation bar that allows the player to navigate through difference pages-->
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="../index.html" class="menu_Item">HOME</a>
         <a href="market.html" class="menu_Item">MARKET</a>
@@ -35,8 +36,8 @@
         <a href="about.html" class="menu_Item">ABOUT</a>
     </div>
     
-    <div class="top_bar">
-        <div class="menu_container" onclick="openNav()">
+    <div class="top_bar"> <!--The nav bar at the top of the page-->
+        <div class="menu_container" onclick="openNav()"> <!--The menu icon to the left side of the top nav bar-->
             <div class="bar1"></div>
             <div class="bar2"></div>
             <div class="bar3"></div>
@@ -47,8 +48,8 @@
         </button>
         <div>
             <div class="item_list"> <!--Contains the list of purchaseable items-->
-                <div class="gold_plate_background">
-                    <img class="stats_icon" src="../images/noun-coin-6929625.png">
+                <div class="gold_plate_background"> <!--Displays the amount of gold the player has-->
+                    <img class="stats_icon" src="../images/noun-coin-6929625.png"> <!--The icon that appears next to the gold display-->
                     <span id="market_gold">Gold: 0</span>
                 </div>
                 <button id="wood sword" class="market_item" onclick="drawAnimation(w_Sword, 'Wood Sword')">Wood Sword</button>
@@ -69,8 +70,8 @@
     </div>
     </body>
 <body>
-    <div class="canvas_list">
-        <canvas id = "market_canvas"> </canvas>
+    <div class="canvas_list"> <!--Div that contains the canvas in market-->
+        <canvas id = "market_canvas"> </canvas> <!--Displays the visuals of the item selected-->
     </div>
     <button id ='purchaseItem' onclick="purchaseItem()">PURCHASE</button>
     <div class="canvas_stats">

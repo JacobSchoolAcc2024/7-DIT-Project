@@ -746,6 +746,7 @@ function drawIdleAnimation() {
       canvas1.height
   );
 
+  
   // Advance frames at specified intervals, loop animation
   if (gameframe % staggerframes === 0) {
       if (framex < 3) framex++;

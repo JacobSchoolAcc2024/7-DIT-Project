@@ -313,15 +313,20 @@ body {
   z-index: 1; /*Makes it appear above the page but below the nav bar*/
 }
 
+/*Adjusts the styling for paragraph tags*/
 p {
   font-family: "Lugrasimo", cursive;
-  user-select: none;
+  user-select: none; /*Makes all text in the html non selectable / non highlightable*/
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+
 }
 
-
+/*Adjusts styling for the wood image in the Stats section*/
 .wood_plate_background {
   font-family: "Lugrasimo", cursive;
-  width: 100%;
+  width: 100%; 
   background-image: url(../images/wood_plate.avif);
   border: 0.2rem black double;
   border-radius: 0.2rem;
@@ -329,18 +334,21 @@ p {
   margin-bottom: 3rem;
 }
 
+/*Adjusts the setting for the word "Stats" in the wood image*/
 .wood {
   font-size: 2rem;
   margin-bottom: 3rem;
 }
  
+/*Adjusts styling of the container which contains the strength stat and add button*/
 .strength_add{
-  display: flex;
+  display: flex; /*Makes the plus button and strength display fit in one line*/
   width: 20%;
   padding: 0;
   height: 5%;
 }
 
+/*Adjusts the style of the plus button*/
 .add_button {
   margin-top: 8%;
   font-size: 0.8rem;
@@ -348,6 +356,7 @@ p {
   height: 2rem;
 }
 
+/*Adjusts styling of the container which contains the stamina stat and add button*/
 .stamina_add{
   display: flex;
   width: 20%;
@@ -355,7 +364,7 @@ p {
   height: 0%;
 }
 
-
+/*Adjusts styling of the container which contains the intelligence stat and add button*/
 .intelligence_add{
   display: flex;
   width: 20%;
@@ -363,13 +372,15 @@ p {
   height: 0%;
 }
 
+/*Adjusts the styling for the container containing all stat add buttons*/
 .stats_add{
   position: relative;
   top: 20%;
-  left: 40%;
+  left: 40%; /*Makes the div centered to the page*/
   
 }
 
+/*Adjusts styling for container displaying skill points*/
 .amount_skillp{
   position: relative;
   left: 2%;
@@ -377,95 +388,89 @@ p {
   font-size: 2rem;
 }
 
+/*Adjusts the style of the pop up menu for skill points*/
 .skill_point_menu {
-  height: 0;
-  width: 100%;
-  position: fixed;
+  height: 0; /*Makes the height 0 (hidden) until the skill points menu button is pressed*/
+  width: 100%; /*Covers the whole width of the screen*/
+  position: fixed; 
   background-image: url(../images/quest-paper.jpg);
-  overflow-x: hidden;
-  overflow-y: hidden;
-  transition: 0.9s;
+  overflow-x: hidden; /*Hides any x-axis scroll bars*/
+  overflow-y: hidden; /*Hides any y-axis scroll bars*/
+  transition: 0.9s; /*Makes the speed the menu pops up 0.9 seconds*/
   margin: auto;
   font-family: "Pixelify Sans", sans-serif;
   bottom: 0;
   left: 0;
   border-right: 0.1px solid black;
-  text-align: center;
-  z-index: 5;
+  text-align: center; /*Aligns all text to the center*/
+  z-index: 5; /*Makes it go above all content in the page besides the nav bar*/
 }
 
+/*Adjusts styling of the close button in the skill points menu when hovered over*/
 .skill_point_menu .closebtn:hover {
-  color: rgb(255, 255, 255);
-  transform: rotate(0deg);
+  color: rgb(255, 255, 255); /*Changes the color of the button from black to white when hovered over*/
+  transform: rotate(0deg); /*Rotates the close button when hovered over*/
 }
 
+/*Adjusts the style of the close button */
 .skill_point_menu .closebtn {
   display: block;
   position: absolute;
   text-decoration: none;
   top: 0;
-  right: 25px;
+  right: 25px; /*Adjusts the position of the close button in the skill point menu*/
   font-size: 3rem;
   margin-left: 50px;
-  transition: 0.3s;
+  transition: 0.3s; /*Adjusts the speed the button rotates at*/
   padding: 0;
   margin: 0;
   color: black;
 }
 
+/*Adjusts the style for the toggles that display how many times you upgrade your stat*/
 .upgrade_how_much{
-  display: flex;
+  display: flex; /*Makes them all fit in one line*/
 }
 
+/*Adjusts the style of the div that contains the canvas in market section*/
 .canvas_list {
   display: flex;
   margin: auto;
   justify-content: center;
   width: 90%;
   height: 50%;
-  margin-top: 10rem;
+  margin-top: 10rem; /*Sets the canvas to be 10rem from the top*/
 }
 
-.start_buttons{
-  display: flex;
-  margin-top: 20%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.start_button{
-  text-decoration: none;
-  width: 50rem;
-  padding: 1rem 20rem 1rem 20rem;
-  border: solid 2px black;
-  color: black;
-}
-
+/*Styling for the image of the store*/
 #market_store {
   display: block;
   position: absolute;
   transform: translate(-50%,-50%);
-  top:70%;
-  left:12%;
+  left: 75%;
+  top: 30%;
   width: 30rem;
   height: 30rem;
 }
+
+/*Styling for the dialogue from the salesperson*/
 #market_text {
   display: block;
   position: absolute;
   transform: translate(-50%,-50%);
-  top:70%;
-  left:32%;
+  left: 90%;
+  top: 30%;
   width: 30rem;
   height: 30rem;
 }
+
+/*Styling for the text appearing in the textbox*/
 #random_text {
 display: block;
 position: absolute;
 transform: translate(-50%,-50%);
-top: 98%;
-left: 31%;
+left: 89%;
+top: 53%;
 width: 30rem;
 height: 30rem;
 font-size: 16px;
@@ -474,53 +479,28 @@ text-align: center;
 padding-top: 50px;
 }
 
-#status_button{
-display: flex;
-margin: auto;
-justify-content: center;
-width: 40%;
-padding: 5rem 0 5rem 0;
-margin-top: 10%;
-border: red solid 2px;
-}
-
-#market_store {
-position: absolute;
-left: 75%;
-top: 30%;
-}
-
-#market_text {
-position: absolute;
-left: 90%;
-top: 30%;
-}
-
-#random_text{
-position: absolute;
-left: 89%;
-top: 53%;
-}
-
+/*Adjusts style for the list of purchaseable items */
 .item_list {
-position: fixed;
+position: fixed; /*Keeps the position of the div fixed even when screen is scrolled*/
 border: black solid 2px;
 height: 100%;
 width: 20rem;
 justify-content: center;
 text-align: center;
 background-image: url(../images/quest-paper.jpg);
-background-repeat: no-repeat;
-background-size: cover;
-background-position: center;
+background-repeat: no-repeat; /*Makes the background image not repeat*/
+background-size: cover; /*Makes the background image cover the whole div*/
+background-position: center; 
 background-attachment: fixed;
 }
 
+/*Adjusts style of the button of purchaseable items*/
 .market_item {
 width: 85%;
 height: 5%;
 }
 
+/*Adjusts styling for the div that contains the item stats*/
 .canvas_stats {
 margin-right: 2rem;
 width: 15rem;
@@ -528,14 +508,16 @@ margin: auto;
 text-align: center;
 }
 
+/*Adjusts the style for the price when an item is clicked on*/
 #market_price {
 font-family: "Bebas Neue", sans-serif;
 font-size: 1.8rem;
-color: gold;
+color: gold; /*Makes the text color gold*/
 text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
-  1px 1px 0 black;
+  1px 1px 0 black; /*Makes the text look slightly more 3d by adding shadows*/
 }
 
+/*Adjusts the style for the damage when an item is clicked on*/
 #dmg_display {
   font-family: "Bebas Neue", sans-serif;
   font-size: 2rem;
@@ -544,6 +526,7 @@ text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
   1px 1px 0 black;
 }
 
+/*Adjusts the style for the health points when an item is clicked on*/
 #hp_display{
   font-family: "Bebas Neue", sans-serif;
   font-size: 2rem;
@@ -553,21 +536,24 @@ text-shadow: -1px -1px 0 black, 1px -1px 0 black, 1px 1px 0 black,
   margin-top: 1rem;
 }
 
-
+/*Adjusts the style for all images*/
 img {
-  user-select: none;
+  user-select: none; /*Makes images non selectable / non highlightable*/
 }
 
+/*Adjusts the style of the icons that appear besides weapon stats*/
 .market_icons {
     display: inline-block;
     height: 3rem;
     user-select: none;
 }
 
+/*Makes all span tags unselectable*/
 span {
   user-select: none;
 }
 
+/*Adjusts the styling for the purchase button*/
 #purchaseItem {
   justify-content: center;
   display: flex;
@@ -575,31 +561,32 @@ span {
   width: 300px;
 }
 
+/*Adjusts style for the Gold text in Market section*/
 #market_gold {
   font-size: 1.5rem
 }
 
+/*Adjusts styling for the play audio button*/
 #play_audio_1 {
   width: 5rem;
 }
 
+/*Adjusts style for all heading tags used*/
 h1 {
   text-align: center;
   font-size: 36px;
   margin-bottom: 20px;
+  user-select: none;
 }
 
-p {
-  font-size: 18px;
-  line-height: 1.5;
-  margin-bottom: 20px;
-}
+/*Adjusts style of container that fits the Aura upgrade and toggle button*/
 .aura_upgrade_div{
-  display: flex;
+  display: flex; /*Makes the aura toggle and upgrade button fit on the same line*/
 }
 
+/*Adjusts style of Aura upgrade button*/
 #aura_upgrade {
-  width: 100%;
+  width: 100%; /*Makes the aura upgrade button 100% of the width of the container containing it*/
   margin-left: 5.4%;
 }
 
@@ -608,10 +595,12 @@ p {
   margin-right: 5.4%;
 }
 
+/*MODAL CSS*/
+/*Adjusts the modal that darkens the screen*/
 .modal {
   display: none;
   position: fixed;
-  z-index: 1000;
+  z-index: 1000; /*Makes the modal appear before anything else when opened*/
   left: 0;
   top: 0;
   width: 100%;
@@ -620,9 +609,10 @@ p {
   overflow: auto;
 }
 
+/*Adjusts the mini modal when help section is opened*/
 .modal-content {
-  background-color: #8B4513;
-  color: white;
+  background-color: #8B4513; /*Makes background color brown*/
+  color: white; /*Makes text color white*/
   margin: 10% auto;
   padding: 30px;
   width: 80%;
@@ -633,10 +623,12 @@ p {
   border: 2px solid #DAA520;
 }
 
+/*Adjusts style of heading 2 tags in modal-content*/
 .modal-content h2 {
   margin-top: 0;
   color: white;
 }
+
 
 #tutorial-content {
   margin-bottom: 20px;
@@ -644,6 +636,7 @@ p {
   line-height: 1.6;
 }
 
+/*Adjusts the style of all buttons in the tutorial section*/
 #help-button, #prev-tutorial, #next-tutorial, #close-tutorial {
   background-color: #CD853F;
   color: white;
@@ -651,20 +644,22 @@ p {
   padding: 10px 20px;
   margin: 5px;
   border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  cursor: pointer; /*Turns the cursor into a pointing cursor when hovered over the button*/
+  transition: 0.3s; /*Adjusts the speed in which the background color changes*/
 }
 
+/*Adjust the style of all buttons in tutorial section when hovered over*/
 #help-button:hover, #prev-tutorial:hover, #next-tutorial:hover, #close-tutorial:hover {
   background-color: #DEB887;
 }
 
+/*Adjusts the style of the "Previous" button in the tutorial when it is disabled*/
 #prev-tutorial:disabled {
   background-color: #A9A9A9;
   cursor: not-allowed;
 }
 
-
+/*Adjusts the tutorial modal regarding reincarnation*/
 .modalReincarnation {
   display: none;
   position: fixed;

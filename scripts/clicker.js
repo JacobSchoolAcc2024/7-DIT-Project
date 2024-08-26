@@ -609,6 +609,7 @@ function drawHPParticle() {
   }
 }
 
+// Function that animates the canva.
 function animate1() {
   // Clear the entire canvas for redrawing
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);

@@ -1,42 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-    <title>Idle_gym</title>
-    <audio id="BGM-2" loop>
-        <source src="../music/BGM-2.m4a" type="audio/mpeg" >
-    </audio>
-<head>
-    <link rel="stylesheet" href="../css/titan.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<!DOCTYPE html> <!-- Specifies the document type and version of HTML -->
+<html lang="en"> <!-- Declares the language of the document to be English -->
+<head> <!-- Head section contains metadata, styles, and links to external resources -->
+    <meta charset="UTF-8"> <!-- Sets the character encoding for the document -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Sets the viewport to ensure responsive design -->
+    <title>Idle Gym</title> <!-- Title of the webpage, displayed in the browser tab -->
+    <link rel="stylesheet" href="../css/titan.css"> <!-- Link to an external CSS file for styling specific to Titan -->
+    <link rel="stylesheet" href="../css/style.css"> <!-- Link to a general external CSS file for styling -->
 </head>
-<body class="main_Page">
+
+<body class="main_Page"> <!-- Body of the document, with a class for additional styling -->
+    
+    <!-- Audio element for background music that loops continuously -->
+    <audio id="BGM-2" loop>
+        <source src="../music/BGM-2.m4a" type="audio/mp4"> 
+    </audio>
+    
+    <!-- Side navigation menu -->
     <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="../index.html" class="menu_Item">HOME</a>
-        <a href="pages/market.html" class="menu_Item">MARKET</a>
-        <a href="pages/contact.html" class="menu_Item">CONTACT</a>
-        <a href="pages/about.html" class="menu_Item">ABOUT</a>
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> <!-- Close button for the side navigation -->
+        <a href="../index.html" class="menu_Item">HOME</a> <!-- Home page link -->
+        <a href="pages/market.html" class="menu_Item">MARKET</a> <!-- Market page link -->
+        <a href="pages/contact.html" class="menu_Item">CONTACT</a> <!-- Contact page link -->
+        <a href="pages/about.html" class="menu_Item">ABOUT</a> <!-- About page link -->
     </div>
+
+    <!-- Top navigation bar with a menu button -->
     <div class="top_bar">
-        <div class="menu_container" onclick="openNav()">
-            <div class="bar1"></div>
+        <div class="menu_container" onclick="openNav()"> <!-- Menu button to open side navigation -->
+            <div class="bar1"></div> <!-- Visual elements of the menu button -->
             <div class="bar2"></div>
             <div class="bar3"></div>
         </div>
     </div>
-    <H1 id="wormHP">Boss HP: 1</H1>
-    <h1 id="playerHP">Player HP: 1</h1>
-    <h1 id="bossDamage">Boss Damage: ?</h1>
-    <h1 id="titanLevel">Titan Level: ?</h1>
-    <h1 id="timeShards">Time Shards: ?</h1>   
+
+    <!-- Display various game stats -->
+    <h1 id="wormHP">Boss HP: 1</h1> <!-- Displays the current health of the boss -->
+    <h1 id="playerHP">Player HP: 1</h1> <!-- Displays the current health of the player -->
+    <h1 id="bossDamage">Boss Damage: ?</h1> <!-- Displays the boss's damage value -->
+    <h1 id="titanLevel">Titan Level: ?</h1> <!-- Displays the current level of the Titan -->
+    <h1 id="timeShards">Time Shards: ?</h1> <!-- Displays the current amount of time shards -->
+
+    <!-- Canvas element for drawing graphics (possibly game-related) -->
     <canvas id="titanCanvas"></canvas>
+
+    <!-- Checkbox for using scientific notation -->
     <div class="checkbox">
         <input type="checkbox" id="scientific-notation-checkbox">
-        <label for="scientific-notation-checkbox">Use Scientific Notation</label>
+        <label for="scientific-notation-checkbox">Use Scientific Notation</label> <!-- Label for the checkbox -->
     </div>
-    <script src="../scripts/clicker.js"></script>
-    <script src="../scripts/titan.js"></script>
+
+    <!-- JavaScript files for game functionality -->
+    <script src="../scripts/clicker.js"></script> <!-- Link to external JavaScript file for main gaem functionality -->
+    <script src="../scripts/titan.js"></script> <!-- Link to external JavaScript file for Titan game functionality -->
 </body>
 </html>

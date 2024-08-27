@@ -1196,12 +1196,6 @@ function update_inventory() {
     lock_button.innerHTML = "Lock Stage";
   }
 
-  // Display the "glory" element if max enemy level is above a certain threshold
-  if (max_enemy_level < 100){
-    document.getElementById('glory').style.display = "none"; // Hide if below threshold
-  } else {
-    document.getElementById('glory').style.display = "inline"; // Show if above threshold
-  }
 
   // Start aura attack if aura upgrade has been purchased
   if (Upgrades['aura_upgrade'].aura_upgrade_purchased > 0) {

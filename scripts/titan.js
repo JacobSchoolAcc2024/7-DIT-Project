@@ -30,7 +30,7 @@ let aura_frequencyTitan = parseInt(localStorage.getItem('aura_frequency')) || 75
 //Prestige variables
 let reincarnationLevel = parseInt(localStorage.getItem('reincarnationLevel')) || 1;
 // Get the reincarnation level from localStorage, defaulting to 1 if not found
-let damageMultiplierClicker = parseInt(localStorage.getItem('damageMultiplier')) || 1;
+let damageMultiplier = parseInt(localStorage.getItem('damageMultiplier')) || 1;
 // Get the damage multiplier from localStorage, defaulting to 1 if not found
 let timeShards = parseInt(localStorage.getItem('timeShards')) || 0;
 // Get the number of time shards from localStorage, defaulting to 0 if not found
@@ -61,7 +61,7 @@ let strengthStatMulti = localStorage.getItem('strength_stat_multi') || 0;
 // Get the strength stat multiplier from localStorage, defaulting to 0 if not found
 let intelligenceStatMulti = localStorage.getItem('intelligence_stat_multi') || 0;
 // Get the intelligence stat multiplier from localStorage, defaulting to 0 if not found
-const finalDamage = damageMultiplierClicker * ((playerDmg + aura_damageTitan) * 1 + strengthStatMulti + intelligenceStatMulti);
+const finalDamage = damageMultiplier * ((playerDmg + aura_damageTitan) * 1 + strengthStatMulti + intelligenceStatMulti);
 // Calculate the final damage based on various factors, including player damage and aura damage
 
 //
@@ -553,7 +553,7 @@ function save(){
     localStorage.setItem('defeatedTitans', defeatedTitans);
     localStorage.setItem('timeShardsMultiplier', timeShardsMultiplier);
     localStorage.setItem('timeShardsTitan', timeShardsTitan);
-    localStorage.setItem('damageMultiplier', damageMultiplierClicker);
+    localStorage.setItem('damageMultiplier', damageMultiplier);
     localStorage.setItem('reincarnationLevel', reincarnationLevel);
 
     document.getElementById('wormHP').innerHTML = 'Titan Health: ' + formatNumber(TitanCurrentHP);

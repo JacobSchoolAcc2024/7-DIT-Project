@@ -1,138 +1,146 @@
-
-*{
-    overflow: hidden;
-    user-select: none;
+/* This code applies some general styles to all elements and prevents overflow issues by hiding content that goes beyond its boundaries. 
+   It also disables the user's ability to select text on the page, creating a more immersive experience */
+   * {
+    overflow: hidden; /* Hides any content that flows outside of its container */
+    user-select: none; /* Disables text selection */
 }
 
+/* Styles for the body element */
 body {
-    background-color: #000;
-    background-image: radial-gradient(circle at center, #300 0%, #000 100%);
-    animation: pulsate 4s ease-in-out infinite;
+    background-color: #000; /* Sets the background color to black */
+    background-image: radial-gradient(circle at center, #300 0%, #000 100%); /* Creates a radial gradient from dark red to black */
+    animation: pulsate 4s ease-in-out infinite; /* Animates the background to pulsate, fading in and out */
 }
 
+/* Defines the keyframes for the pulsating effect on the body background */
 @keyframes pulsate {
-    0% { opacity: 1; }
-    50% { opacity: 0.8; }
-    100% { opacity: 1; }
+    0% { opacity: 1; } /* At the start, the opacity is full */
+    50% { opacity: 0.8; } /* Midway, the opacity decreases slightly */
+    100% { opacity: 1; } /* Returns to full opacity at the end */
 }
 
+/* Adds a fixed overlay on the body with a background image and subtle animation to create a sparkling effect */
 body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    content: ''; /* Creates a pseudo-element for styling */
+    position: fixed; /* Positions it relative to the viewport */
+    top: 0; /* Aligns to the top */
+    left: 0; /* Aligns to the left */
+    width: 100%; /* Takes full width of the viewport */
+    height: 100%; /* Takes full height of the viewport */
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACkSURBVGhD7dixDcMwDERRd8rI3iNLZRFnCWfKCGqUBiCkk3m8A/JfckktirwCkgxTSimllFJKKaWUUkr/oWmaHtM0fWWXbNu2P+u67oedEZMdMHLOj+zSiB0wcqkmdi+IHVXjhatG7BCxQ8SOvzPC7ghix7Ioym3bU2rRtu0WRVHu+56yK6IoynVdU2qRc76iKEoppZRSSimllFJKSZPkB+/9TpGwNR0fAAAAAElFTkSuQmCC');
-    opacity: 0.1;
-    animation: sparkle 20s linear infinite;
+    opacity: 0.1; /* Sets low opacity for subtle effect */
+    animation: sparkle 20s linear infinite; /* Animates it to move vertically, creating a sparkling effect */
 }
 
+/* Defines the keyframes for the sparkle animation */
 @keyframes sparkle {
-    from { transform: translateY(0); }
-    to { transform: translateY(-100%); }
+    from { transform: translateY(0); } /* Starts at the top */
+    to { transform: translateY(-100%); } /* Moves up by the height of the element */
 }
 
+/* Adds a dark gradient overlay to the body, enhancing the depth effect */
 body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%);
-    pointer-events: none;
+    content: ''; /* Creates another pseudo-element */
+    position: fixed; /* Sticks it to the viewport */
+    top: 0; /* Aligns to the top */
+    left: 0; /* Aligns to the left */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%); /* Creates a gradient from transparent to semi-transparent black */
+    pointer-events: none; /* Ensures the element doesn't interfere with user interaction */
 }
 
-
+/* Styles for the canvas element with the ID 'titanCanvas' */
 #titanCanvas {
-    position: absolute;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: white 1px solid;
+    position: absolute; /* Absolutely positioned within its container */
+    top: 55%; /* Positioned slightly below the center vertically */
+    left: 50%; /* Positioned in the center horizontally */
+    transform: translate(-50%, -50%); /* Offsets by half of its own dimensions to truly center it */
+    border: white 1px solid; /* Adds a white border */
     box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.7),
-    0 0 40px 20px rgba(255, 255, 255, 0.5),
-    0 0 60px 30px rgba(255, 255, 255, 0.3); background-color: black;
-    border-radius: 2rem;
-    width: 600px;
-    height: 600px;
+                0 0 40px 20px rgba(255, 255, 255, 0.5),
+                0 0 60px 30px rgba(255, 255, 255, 0.3); /* Adds multiple levels of glowing shadows */
+    background-color: black; /* Background color set to black */
+    border-radius: 2rem; /* Rounded corners with a 2rem radius */
+    width: 600px; /* Sets a fixed width */
+    height: 600px; /* Sets a fixed height */
 }
 
-/* Add this to your existing CSS */
-
+/* Keyframes for a 'fire' animation that makes an element grow and rotate slightly */
 @keyframes fire {
-    0% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.1) rotate(3deg); }
-    100% { transform: scale(1) rotate(-3deg); }
+    0% { transform: scale(1) rotate(0deg); } /* Starts at normal size and no rotation */
+    50% { transform: scale(1.1) rotate(3deg); } /* Grows slightly and rotates 3 degrees */
+    100% { transform: scale(1) rotate(-3deg); } /* Returns to normal size but rotates -3 degrees */
 }
 
-
+/* Styles for elements with the 'fire' class to animate them like a flickering flame */
 .fire {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: white;
-    animation: fire 2s ease-in-out infinite;
+    position: absolute; /* Absolutely positioned */
+    top: 50%; /* Centered vertically */
+    left: 50%; /* Centered horizontally */
+    transform: translate(-50%, -50%); /* Offsets to center within its container */
+    width: 100px; /* Fixed width */
+    height: 100px; /* Fixed height */
+    border-radius: 50%; /* Makes the element circular */
+    background-color: white; /* Sets the background color to white */
+    animation: fire 2s ease-in-out infinite; /* Applies the fire animation with easing, looping forever */
 }
 
-
+/* Styles for buttons */
 button {
-    position: relative;
-    z-index: 900;
-    cursor: pointer;
+    position: relative; /* Positioned relative to its normal flow */
+    z-index: 900; /* Places it above most other elements, except for those with higher z-index values */
+    cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
 }
 
+/* Styles for h1 headings */
 h1 {
-    right: 37%;
-    position: relative;
-    z-index: 900;
-    color: white;
-
+    right: 37%; /* Positions the heading slightly to the left from the right edge */
+    position: relative; /* Positioned relative to its normal flow */
+    z-index: 900; /* High z-index to ensure it appears on top */
+    color: white; /* Text color set to white */
 }
 
+/* Styles for elements inside the menu container */
 .menu_container {
-    z-index: 999;
+    z-index: 999; /* Very high z-index to ensure it appears on top of most elements */
 }
 
-.checkbox{
-    margin-top: 10px;
-    position: relative;
-    cursor: pointer;
-    z-index: 1000;
-    color: white;
-  }
+/* Styles for checkbox elements */
+.checkbox {
+    margin-top: 10px; /* Adds some space above the checkbox */
+    position: relative; /* Positioned relative to its normal flow */
+    cursor: pointer; /* Changes cursor to pointer when hovered */
+    z-index: 1000; /* High z-index to ensure visibility over other elements */
+    color: white; /* Text color set to white */
+}
 
-
-
+/* Styles for a specific button and element with the ID 'playerReincarnation' */
 #playerReincarnation, button {
-    font-size: 1rem;
-    font-family: 'Press Start 2P', cursive;
-    margin-left: 70px;
+    font-size: 1rem; /* Sets the font size */
+    font-family: 'Press Start 2P', cursive; /* Uses a pixel-style font for a retro look */
+    margin-left: 70px; /* Adds left margin for spacing */
 }
 
+/* Styles for modal dialog boxes */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 900;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.4);
-  }
-  
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    z-index: 900;
-  }
-  
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position relative to the viewport */
+    z-index: 900; /* High z-index to overlay other content */
+    left: 0; /* Aligns to the left */
+    top: 0; /* Aligns to the top */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0,0,0,0.4); /* Semi-transparent black background for overlay */
+}
+
+/* Styles for the content inside modal dialogs */
+.modal-content {
+    background-color: #fefefe; /* Light background for contrast */
+    margin: 15% auto; /* Centers the modal content vertically and horizontally */
+    padding: 20px; /* Adds padding for spacing inside the modal */
+    border: 1px solid #888; /* Light grey border */
+    width: 80%; /* Width of the modal content */
+    max-width: 500px; /* Maximum width to prevent it from getting too large */
+    z-index: 900; /* High z-index to overlay other elements */
+}

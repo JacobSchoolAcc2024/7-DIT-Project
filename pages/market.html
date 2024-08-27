@@ -1,100 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Market</title>
-    <!--All audio files used for sound fx-->
-        <audio id="BGM-1" loop>
-            <source src="../music/BGM-1.m4a" type="audio/mpeg">
-        </audio>
-        <audio id="coin">
-            <source src="../music/coin-flip.mp3" type="audio/mpeg">
-        </audio>
-        <audio id="preview">
-            <source src="../music/normalSound.wav" type="audio/mpeg">
-        </audio>
-        
-        <link rel="stylesheet" href="../css/style.css">
-        <style>
-            body { /*Adjusts the style of the body in market section*/
-                background-image: url(../images/brown_paper_bg.avif);
-                background-repeat: no-repeat;
-                background-size: cover;
-                background-position: center;
-                background-attachment: fixed;
-                overflow-x: hidden;
-            }
-        </style>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-    <div id="mySidenav" class="sidenav"> <!--Navigation bar that allows the player to navigate through difference pages-->
+
+    <!-- Link to CSS for styling -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- Inline CSS specific to this page -->
+    <style>
+        body {
+            background-image: url(../images/brown_paper_bg.avif);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+    </style>
+
+    <!-- Audio files for sound effects -->
+    <audio id="BGM-1" loop>
+        <source src="../music/BGM-1.m4a" type="audio/mpeg">
+    </audio>
+    <audio id="coin">
+        <source src="../music/coin-flip.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="preview">
+        <source src="../music/normalSound.wav" type="audio/mpeg">
+    </audio>
+</head>
+<body>
+    <!-- Side navigation bar for page navigation -->
+    <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="../index.html" class="menu_Item">HOME</a>
-        <a href="market.html" class="menu_Item">MARKET</a>
-        <a href="contact.html" class="menu_Item">CONTACT</a>
-        <a href="about.html" class="menu_Item">ABOUT</a>
+        <a href="../index.html" class="menu_item">HOME</a>
+        <a href="market.html" class="menu_item">MARKET</a>
+        <a href="contact.html" class="menu_item">CONTACT</a>
+        <a href="about.html" class="menu_item">ABOUT</a>
     </div>
-    
-    <div class="top_bar"> <!--The nav bar at the top of the page-->
-        <div class="menu_container" onclick="openNav()"> <!--The menu icon to the left side of the top nav bar-->
+
+    <!-- Top navigation bar with menu icon -->
+    <div class="top_bar">
+        <div class="menu_container" onclick="openNav()">
             <div class="bar1"></div>
             <div class="bar2"></div>
             <div class="bar3"></div>
         </div>
     </div>
-    <div class="Tier 0 Items">
-            
-        </button>
-        <div>
-            <div class="item_list"> <!--Contains the list of purchaseable items-->
-                <div class="gold_plate_background"> <!--Displays the amount of gold the player has-->
-                    <img class="stats_icon" src="../images/noun-coin-6929625.png"> <!--The icon that appears next to the gold display-->
-                    <span id="market_gold">Gold: 0</span>
-                </div>
-                <button id="wood sword" class="market_item" onclick="drawAnimation(w_Sword, 'Wood Sword')">Wood Sword</button>
-                <button id="wood pickaxe" class="market_item" onclick="drawAnimation(w_pickaxe, 'Wood Pickaxe')">Wood Pickaxe</button>
-                <button id="iron pickaxe" class="market_item" onclick="drawAnimation(i_pickaxe, 'Iron Pickaxe')">Iron Pickaxe</button>
-                <button id="emerald pickaxe" class="market_item" onclick="drawAnimation(e_pickaxe, 'Emerald Pickaxe')">Emerald Pickaxe</button>
-                <button id="epic sword" class="market_item" onclick="drawAnimation(epicSword, 'Epic Sword')">Epic Sword</button>
-                <button id="diamond sword" class="market_item" onclick="drawAnimation(d_Sword, 'Diamond Sword')">Diamond Sword</button> 
-                <button id ="genki dama" class ='market_item' onclick="drawAnimation(genkidama,'Genki Dama')"> Genki Dama</button>
-                <button id="dirty icecream" class="market_item" onclick="drawAnimation(dirtyIceCream, 'Dirty Icecream')">Dirty Icecream</button>
-                <button id="helmet" class="market_item" onclick="drawAnimation(helmet, 'Helmet')">Helmet</button>
-                <button id="normal armer" class="market_item" onclick="drawAnimation(n_armer, 'Normal Armer')">Normal Armer</button>
-                <button id="epic armer" class="market_item" onclick="drawAnimation(e_armer, 'Epic Armer')">Epic Armer</button>
-                <button id="play_audio_1" onclick="togglePlayPause()">Play BGM</button>
-                <button id="play_fx_market" onclick="PlayFxMarket()">Play Sound</button>
+
+    <!-- Main content for market items -->
+    <div class="tier-0-items">
+        <div class="item_list">
+            <!-- Displays the amount of gold the player has -->
+            <div class="gold_plate_background">
+                <img class="stats_icon" src="../images/noun-coin-6929625.png" alt="Coin Icon">
+                <span id="market_gold">Gold: 0</span>
             </div>
+
+            <!-- List of purchasable items with corresponding buttons -->
+            <button id="wood_sword" class="market_item" onclick="drawAnimation(w_Sword, 'Wood Sword')">Wood Sword</button>
+            <button id="wood_pickaxe" class="market_item" onclick="drawAnimation(w_pickaxe, 'Wood Pickaxe')">Wood Pickaxe</button>
+            <button id="iron_pickaxe" class="market_item" onclick="drawAnimation(i_pickaxe, 'Iron Pickaxe')">Iron Pickaxe</button>
+            <button id="emerald_pickaxe" class="market_item" onclick="drawAnimation(e_pickaxe, 'Emerald Pickaxe')">Emerald Pickaxe</button>
+            <button id="epic_sword" class="market_item" onclick="drawAnimation(epicSword, 'Epic Sword')">Epic Sword</button>
+            <button id="diamond_sword" class="market_item" onclick="drawAnimation(d_Sword, 'Diamond Sword')">Diamond Sword</button>
+            <button id="genki_dama" class="market_item" onclick="drawAnimation(genkidama, 'Genki Dama')">Genki Dama</button>
+            <button id="dirty_icecream" class="market_item" onclick="drawAnimation(dirtyIceCream, 'Dirty Ice Cream')">Dirty Ice Cream</button>
+            <button id="helmet" class="market_item" onclick="drawAnimation(helmet, 'Helmet')">Helmet</button>
+            <button id="normal_armor" class="market_item" onclick="drawAnimation(n_armor, 'Normal Armor')">Normal Armor</button>
+            <button id="epic_armor" class="market_item" onclick="drawAnimation(e_armor, 'Epic Armor')">Epic Armor</button>
+            <button id="play_audio_1" onclick="togglePlayPause()">Play BGM</button>
+            <button id="play_fx_market" onclick="playFxMarket()">Play Sound</button>
         </div>
     </div>
-    </body>
-<body>
-    <div class="canvas_list"> <!--Div that contains the canvas in market-->
-        <canvas id = "market_canvas"> </canvas> <!--Displays the visuals of the item selected-->
+
+    <!-- Canvas to display item visuals -->
+    <div class="canvas_list">
+        <canvas id="market_canvas"></canvas>
     </div>
-    <button id ='purchaseItem' onclick="purchaseItem()">PURCHASE</button>
+
+    <!-- Button to purchase the selected item -->
+    <button id="purchaseItem" onclick="purchaseItem()">PURCHASE</button>
+
+    <!-- Display stats of the selected item -->
     <div class="canvas_stats">
         <div>
-            <img class="market_icons" src="../images/noun-coin-6929625.png">
-            <span class="market price" id="market_price">Price:</span>
+            <img class="market_icons" src="../images/noun-coin-6929625.png" alt="Coin Icon">
+            <span class="market_price" id="market_price">Price:</span>
         </div>
         <div>
-        <img class="market_icons" src="../images/noun-fist-6352698.png">
-        <span id="dmg_display">Damage: </span>
+            <img class="market_icons" src="../images/noun-fist-6352698.png" alt="Fist Icon">
+            <span id="dmg_display">Damage:</span>
         </div>
         <br>
-        <img class="market_icons" class="heart_icon" src="../images/noun-heart-7121411.png">
-        <span id="hp_display">HP: + </span>
+        <img class="market_icons heart_icon" src="../images/noun-heart-7121411.png" alt="Heart Icon">
+        <span id="hp_display">HP: +</span>
     </div>
+
+    <!-- Scripts for market and clicker functionalities -->
     <script src="../scripts/market.js"></script>
     <script src="../scripts/clicker.js"></script>
+
+    <!-- Store image and additional content -->
     <div class="store_image">
-        <img src="../images/market_store.png" id ="market_store">
-        <img src="../images/text.png" id ="market_text">
+        <img src="../images/market_store.png" id="market_store" alt="Market Store">
+        <img src="../images/text.png" id="market_text" alt="Market Text">
         <div id="random_text">I'm J_J</div>
     </div>
-    </body>
 </body>
 </html>
-

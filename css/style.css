@@ -1,118 +1,98 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,600&family=Pixelify+Sans:wght@400..700&family=VT323&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Graduate&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lugrasimo&family=Playwrite+ES&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lugrasimo&family=Playwrite+ES&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lugrasimo&family=Playwrite+ES&display=swap');
 
-
-
-
-
-
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-
-/*This is the overall style that applies to everything unless specifically reassinged*/
+/* This is the overall style that applies to everything unless specifically reassigned */
 * {
-    overflow-x: hidden; /*Hides any scroll bar at the bottom of the nav bar*/
-    font-family: "Lugrasimo", cursive; /*Sets the font of any text*/
-    --bg-primary: rgb(141, 141, 141); /*Sets the variable "--bg-primary" to be this color for future use*/
+    overflow-x: hidden; /* Hides any scroll bar at the bottom of the nav bar */
+    font-family: "Lugrasimo", cursive; /* Sets the font of any text */
+    --bg-primary: rgb(141, 141, 141); /* Sets the variable "--bg-primary" to be this color for future use */
     --clr: #1e9bff;
-    margin: 0; /*Sets all margin to 0 unless spefically reassigned*/
-    padding: 0; /*Sets all padding to 0 unless spefically reassigned*/
+    margin: 0; /* Sets all margin to 0 unless specifically reassigned */
+    padding: 0; /* Sets all padding to 0 unless specifically reassigned */
     --paper: #f7da88;
-    user-select: none; /*Makes all text not selectable or not highlightable*/
-    
+    user-select: none; /* Makes all text not selectable or not highlightable */
 }
 
-
-/*Adjusts the style for the nav on the side*/
+/* Adjusts the style for the nav on the side */
 .sidenav {
-    height: 100%; /*Makes the nav bar cover the whole height of the page*/
-    width: 0; /*Makes the nav bar not visible unless they press the menu button*/
-    position: fixed; /*Makes the nav bar stay in place even when scrolled down or side*/
-    background-image: url(../images/quest-paper.jpg); /*Sets the image of the background to be quest-paper.jpg*/
+    height: 100%; /* Makes the nav bar cover the whole height of the page */
+    width: 0; /* Makes the nav bar not visible unless they press the menu button */
+    position: fixed; /* Makes the nav bar stay in place even when scrolled down or side */
+    background-image: url(../images/quest-paper.jpg); /* Sets the image of the background to be quest-paper.jpg */
     background-color: #d3a970; 
     overflow-x: hidden;
     padding-top: 60px;
-    transition: 0.9s; /*Adjusts the speed in which the nav bar slides out when menu button is clicked*/
-    margin: auto; /*Centers the nav bar*/
-    font-family: "Pixelify Sans", sans-serif; /*Sets the font of anything in the nav bar to be this font*/
+    transition: 0.9s; /* Adjusts the speed in which the nav bar slides out when menu button is clicked */
+    margin: auto; /* Centers the nav bar */
+    font-family: "Pixelify Sans", sans-serif; /* Sets the font of anything in the nav bar to be this font */
     top: 0; 
     left: 0;
-    /*Sets the distance of the nav bar to the top to be 0, and to the left to be 0 (Makes nav bar allign with the top left of the page)*/
-    border-right: 0.1px solid black; /*Sets only the border on the right to me solid, black and 0.1px*/
-    text-align: center; /*Makes all text in the nav bar to be centered*/
-    z-index: 1000; /*Makes this the first priority in terms of z-index (Appears on top of everything)*/
+    border-right: 0.1px solid black; /* Sets only the border on the right to be solid, black and 0.1px */
+    text-align: center; /* Makes all text in the nav bar to be centered */
+    z-index: 1000; /* Makes this the first priority in terms of z-index (Appears on top of everything) */
 }
-
-
 
 body {
-  margin: 0;
+    margin: 0;
 }
 
-/*Adjusts the styling of the anchor tags in the nav bar*/
+/* Adjusts the styling of the anchor tags in the nav bar */
 .sidenav a {
-    text-decoration: none; /*Makes the anchor tag have no underline*/
+    text-decoration: none; /* Makes the anchor tag have no underline */
     font-size: 1rem;
-    color:rgb(0, 0, 0); /*Changes the anchor tag from its typical blue color*/
-    transition: 0.3s; /*Changes the speed of the hover effect*/
+    color: rgb(0, 0, 0); /* Changes the anchor tag from its typical blue color */
+    transition: 0.3s; /* Changes the speed of the hover effect */
     display: block; 
     padding-right: 0;
 }
 
-/*Adjusts the style of the close button in the nav bar*/
+/* Adjusts the style of the close button in the nav bar */
 .closebtn {
-  margin-top: 0.4rem;
-  padding: 0px 8px 0px 0px;
-  transform: rotate(90deg); /*Rotates the "X" button by 90 degrees when hovered over*/
-  transition: 0.7s;
+    margin-top: 0.4rem;
+    padding: 0 8px 0 0;
+    transform: rotate(90deg); /* Rotates the "X" button by 90 degrees when hovered over */
+    transition: 0.7s;
 }
 
-/*Adjusts the style for the pages in the side nav bar*/
+/* Adjusts the style for the pages in the side nav bar */
 .menu_Item {
     display: block;
-    padding: 12px 12px 12px 12px;
-    margin: 10px 0px 40px 0px;
+    margin: 10px 0 40px 0;
     font-size: 1rem;
     padding: 3%;
     width: 100%;
 }
 
-/*Adjusts the style for menu items when hovered over*/
-.sidenav .menu_Item:hover{
-    color: #f1f1f1; /*Changes the text color from black to white when hovered over*/
-    padding: 8px 0px 8px 0px; /*Enlarges the padding/hitbox when hovered over*/
-    background-color: #d4be9e; /*Adds a background color when hovered*/
+/* Adjusts the style for menu items when hovered over */
+.sidenav .menu_Item:hover {
+    color: #f1f1f1; /* Changes the text color from black to white when hovered over */
+    background-color: #d4be9e; /* Adds a background color when hovered */
 }
 
-/*Adjusts the style for close button when hovered over*/
-  .sidenav .closebtn:hover {
-    transform: rotate(0deg); /*Rotates the close button back to normal when hovered over*/
-  }
+/* Adjusts the style for close button when hovered over */
+.sidenav .closebtn:hover {
+    transform: rotate(0deg); /* Rotates the close button back to normal when hovered over */
+}
 
-  .sidenav .closebtn {
+.sidenav .closebtn {
     position: absolute;
     top: 0;
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
-  }
+}
 
-/*Adjusts the style for the container which holds the menu button*/
-  .menu_container {
+/* Adjusts the style for the container which holds the menu button */
+.menu_container {
     display: inline-block;
-    margin-bottom: 2rem;
-    margin-top: 1.5rem;
-    margin-left: 1.2rem;
+    margin: 1.5rem 0 2rem 1.2rem;
     justify-content: end;
-    padding: 0 0.5rem 1.3rem 0.5rem;
-    
-  }
+    padding: 0 0.5rem 1.3rem;
+}
+
 
 /*The divs that make the menu button look like a menu button*/
   .bar1, .bar2, .bar3 {

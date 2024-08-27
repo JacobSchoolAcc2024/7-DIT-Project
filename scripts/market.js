@@ -332,7 +332,7 @@ function togglePlayPause() {
 }
 
 //control of sound effect playing
-function PlayFxMarket(){
+function playFxMarket(){
   if (fx_play_market) {
     playPauseFxMarket.textContent = 'Play Sound';
      //change of button context

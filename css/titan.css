@@ -1,21 +1,24 @@
-
+/* Prevant overflow and user selection for all elements */
 *{
     overflow: hidden;
     user-select: none;
 }
 
+/* Set up the body background with a cool radial gradient and pulsating effect */
 body {
     background-color: #000;
     background-image: radial-gradient(circle at center, #300 0%, #000 100%);
     animation: pulsate 4s ease-in-out infinite;
 }
 
+/* Define the pulsate animation for the body */
 @keyframes pulsate {
     0% { opacity: 1; }
     50% { opacity: 0.8; }
     100% { opacity: 1; }
 }
 
+/* Add a sparkly effect to the body using a repeating background image */
 body::before {
     content: '';
     position: fixed;
@@ -28,11 +31,13 @@ body::before {
     animation: sparkle 20s linear infinite;
 }
 
+/* Define the sparkle animation for the body::before element */
 @keyframes sparkle {
     from { transform: translateY(0); }
     to { transform: translateY(-100%); }
 }
 
+/* Add a radial gradient overlay to the body */
 body::after {
     content: '';
     position: fixed;
@@ -44,7 +49,7 @@ body::after {
     pointer-events: none;
 }
 
-
+/* Style the titan canvas element */
 #titanCanvas {
     position: absolute;
     top: 55%;
@@ -59,15 +64,14 @@ body::after {
     height: 600px;
 }
 
-/* Add this to your existing CSS */
-
+/* Define the fire animation for the .fire element */
 @keyframes fire {
     0% { transform: scale(1) rotate(0deg); }
     50% { transform: scale(1.1) rotate(3deg); }
     100% { transform: scale(1) rotate(-3deg); }
 }
 
-
+/* Style the .fire element */
 .fire {
     position: absolute;
     top: 50%;
@@ -80,41 +84,43 @@ body::after {
     animation: fire 2s ease-in-out infinite;
 }
 
-
+/* Style buttons and set there z-index */
 button {
     position: relative;
     z-index: 900;
     cursor: pointer;
 }
 
+/* Style the h1 element and position it */
 h1 {
     right: 37%;
     position: relative;
     z-index: 900;
     color: white;
-
 }
 
+/* Set z-index for the menu container */
 .menu_container {
     z-index: 999;
 }
 
+/* Style the checkbox element */
 .checkbox{
     margin-top: 10px;
     position: relative;
     cursor: pointer;
     z-index: 1000;
     color: white;
-  }
+}
 
-
-
+/* Style the player reincarnation and button elements */
 #playerReincarnation, button {
     font-size: 1rem;
     font-family: 'Press Start 2P', cursive;
     margin-left: 70px;
 }
 
+/* Style the modal element */
 .modal {
     display: none;
     position: fixed;
@@ -124,9 +130,10 @@ h1 {
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.4);
-  }
-  
-  .modal-content {
+}
+
+/* Style the modal content */
+.modal-content {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
@@ -134,5 +141,6 @@ h1 {
     width: 80%;
     max-width: 500px;
     z-index: 900;
-  }
-  
+}
+
+/* Thats all the CSS styles for now, might need to add more later */

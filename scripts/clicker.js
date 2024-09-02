@@ -101,11 +101,14 @@ const Upgrades = {
 /// These are the stats the affect the player's progression, basically the multipliers
 // for the player's damage, etc.
 let defeatedTitansClicker = parseInt(localStorage.getItem('defeatedTitans')) || 0;
+let titanLevelClicker = parseInt(localStorage.getItem('titanLevel')) || 1;
 let timeShardsMultiplierClicker = parseInt(localStorage.getItem('timeShardsMultiplier')) || 1;
 let timeShardsTitanClicker = parseInt(localStorage.getItem('timeShardsTitan')) || 1;
-let damageMultiplierClicker = parseInt(localStorage.getItem('damageMultiplier')) || 1;
+let damageMultiplierClicker = parseInt(localStorage.getItem('damageMultiplierClicker')) || 1;
 let reincarnationLevelClicker = parseInt(localStorage.getItem('reincarnationLevel')) || 1;
 let timeShardsClicker = parseInt(localStorage.getItem('timeShards')) || 0;
+let titanMaxLevelClicker = parseInt(localStorage.getItem('titanMaxLevel')) || 1;
+let titanLevelProgressClicker = parseInt(localStorage.getItem('titanLevelProgress')) || 0;
 let finalPlayerDamage = damageMultiplierClicker * (playerDmg * 1 + strength_stat_multi);
 let finalPurchaseMulti = reincarnationLevelClicker;
 
@@ -892,10 +895,10 @@ function handleKeyPress(event) {
     case 'ArrowRight': // If the right arrow key is pressed
       next_level();     // Call function to go to the next level
       break;
-    case 'a':           // If the 'a' key is pressed
+    case 'a':          
       previous_level(); // Call function to go to the previous level
       break;
-    case 'd':           // If the 'd' key is pressed
+    case 'd':          
       next_level();     // Call function to go to the next level
       break;
     case 'b':           // If the 'b' key is pressed
@@ -915,7 +918,7 @@ function handleKeyPress(event) {
     case 'm':           // If the 'm' key is pressed
       // Toggle the openedNav state and manage skills and nav accordingly
       if (openedNav === 1) {
-        openedNav = 2;  // Set openedNav to 2
+        openedNav = 2; 
         openNav();      // Call function to open navigation
         closeSkills();  // Call function to close skills
       } else if (openedNav === 2) {
@@ -939,15 +942,8 @@ function handleKeyPress(event) {
     case '2':           // If the '2' key is pressed
       purchase_amount(10, 'button10'); // Call function to purchase 10 of an item
       break;
-    case '3':           // If the '3' key is pressed
+    case '3':          
       purchase_amount(100, 'button100'); // Call function to purchase 100 of an item
-      break;
-    case 'r':           // If the 'r' key is pressed
-      reset();          // Call function to reset the game
-      break;
-    case 'z':           // If the 'z' key is pressed
-      // Add a large amount of gold to the player's total
-      gold += 1000000000000000000000000000000000000000000000000;
       break;
     case 'f':           // If the 'f' key is pressed
       // Toggle the auraIsOn state and reload the page
@@ -990,7 +986,7 @@ function enableScientificNotation() {
 function showGoldGainedAnimation(goldGained) {
   // Create a new div element to display the gold gained
   const goldGainedElement = document.createElement('div');
-  goldGainedElement.textContent = `+${goldGained} Gold`; // Set text content
+  goldGainedElement.textContent = `+${formatNumber(goldGained)} Gold`; // Set text content
   goldGainedElement.style.position = 'absolute'; // Position it absolutely
   goldGainedElement.style.left = (CANVAS_WIDTH + 100) + 'px'; // Set horizontal position
   goldGainedElement.style.top = (CANVAS_HEIGHT / 2) + 'px'; // Set vertical position
@@ -1092,6 +1088,19 @@ function locked_stage() {
   }
 }
 
+function lock_stage_gold_gain(){
+  if ((enemy_level) % 5 === 0) {
+    const goldGained = 10 + Math.round((12 * (enemy_level / 5)));
+    gold += goldGained;
+    localStorage.setItem('gold', gold);
+    showGoldGainedAnimation(goldGained)}
+  else{
+    const goldGained = 1 + Math.round((6 * (enemy_level / 10)))
+    gold += goldGained;
+    localStorage.setItem('gold', gold);
+    showGoldGainedAnimation(goldGained)}
+}
+
 // Function to calculate the gold gained based on the enemy level
 function calculate_gold_gain() {
   // If the enemy level is one less than a multiple of 5
@@ -1115,6 +1124,14 @@ function reset() {
   localStorage.clear(); // Clear all data stored in local storage
   location.reload(); // Reload the page to reset the game
 }
+
+// Function to confirm reset
+function confirmReset() {
+  if (confirm("Are you sure you want to reset all progress? This action cannot be undone.")) {
+      reset();
+  }
+}
+
 
 // Function to update inventory and display elements
 function update_inventory() {
@@ -1165,7 +1182,7 @@ function update_inventory() {
   gold_status.innerHTML = "Gold: " + formatNumber(gold); // Display formatted gold amount
   let player_damage_status = document.getElementById('player_damage');
   let boss_damage_status = document.getElementById('boss_damage');
-  player_damage_status.innerHTML = "Damage: " + formatNumber(finalPlayerDamage) + " "; // Display player damage
+  player_damage_status.innerHTML = "Click Damage: " + formatNumber(finalPlayerDamage) + " "; // Display player damage
   boss_damage_status.innerHTML = "Boss DPS: " + boss_dps + " "; // Display boss damage per second
   player_level_button.innerHTML = 'Player Level: ' + formatNumber(player_level); // Update player level display
   str_stat_button.innerHTML = 'Strength: ' + strength_stat_multi_added; // Update strength stat display
@@ -1174,7 +1191,7 @@ function update_inventory() {
   skillpoints_status.innerHTML = "Skill Points: " + skill_points; // Update skill points display
   aura_status.innerHTML = "Aura Damage: " + formatNumber(aura_damage * 2); // Update aura damage display
   playerHpStatus.innerHTML = "Max HP: " + formatNumber(player_MAX_HP); // Update maximum HP display
-  player_regen_status.innerHTML = "Player Regen: " + formatNumber(hp_regen); // Update HP regeneration rate display
+  player_regen_status.innerHTML = "Player Regen: " + formatNumber(hp_regen) + ' <br> (To activate buy regen upgrade)'; // Update HP regeneration rate display
   amountTimeShards.innerHTML = "Time Shards: " + timeShardsClicker; // Update time shards display
   
   // Check and update the maximum enemy level reached
@@ -1379,7 +1396,7 @@ function buy_hp_upgrade(new_requiredCost, id){
     gold -= new_requiredCost; // Deducts the required cost from player's gold
 
     // Calculates additional HP based on stamina multipliers and the number of upgrades purchased
-    const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade ** upgrade.hp_multiplier)));
+    const add_hp = Math.round(stamina_stat_multi + (1 + stamina_stat_multi) * (buy_upgrade + buy_upgrade * (buy_upgrade * upgrade.hp_multiplier)));
     
     upgrade.hp_multiplier += 0.01 * buy_upgrade; // Increment the HP multiplier by a small percentage
     player_MAX_HP += add_hp * finalPurchaseMulti; // Adds the calculated HP to the player's max HP
@@ -1515,13 +1532,21 @@ function checkTimeShards() {
   const goldMulti = document.getElementById('goldMulti'); // Element for displaying gold multiplier
   const reincarnationLevelDisplay = document.getElementById('reincarnationLevel'); // Element for displaying reincarnation level
   const damageMulti = document.getElementById('damageMulti'); // Element for displaying damage multiplier
+  const confirmReincarnateButton = document.getElementById('confirmReincarnate'); // Element for confirming reincarnation
 
   if (currentRequirement && timeShardsClicker >= currentRequirement.shards) {
     reincarnationButton.style.backgroundColor = 'darkgreen'; // Button color changes to green if enough time shards
     reincarnationButton.style.color = 'wheat'; // Button text color changes to wheat
+    confirmReincarnateButton.style.backgroundColor = 'green'; // Confirm reincarnation button color changes to green if enough time shards
+    confirmReincarnateButton.style.color = 'white'; // Confirm reincarnation button text color changes to white
+    confirmReincarnateButton.disabled = false; // Enable the confirm reincarnation button
   } else {
     reincarnationButton.style.backgroundColor = 'darkred'; // Button color changes to red if not enough time shards
     reincarnationButton.style.color = 'white'; // Button text color changes to white
+    confirmReincarnateButton.style.backgroundColor = 'darkred'; // Confirm reincarnation button color changes to red if not enough time shards
+    confirmReincarnateButton.style.color = 'white'; // Confirm reincarnation button text color changes to white
+    confirmReincarnateButton.disabled = true; // Disable the confirm reincarnation button
+    confirmReincarnateButton.innerHTML = 'Requirement: ' + formatNumber(currentRequirement.shards) +' Time Shards';
   }
 
   if (currentRequirement) {
@@ -1530,10 +1555,10 @@ function checkTimeShards() {
     reincarnationRequirement.innerHTML = 'Max level reached'; // Message when max level is reached
   }
 
-  timeShardMulti.innerHTML = 'Time Shard Multiplier: ' + timeShardsMultiplierClicker; // Display the current time shard multiplier
-  goldMulti.innerHTML = 'Gold Multiplier: ' + goldMultiplier; // Display the current gold multiplier
-  reincarnationLevelDisplay.innerHTML = 'Reincarnation Level: ' + reincarnationLevelClicker; // Display the current reincarnation level
-  damageMulti.innerHTML = 'Damage Multiplier: ' + damageMultiplierClicker; // Display the current damage multiplier
+  timeShardMulti.innerHTML = 'Time Shard Multiplier: ' + formatNumber(timeShardsMultiplierClicker); // Display the current time shard multiplier
+  goldMulti.innerHTML = 'Gold Multiplier: ' + formatNumber(goldMultiplier); // Display the current gold multiplier
+  reincarnationLevelDisplay.innerHTML = 'Reincarnation Level: ' + formatNumber(reincarnationLevelClicker); // Display the current reincarnation level
+  damageMulti.innerHTML = 'Damage Multiplier: ' + formatNumber(damageMultiplierClicker); // Display the current damage multiplier
 }
 
 
@@ -1568,6 +1593,9 @@ function reincarnation(){
     aura_damage = 0; // Resets aura damage
     aura_frequency = 750; // Resets aura attack frequency
     gold = 0; // Resets player's gold to 0
+    titanLevelClicker = 0; // Resets titan level
+    titanLevelProgressClicker = 1; // Resets titan level progress
+    titanMaxLevelClicker = 1; // Resets titan max level
     
     // Save the updated stats and multipliers in local storage
     localStorage.setItem('playerDmg',playerDmg);
@@ -1583,9 +1611,12 @@ function reincarnation(){
     localStorage.setItem('gold',gold);
     localStorage.setItem('aura_frequency',aura_frequency);
     localStorage.setItem('timeShards',timeShardsClicker);
+    localStorage.setItem('titanLevel',titanLevelClicker);
+    localStorage.setItem('titanLevelProgress',titanLevelProgressClicker);
+    localStorage.setItem('titanMaxLevel',titanMaxLevelClicker);
+    alert('You have successfully reincarnated!'); // Show alert message
   }
   else{
-    alert('You do not have enough time shards to reincarnate'); // Show alert if not enough shards
     modal.style.display = 'none'; // Close the modal window
   }
 }

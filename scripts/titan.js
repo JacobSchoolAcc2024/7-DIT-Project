@@ -22,15 +22,11 @@ let auraActiveTItan = false;
 // Variable to track if the aura is currently active
 let auraIntervalTItan;
 // Variable to store the interval ID for aura effects
-let aura_damageTitan = parseInt(localStorage.getItem('aura_damage')) || 0;
-// Get the aura damage from localStorage, defaulting to 0 if not found
-let aura_frequencyTitan = parseInt(localStorage.getItem('aura_frequency')) || 750;
-// Get the aura frequency from localStorage, defaulting to 750 if not found
 
 //Prestige variables
 let reincarnationLevel = parseInt(localStorage.getItem('reincarnationLevel')) || 1;
 // Get the reincarnation level from localStorage, defaulting to 1 if not found
-let damageMultiplier = parseInt(localStorage.getItem('damageMultiplier')) || 1;
+let damageMultiplier = parseInt(localStorage.getItem('damageMultiplierClicker')) || 1;
 // Get the damage multiplier from localStorage, defaulting to 1 if not found
 let timeShards = parseInt(localStorage.getItem('timeShards')) || 0;
 // Get the number of time shards from localStorage, defaulting to 0 if not found
@@ -39,14 +35,18 @@ let defeatedTitans = parseInt(localStorage.getItem('defeatedTitans')) || 0;
 let timeShardsMultiplier = parseInt(localStorage.getItem('timeShardsMultiplier')) || 1;
 // Get the time shards multiplier from localStorage, defaulting to 1 if not found
 let timeShardsTitan = parseInt(localStorage.getItem('timeShardsTitan')) || 1;
-// Get the time shards for titans from localStorage, defaulting to 1 if not found
+// Get the time shards for titans from localStorage, defaulting to 0 if not found
+let titanMaxLevel =  parseInt(localStorage.getItem('titanMaxLevel')) || 1;
+
+let titanLevelProgress = parseInt(localStorage.getItem('titanLevelProgress')) || 1;
 
 //Reset Variables
-let regenAmount = localStorage.getItem('hp_regen') || 10;
+let regenAmount = localStorage.getItem('hp_regen') || 100;
 // Get the HP regeneration amount from localStorage, defaulting to 10 if not found
 let auraDamage = localStorage.getItem('aura_damage') || 0;
 // Get the aura damage from localStorage, defaulting to 0 if not found
 
+let playerDmgTitan = parseInt(localStorage.getItem('playerDmg')) || 1;
 /////////////////////////////////
 //Player Attributes
 
@@ -57,11 +57,8 @@ let multipliers = {
 }
 // Object to store different multipliers for boss attack, prestige, etc.
 
-let strengthStatMulti = localStorage.getItem('strength_stat_multi') || 0;
-// Get the strength stat multiplier from localStorage, defaulting to 0 if not found
-let intelligenceStatMulti = localStorage.getItem('intelligence_stat_multi') || 0;
-// Get the intelligence stat multiplier from localStorage, defaulting to 0 if not found
-const finalDamage = damageMultiplierClicker * ((playerDmg + aura_damageTitan) * 1 + strengthStatMulti + intelligenceStatMulti);
+
+const finalDamage = damageMultiplier * auraDamage + playerDmgTitan;
 // Calculate the final damage based on various factors, including player damage and aura damage
 
 //
@@ -109,8 +106,9 @@ let TitanCurrentHP = parseInt(localStorage.getItem('TitanCurrentHP')) || TitanMa
 let titanAttack = parseInt(localStorage.getItem('titanAttack')) || 5000;
 // Get the titan's attack value from localStorage, defaulting to 5000 if not found
 
+
 // HP particle variables
-const HP_PARTICLE_TEXT = "-" + playerDmg + "HP";
+const HP_PARTICLE_TEXT = "-" + playerDmgTitan + "HP";
 // Text to display for HP particles
 const HP_PARTICLE_SIZE = 20;
 // Size of the HP particle text
@@ -398,7 +396,7 @@ function animationTitan() {
       case 'attack':
           // Draw the attack animation for the worm
           wormAttackAnimation.drawTitan();
-          
+  
           // Set boss timer to visible and adjust parameters for attack
           bossAttackBegin = true;
           BOSS_TIMER_X = 15; // Position of the boss timer
@@ -509,18 +507,23 @@ function drawHPParticle() {
 
 // Update the click event listener
 canvasTitan.addEventListener('click', () => {
+    checkPlayerHp();
+  
     TitanCurrentHP -= finalDamage;
-    timeShards += 1;
     if (TitanCurrentHP <= 0){
-        
         titanLevel += 1
+        titanLevelProgress += 1;
         defeatedTitans += 1;
+        // Check and update the maximum enemy level reached
+        if (titanLevelProgress > titanMaxLevel) {
+            titanMaxLevel = titanLevelProgress;
+            timeShards += 2;
+            localStorage.setItem('titanMaxLevel', titanMaxLevel); // Store maximum enemy level in local storage
+        }
         TitanMaxHP = 10 * Math.pow(10,(defeatedTitans + 4))
         titanAttack = 1 * Math.pow(10,(defeatedTitans + 3))
         TitanCurrentHP = TitanMaxHP;
-        const addTimeShards = timeShardsTitan * timeShardsMultiplier * (1 * Math.pow(1.5,(defeatedTitans + 1)))
-        timeShards += addTimeShards;
-    }
+      }
         if (titanLevel > 2){
           titanLevel = 1;
     }
@@ -556,26 +559,34 @@ function save(){
     localStorage.setItem('damageMultiplier', damageMultiplier);
     localStorage.setItem('goldMultiplier', goldMultiplier);
     localStorage.setItem('reincarnationLevel', reincarnationLevel);
+    localStorage.setItem('titanLevelProgress', titanLevelProgress);
+    localStorage.setItem('titanMaxLevel', titanMaxLevel);
 
     document.getElementById('wormHP').innerHTML = 'Titan Health: ' + formatNumber(TitanCurrentHP);
     document.getElementById('bossDamage').innerHTML = 'Boss Damage: ' + formatNumber(titanAttack);
     document.getElementById('titanLevel').innerHTML = 'Titan Reincarnations: ' + formatNumber(defeatedTitans);
     document.getElementById('timeShards').innerHTML = 'Time Shards: ' + formatNumber(timeShards);
+
+    if (titanLevelProgress > titanMaxLevel) {
+      titanMaxLevel = titanLevelProgress;
+      localStorage.setItem('titanMaxLevel', titanMaxLevel); // Store maximum enemy level in local storage
+  }
 }
 
 
 function checkPlayerHp(){
   if (playerHP <= 0){
-    setTimeout(function(){b
-      alert("You have died");
-      defeatedTitans = 0;
-      titanLevel = 1;
-      TitanMaxHP = 10 * Math.pow(10,(defeatedTitans + 4))
-      titanAttack = 1 * Math.pow(10,(defeatedTitans + 3))
-      timeShardsTitan = 0;
-      TitanCurrentHP = TitanMaxHP;
-    }, 100)
-    
+    defeatedTitans = 0;
+    titanLevel = 1;
+    titanLevelProgress = 1;
+    TitanMaxHP = 10 * Math.pow(10,(defeatedTitans + 4))
+    titanAttack = 1 * Math.pow(10,(defeatedTitans + 3))
+    TitanCurrentHP = TitanMaxHP;
+    playerHP = playerMaxHP * 0.1;
+    timeShardsTitan = 0;
+    localStorage.setItem('timeShardsTitan', timeShardsTitan);
+    localStorage.setItem('defeatedTitans', defeatedTitans);
+    alert("You have died");
   }
 }
 
@@ -583,6 +594,8 @@ function checkPlayerHp(){
 function reset(){
     localStorage.clear();
     location.reload();
+    titanMaxLevel = 1;
+    titanLevelProgress = 1;
 }
 
 
@@ -661,6 +674,7 @@ checkboxScientificNotation.addEventListener('change', () => {
 
 // Event listener when user press keydown.
 document.addEventListener('keydown', handleKeyPress);
+
 function handleKeyPress(event) {
   switch(event.key) {
     case 'r': //When user presses letter r, then reset the game.
@@ -669,8 +683,20 @@ function handleKeyPress(event) {
   }
 
 }
-// Saves game state every second.
-setInterval(save, 1000);
+
+function regenHp(){
+  playerHP += regenAmount;
+  if (playerHP >= playerMaxHP){
+    playerHP = playerMaxHP;
+  }
+}
+
+// Saves game state every 100 mili second.
+setInterval(save, 100);
+
+setInterval(regenHp, 5000);
+
+
 
 
 
